@@ -17,7 +17,7 @@ interface PaymentRequestDao {
     suspend fun insert(paymentRequest: PaymentRequest)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(vararg paymentRequest: PaymentRequest)
+    suspend fun insertAll(paymentRequest: List<PaymentRequest>)
 
     @Query("DELETE FROM payment_requests_table")
     suspend fun deleteAll()

@@ -1,5 +1,6 @@
 package ru.cybernut.agreement
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -12,10 +13,10 @@ import ru.cybernut.agreement.network.KamiApi
  */
 class KamiAPIServiceTest {
 
-
     @Test
-    fun getRequests() {
-        val list = KamiApi.retrofitService.getPaymentRequests("""password":"12345@qw)","userName":"Калашник Ольга Георгиевна"}""").await()
-        assertEquals(4, 2 + 2)
+    @Throws(Exception::class)
+    fun getRequests()  = runBlocking {
+        val list = KamiApi.retrofitService.getPaymentRequests("{\"password\":\"12345@qw)\",\"userName\":\"Калашник Ольга Георгиевна\"}").await()
+        assertNotEquals(list.size, 0)
     }
 }

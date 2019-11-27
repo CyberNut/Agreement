@@ -1,5 +1,6 @@
 package ru.cybernut.agreement.repositories
 
+import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.db.PaymentRequestDao
 
 class PaymentRequestRepository private constructor(private val paymentRequestDao: PaymentRequestDao) {
@@ -7,6 +8,8 @@ class PaymentRequestRepository private constructor(private val paymentRequestDao
     fun getRequests() = paymentRequestDao.getPaymentRequests()
 
     fun getRequestById(requestId: String) = paymentRequestDao.getPaymentRequestById(requestId)
+
+    suspend fun insertRequests(requests: List<PaymentRequest>) = paymentRequestDao.insertAll(requests)
 
     companion object {
 
