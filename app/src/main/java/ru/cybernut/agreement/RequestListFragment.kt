@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import ru.cybernut.agreement.adapters.PaymentRequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentRequestListBinding
 import ru.cybernut.agreement.viewmodels.RequestListViewModel
@@ -36,6 +37,13 @@ class RequestListFragment : Fragment() {
         viewModel.requests.observe(this, Observer { requests ->
             requests?.let {
                 adapter.submitList(it)
+            }
+        })
+
+        viewModel.navigateToSelectedRequest.observe(this, Observer {
+            if (null != it) {
+                this.findNavController().navigate(RequestListFragmentDirections.actionRequestListFragmentToRequestFragment(it))
+                viewModel.navigateToSelectedRequestComplete()
             }
         })
 

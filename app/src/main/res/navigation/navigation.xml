@@ -6,5 +6,17 @@
     <fragment
         android:id="@+id/requestListFragment"
         android:name="ru.cybernut.agreement.RequestListFragment"
-        android:label="RequestListFragment" />
+        android:label="RequestListFragment" >
+        <action
+            android:id="@+id/action_requestListFragment_to_requestFragment"
+            app:destination="@id/requestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestFragment"
+        android:name="ru.cybernut.agreement.RequestFragment"
+        android:label="RequestFragment" >
+        <argument
+            android:name="request"
+            app:argType="ru.cybernut.agreement.db.PaymentRequest" />
+    </fragment>
 </navigation>

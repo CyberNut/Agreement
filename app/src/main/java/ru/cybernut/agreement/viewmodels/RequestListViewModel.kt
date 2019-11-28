@@ -29,6 +29,10 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
     val requests: LiveData<List<PaymentRequest>>
         get() = _requests
 
+    private val _navigateToSelectedRequest = MutableLiveData<PaymentRequest>()
+    val navigateToSelectedRequest: LiveData<PaymentRequest>
+        get() = _navigateToSelectedRequest
+
     private var viewModelJob = Job()
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -38,7 +42,7 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
         val paymentRequestDao = database.paymentRequestsDao()
         paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
         _requests = paymentRequestRepository.getRequests()
-        //updatePaymentRequests();
+        updatePaymentRequests();
     }
 
     private fun updatePaymentRequests() = coroutineScope.async {
@@ -51,12 +55,16 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
     }
 
     fun showPaymentRequest(request: PaymentRequest) {
-
+        _navigateToSelectedRequest.value = request
     }
 
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    fun navigateToSelectedRequestComplete() {
+        _navigateToSelectedRequest.value = null
     }
 }
 

@@ -1,6 +1,26 @@
 <resources>
     <string name="app_name">Agreement</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="approve">Approve</string>
+    <string name="decline">Decline</string>
+    <string name="title_activity_login">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_login">User name</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="remember_password">Remember me</string>
+    <string name="error_login_label">Incorrect login or password</string>
+    <string name="requestNumber">Number</string>
+    <string name="paymentDate">Payment date</string>
+    <string name="requestDate">Request date</string>
+    <string name="description">Description</string>
+    <string name="client">Client</string>
+    <string name="sum">Sum</string>
+    <string name="author">Author</string>
+    <string name="autologin">Auto login</string>
+    <string name="use_qr_code">Use QR-Code</string>
+    <string name="dialog_confirm_approve">Confirm action?</string>
 </resources>
