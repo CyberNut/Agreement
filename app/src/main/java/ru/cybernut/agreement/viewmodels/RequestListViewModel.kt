@@ -45,7 +45,7 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
         updatePaymentRequests();
     }
 
-    private fun updatePaymentRequests() = coroutineScope.async {
+    fun updatePaymentRequests() = coroutineScope.async {
         try {
             val requests = KamiApi.retrofitService.getPaymentRequests("{\"password\":\"12345@qw)\",\"userName\":\"Калашник Ольга Георгиевна\"}").await()
             paymentRequestRepository.insertRequests(requests)

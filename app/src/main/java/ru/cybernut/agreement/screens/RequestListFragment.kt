@@ -1,4 +1,4 @@
-package ru.cybernut.agreement
+package ru.cybernut.agreement.screens
 
 
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import ru.cybernut.agreement.screens.RequestListFragmentDirections
 import ru.cybernut.agreement.adapters.PaymentRequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentRequestListBinding
 import ru.cybernut.agreement.viewmodels.RequestListViewModel
@@ -38,15 +39,33 @@ class RequestListFragment : Fragment() {
             requests?.let {
                 adapter.submitList(it)
             }
+            binding.swipeRefresh.isRefreshing = false
         })
 
         viewModel.navigateToSelectedRequest.observe(this, Observer {
             if (null != it) {
-                this.findNavController().navigate(RequestListFragmentDirections.actionRequestListFragmentToRequestFragment(it))
+                this.findNavController().navigate(
+                    RequestListFragmentDirections.actionRequestListFragmentToRequestFragment(
+                        it
+                    )
+                )
                 viewModel.navigateToSelectedRequestComplete()
             }
         })
 
+        initSwipeToRefresh()
+
         return binding.root
     }
+
+    private fun initSwipeToRefresh() {
+//        model.refreshState.observe(this, Observer {
+//            swipe_refresh.isRefreshing = it == NetworkState.LOADING
+//        })
+        binding.swipeRefresh.isRefreshing = true
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.updatePaymentRequests()
+        }
+    }
+
 }

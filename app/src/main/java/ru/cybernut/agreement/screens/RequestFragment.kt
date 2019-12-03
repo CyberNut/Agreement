@@ -1,4 +1,4 @@
-package ru.cybernut.agreement
+package ru.cybernut.agreement.screens
 
 
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
+import ru.cybernut.agreement.screens.RequestFragmentArgs
 import ru.cybernut.agreement.databinding.FragmentRequestBinding
 import ru.cybernut.agreement.viewmodels.RequestViewModel
 import ru.cybernut.agreement.viewmodels.RequestViewModelFactory
