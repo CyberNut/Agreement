@@ -22,11 +22,20 @@ class RequestViewModel(application: Application, val request: PaymentRequest): A
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     var paymentRequest = MutableLiveData<PaymentRequest>()
+    lateinit var paymentRequestRepository: PaymentRequestRepository
 
     val status: LiveData<KamiApiStatus>
         get() = _status
 
+    private var _requests : LiveData<List<PaymentRequest>>
+    val requests: LiveData<List<PaymentRequest>>
+        get() = _requests
+
     init {
+        val database = AgreementsDatabase.getDatabase(application)
+        val paymentRequestDao = database.paymentRequestsDao()
+        paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
+        _requests = paymentRequestRepository.getRequests()
         paymentRequest.value = request
     }
 

@@ -6,9 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
-import ru.cybernut.agreement.screens.RequestFragmentArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.SnapHelper
+import ru.cybernut.agreement.R
+import ru.cybernut.agreement.adapters.PaymentRequestsAdapter
+import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentRequestBinding
 import ru.cybernut.agreement.viewmodels.RequestViewModel
 import ru.cybernut.agreement.viewmodels.RequestViewModelFactory
@@ -32,10 +38,24 @@ class RequestFragment : Fragment() {
     ): View? {
 
         binding = FragmentRequestBinding.inflate(inflater, container, false)
-
         binding.setLifecycleOwner(this)
 
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerView.setHasFixedSize(true)
+
+        val snapHelper: SnapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(binding.recyclerView)
+
+        val adapter = RequestsAdapter(R.layout.fragment_request_item)
+        //val adapter = PaymentRequestsAdapter(PaymentRequestsAdapter.OnClickListener{ })
+        binding.recyclerView.adapter = adapter
         binding.viewModel = viewModel
+
+        viewModel.requests.observe(this, Observer { requests ->
+            requests?.let {
+                adapter.submitList(it)
+            }
+        })
 
         return binding.root
     }

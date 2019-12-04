@@ -4,13 +4,14 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
+import ru.cybernut.agreement.data.Request
 import java.io.Serializable
 
 
 @Entity(tableName = "payment_requests_table")
 data class PaymentRequest constructor(
     @PrimaryKey(autoGenerate = false)
-    val uuid: String,
+    override val uuid: String,
     val number: String,
     val date: String,
     @ColumnInfo(name = "payment_date")
@@ -21,4 +22,5 @@ data class PaymentRequest constructor(
     val currency: String,
     val sum: String,
     val author:String
-) : Serializable
+
+) : Serializable, Request

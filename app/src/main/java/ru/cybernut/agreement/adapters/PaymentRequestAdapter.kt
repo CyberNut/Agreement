@@ -27,11 +27,11 @@ class PaymentRequestsAdapter( val onClickListener: OnClickListener ) :
      */
     companion object DiffCallback : DiffUtil.ItemCallback<PaymentRequest>() {
         override fun areItemsTheSame(oldItem: PaymentRequest, newItem: PaymentRequest): Boolean {
-            return oldItem === newItem
+            return oldItem.uuid == newItem.uuid
         }
 
         override fun areContentsTheSame(oldItem: PaymentRequest, newItem: PaymentRequest): Boolean {
-            return oldItem.uuid == newItem.uuid
+            return oldItem == newItem
         }
     }
 

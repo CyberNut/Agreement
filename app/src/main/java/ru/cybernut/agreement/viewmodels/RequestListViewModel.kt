@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
+import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.AgreementsDatabase
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.network.KamiAPIService
@@ -29,8 +30,8 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
     val requests: LiveData<List<PaymentRequest>>
         get() = _requests
 
-    private val _navigateToSelectedRequest = MutableLiveData<PaymentRequest>()
-    val navigateToSelectedRequest: LiveData<PaymentRequest>
+    private val _navigateToSelectedRequest = MutableLiveData<Request>()
+    val navigateToSelectedRequest: LiveData<Request>
         get() = _navigateToSelectedRequest
 
     private var viewModelJob = Job()
@@ -54,7 +55,7 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
         }
     }
 
-    fun showPaymentRequest(request: PaymentRequest) {
+    fun showPaymentRequest(request: Request) {
         _navigateToSelectedRequest.value = request
     }
 

@@ -2,16 +2,18 @@ package ru.cybernut.agreement.screens
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import ru.cybernut.agreement.screens.RequestListFragmentDirections
-import ru.cybernut.agreement.adapters.PaymentRequestsAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import ru.cybernut.agreement.R
+import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentRequestListBinding
+import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.viewmodels.RequestListViewModel
 
 class RequestListFragment : Fragment() {
@@ -32,13 +34,18 @@ class RequestListFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        val adapter = PaymentRequestsAdapter(PaymentRequestsAdapter.OnClickListener{ viewModel.showPaymentRequest(it)})
+        //val adapter = PaymentRequestsAdapter(PaymentRequestsAdapter.OnClickListener{ viewModel.showPaymentRequest(it)})
+        val adapter = RequestsAdapter(R.layout.payment_request_list_item, RequestsAdapter.OnClickListener{viewModel.showPaymentRequest(it)})
+        binding.requestsList.layoutManager = LinearLayoutManager(activity)
+        binding.requestsList.setHasFixedSize(true)
         binding.requestsList.adapter = adapter
+
 
         viewModel.requests.observe(this, Observer { requests ->
             requests?.let {
                 adapter.submitList(it)
             }
+            //Toast.makeText(activity, "Update done!", Toast.LENGTH_SHORT).show()
             binding.swipeRefresh.isRefreshing = false
         })
 
@@ -46,7 +53,7 @@ class RequestListFragment : Fragment() {
             if (null != it) {
                 this.findNavController().navigate(
                     RequestListFragmentDirections.actionRequestListFragmentToRequestFragment(
-                        it
+                        it as PaymentRequest
                     )
                 )
                 viewModel.navigateToSelectedRequestComplete()
