@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
+import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.adapters.PaymentRequestsAdapter
 import ru.cybernut.agreement.adapters.RequestsAdapter
@@ -40,20 +42,29 @@ class RequestFragment : Fragment() {
         binding = FragmentRequestBinding.inflate(inflater, container, false)
         binding.setLifecycleOwner(this)
 
+
         binding.recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerView.setHasFixedSize(true)
 
         val snapHelper: SnapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(binding.recyclerView)
 
-        val adapter = RequestsAdapter(R.layout.fragment_request_item)
-        //val adapter = PaymentRequestsAdapter(PaymentRequestsAdapter.OnClickListener{ })
+
+        val adapter = RequestsAdapter(R.layout.fragment_request_item, BR.paymentRequest)
+        adapter.addBindingVariable(BR.requestViewModel, viewModel)
         binding.recyclerView.adapter = adapter
         binding.viewModel = viewModel
 
         viewModel.requests.observe(this, Observer { requests ->
             requests?.let {
                 adapter.submitList(it)
+            }
+        })
+
+        viewModel.needShowToast.observe(this, Observer {
+            if (it == true) {
+                Toast.makeText(activity, "Test", Toast.LENGTH_SHORT).show()
+                viewModel.onToastShowDone()
             }
         })
 

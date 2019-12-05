@@ -27,6 +27,10 @@ class RequestViewModel(application: Application, val request: PaymentRequest): A
     val status: LiveData<KamiApiStatus>
         get() = _status
 
+    private var _needShowToast = MutableLiveData<Boolean>()
+    val needShowToast: LiveData<Boolean>
+        get() = _needShowToast
+
     private var _requests : LiveData<List<PaymentRequest>>
     val requests: LiveData<List<PaymentRequest>>
         get() = _requests
@@ -37,6 +41,19 @@ class RequestViewModel(application: Application, val request: PaymentRequest): A
         paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
         _requests = paymentRequestRepository.getRequests()
         paymentRequest.value = request
+    }
+
+    fun handleRequest(approve: Boolean) {
+        //TODO: Обработка согласования
+        Log.i(TAG, "Approve = $approve, Request = ${paymentRequest.value}")
+    }
+
+    fun onToastShowDone() {
+        _needShowToast.value = false
+    }
+
+    fun showToast() {
+        _needShowToast.value = true
     }
 
     override fun onCleared() {

@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentRequestListBinding
@@ -34,12 +35,10 @@ class RequestListFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        //val adapter = PaymentRequestsAdapter(PaymentRequestsAdapter.OnClickListener{ viewModel.showPaymentRequest(it)})
-        val adapter = RequestsAdapter(R.layout.payment_request_list_item, RequestsAdapter.OnClickListener{viewModel.showPaymentRequest(it)})
+        val adapter = RequestsAdapter(R.layout.payment_request_list_item, BR.request, RequestsAdapter.OnClickListener{viewModel.showPaymentRequest(it)})
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
         binding.requestsList.adapter = adapter
-
 
         viewModel.requests.observe(this, Observer { requests ->
             requests?.let {
