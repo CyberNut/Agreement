@@ -1,5 +1,7 @@
 package ru.cybernut.agreement.data
 
+import java.io.Serializable
+
 //abstract class Request(open val uuid: String) {
 //
 //    override fun equals(other: Any?): Boolean {
@@ -17,7 +19,7 @@ package ru.cybernut.agreement.data
 //}
 
 
-interface Request {
+interface Request: Serializable {
     val uuid: String
     override fun equals(other: Any?): Boolean
 }

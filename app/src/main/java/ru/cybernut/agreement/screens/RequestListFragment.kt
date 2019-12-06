@@ -52,7 +52,7 @@ class RequestListFragment : Fragment() {
             if (null != it) {
                 this.findNavController().navigate(
                     RequestListFragmentDirections.actionRequestListFragmentToRequestFragment(
-                        it as PaymentRequest
+                        it as PaymentRequest, ""
                     )
                 )
                 viewModel.navigateToSelectedRequestComplete()

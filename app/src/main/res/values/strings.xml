@@ -23,4 +23,7 @@
     <string name="autologin">Auto login</string>
     <string name="use_qr_code">Use QR-Code</string>
     <string name="dialog_confirm_approve">Confirm action?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="commentary">Commentary</string>
 </resources>

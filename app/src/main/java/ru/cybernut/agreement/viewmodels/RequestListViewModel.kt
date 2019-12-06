@@ -39,6 +39,7 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
+        Log.i(TAG, "Init view model")
         val database = AgreementsDatabase.getDatabase(application)
         val paymentRequestDao = database.paymentRequestsDao()
         paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)

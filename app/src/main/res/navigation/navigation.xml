@@ -18,6 +18,11 @@
         <argument
             android:name="request"
             app:argType="ru.cybernut.agreement.db.PaymentRequest" />
+        <action
+            android:id="@+id/action_requestFragment_to_confirmDialogFragment"
+            app:destination="@id/confirmDialogFragment" />
+        <argument
+            android:name="confirmed" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -27,4 +32,16 @@
             android:id="@+id/action_loginFragment_to_requestListFragment"
             app:destination="@id/requestListFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/confirmDialogFragment"
+        android:name="ru.cybernut.agreement.screens.ConfirmDialogFragment"
+        android:label="ConfirmDialogFragment" >
+        <action
+            android:id="@+id/action_confirmDialogFragment_to_requestFragment"
+            app:destination="@id/requestFragment" />
+        <argument
+            android:name="approveType"
+            app:argType="boolean" />
+        <argument android:name="requestViewModel" />
+    </dialog>
 </navigation>
