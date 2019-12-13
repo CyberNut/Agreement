@@ -49,7 +49,7 @@ interface KamiAPIService {
     fun approveRequests(@Path("type") type: Boolean,
                         @Path("comment"
         ) comment: String?, @Body approveBody: String?
-    ): Deferred<Void?>?
+    ): Call<Void>
 
 }
 

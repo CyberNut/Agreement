@@ -14,6 +14,8 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.cybernut.agreement.AgreementApp
+import ru.cybernut.agreement.data.LoginCredential
 import ru.cybernut.agreement.network.KamiApi
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
@@ -112,6 +114,7 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
                             } else {
                                 _incorrectLogin.value = true
                             }
+                            AgreementApp.loginCredential = LoginCredential(userName, password)
                             Log.i(TAG, "doLogin success")
                         }
                     }

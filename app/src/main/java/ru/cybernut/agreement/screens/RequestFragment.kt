@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentRequestBinding
 import ru.cybernut.agreement.viewmodels.RequestViewModel
@@ -23,9 +24,6 @@ class RequestFragment : Fragment() {
 
     private val TAG = "RequestFragment"
     private val args: RequestFragmentArgs by navArgs()
-    private val DIALOG_CONFIRM_DELETE = "ConfirmApproveDialog"
-    private val REQUEST_CONFIRM_APPROVE = 1
-
 
     private lateinit var binding: FragmentRequestBinding
     private val viewModel: RequestViewModel by lazy {
@@ -48,7 +46,8 @@ class RequestFragment : Fragment() {
 
         viewModel.needShowToast.observe(this, Observer {
             if (it == true) {
-                Toast.makeText(activity, "Test", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(activity, "Test", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(RequestFragmentDirections.actionRequestFragmentToRequestListFragment())
                 viewModel.onToastShowDone()
             }
         })
@@ -65,7 +64,7 @@ class RequestFragment : Fragment() {
             .setCancelable(false)
             .setPositiveButton(getText(R.string.confirm), DialogInterface.OnClickListener {
                     dialog, id -> viewModel.handleRequest(approve)
-                    Toast.makeText(activity,"Ok",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"Ok " + AgreementApp.loginCredential.userName, Toast.LENGTH_SHORT).show()
             })
             .setNegativeButton(getText(R.string.cancel), DialogInterface.OnClickListener {
                     dialog, id -> dialog.cancel()
