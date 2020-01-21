@@ -10,6 +10,7 @@ import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,11 +64,16 @@ class RequestViewModel(application: Application, val request: PaymentRequest): A
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
                         Log.i(TAG, "ERROR Approve = $approve, Request = ${paymentRequest.value}")
-
                     }
 
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         Log.i(TAG, "SUCCESS Approve = $approve, Request = ${paymentRequest.value}")
+                        coroutineScope.launch {
+
+                            paymentRequestRepository.deleteRequest(
+                                paymentRequest.value!!
+                            )
+                        }
                     }
                 })
             showToast()

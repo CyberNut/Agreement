@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
+import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.AgreementsDatabase
 import ru.cybernut.agreement.db.PaymentRequest
@@ -49,7 +50,10 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
 
     fun updatePaymentRequests() = coroutineScope.async {
         try {
-            val requests = KamiApi.retrofitService.getPaymentRequests("{\"password\":\"12345@qw)\",\"userName\":\"Калашник Ольга Георгиевна\"}").await()
+            //TODO: do auth
+            val credential = AgreementApp.loginCredential
+            val requests = KamiApi.retrofitService.getPaymentRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
+            paymentRequestRepository.deleteAllRequests()
             paymentRequestRepository.insertRequests(requests)
         } catch (e: Exception) {
             Log.i(TAG, "updatePaymentRequests", e)

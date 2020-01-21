@@ -26,7 +26,28 @@ interface PaymentRequestDao {
     suspend fun delete(paymentRequest: PaymentRequest)
 }
 
-@Database(entities = [PaymentRequest::class], version = 1, exportSchema = false)
+@Dao
+interface ServiceRequestDao {
+    @Query("select * from service_requests_table")
+    fun getServiceRequests(): LiveData<List<ServiceRequest>>
+
+    @Query("select * from service_requests_table where uuid = :uuid")
+    fun getServiceRequestById(uuid: String): LiveData<ServiceRequest>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(serviceRequest: ServiceRequest)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(serviceRequest: List<ServiceRequest>)
+
+    @Query("DELETE FROM service_requests_table")
+    suspend fun deleteAll()
+
+    @Delete
+    suspend fun delete(serviceRequest: ServiceRequest)
+}
+
+@Database(entities = [PaymentRequest::class, ServiceRequest::class], version = 1, exportSchema = false)
 abstract class AgreementsDatabase : RoomDatabase() {
 
     abstract fun paymentRequestsDao(): PaymentRequestDao

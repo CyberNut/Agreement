@@ -9,12 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentRequestBinding
 import ru.cybernut.agreement.viewmodels.RequestViewModel
@@ -52,6 +50,7 @@ class RequestFragment : Fragment() {
             }
         })
 
+        binding.approvalButton.setOnClickListener { handleThisRequest(true) }
         binding.declineButton.setOnClickListener { handleThisRequest(false) }
 
         return binding.root
@@ -64,7 +63,7 @@ class RequestFragment : Fragment() {
             .setCancelable(false)
             .setPositiveButton(getText(R.string.confirm), DialogInterface.OnClickListener {
                     dialog, id -> viewModel.handleRequest(approve)
-                    Toast.makeText(activity,"Ok " + AgreementApp.loginCredential.userName, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"Ok", Toast.LENGTH_SHORT).show()
             })
             .setNegativeButton(getText(R.string.cancel), DialogInterface.OnClickListener {
                     dialog, id -> dialog.cancel()

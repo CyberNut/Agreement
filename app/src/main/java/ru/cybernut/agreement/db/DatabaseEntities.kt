@@ -24,3 +24,21 @@ data class PaymentRequest constructor(
     val author:String
 
 ) : Serializable, Request
+
+@Entity(tableName = "service_requests_table")
+data class ServiceRequest constructor(
+    @PrimaryKey(autoGenerate = false)
+    override val uuid: String,
+    val number: String,
+    val date: String,
+    @ColumnInfo(name = "service_dept")
+    @Json(name = "service_dept")
+    val serviceDept: String,
+    val dept: String,
+    val client: String,
+    val company: String,
+    val description: String,
+    val sum: String,
+    val author:String
+
+) : Serializable, Request

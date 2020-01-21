@@ -13,6 +13,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
 import ru.cybernut.agreement.db.PaymentRequest
+import ru.cybernut.agreement.db.ServiceRequest
 
 private const val BASE_URL = "http://172.16.0.42"
 
@@ -39,11 +40,14 @@ private val retrofit = Retrofit.Builder()
  */
 interface KamiAPIService {
 
+    @POST("/kami_ageenko/hs/Approval/login")
+    fun doLogin(@Body loginString: String?): Call<Void>
+
     @POST("/kami_ageenko/hs/Approval/getList")
     fun getPaymentRequests(@Body loginCredential: String): Deferred<List<PaymentRequest>>
 
-    @POST("/kami_ageenko/hs/Approval/login")
-    fun doLogin(@Body loginString: String?): Call<Void>
+    @POST("/kami_ageenko/hs/Approval/getListService")
+    fun getServiceRequests(@Body loginCredential: String): Deferred<List<ServiceRequest>>
 
     @POST("/kami_ageenko/hs/Approval/approve/{type}/{comment}")
     fun approveRequests(@Path("type") type: Boolean,

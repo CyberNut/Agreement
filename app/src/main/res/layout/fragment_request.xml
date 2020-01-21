@@ -183,15 +183,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/approve"
-                android:onClick="@{() -> viewModel.handleRequest(true)}"/>
+                android:text="@string/approve" />
 
             <Button
                 android:id="@+id/declineButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/decline"                />
+                android:text="@string/decline" />
 
         </LinearLayout>
     </LinearLayout>
