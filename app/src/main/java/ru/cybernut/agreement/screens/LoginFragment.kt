@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.get
 import kotlinx.coroutines.*
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentLoginBinding
@@ -65,7 +66,9 @@ class LoginFragment: Fragment() {
         viewModel.loginSuccess.observe(this, Observer {
             if(it) {
                 saveSettings()
-                this.findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRequestListFragment())
+                //this.findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRequestListFragment())
+                val nc = this.findNavController()
+                nc.navigate(R.id.requestListFragment)
                 viewModel.navigateToRequestListDone()
             }
         })

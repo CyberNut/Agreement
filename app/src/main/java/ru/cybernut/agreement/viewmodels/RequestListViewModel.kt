@@ -10,9 +10,11 @@ import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.AgreementsDatabase
 import ru.cybernut.agreement.db.PaymentRequest
+import ru.cybernut.agreement.db.ServiceRequest
 import ru.cybernut.agreement.network.KamiAPIService
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.PaymentRequestRepository
+import ru.cybernut.agreement.repositories.ServiceRequestRepository
 import java.lang.Exception
 
 enum class KamiApiStatus  { LOADING, ERROR, DONE }
@@ -23,6 +25,7 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
     private val _status = MutableLiveData<KamiApiStatus>()
 
     lateinit var paymentRequestRepository: PaymentRequestRepository
+    lateinit var serviceRequestRepository: ServiceRequestRepository
 
     val status: LiveData<KamiApiStatus>
         get() = _status
@@ -30,6 +33,10 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
     private var _requests : LiveData<List<PaymentRequest>>
     val requests: LiveData<List<PaymentRequest>>
         get() = _requests
+
+    private var _serviceRequests : LiveData<List<ServiceRequest>>
+    val serviceRequests: LiveData<List<ServiceRequest>>
+        get() = _serviceRequests
 
     private val _navigateToSelectedRequest = MutableLiveData<Request>()
     val navigateToSelectedRequest: LiveData<Request>
@@ -42,9 +49,15 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
     init {
         Log.i(TAG, "Init view model")
         val database = AgreementsDatabase.getDatabase(application)
+
         val paymentRequestDao = database.paymentRequestsDao()
         paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
         _requests = paymentRequestRepository.getRequests()
+
+        val serviceRequestDao = database.serviceRequestsDao()
+        serviceRequestRepository = ServiceRequestRepository.getInstance(serviceRequestDao)
+        _serviceRequests = serviceRequestRepository.getRequests()
+
         updatePaymentRequests();
     }
 
@@ -52,9 +65,12 @@ class RequestListViewModel(application: Application): AndroidViewModel(applicati
         try {
             //TODO: do auth
             val credential = AgreementApp.loginCredential
-            val requests = KamiApi.retrofitService.getPaymentRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
-            paymentRequestRepository.deleteAllRequests()
-            paymentRequestRepository.insertRequests(requests)
+//            val requests = KamiApi.retrofitService.getPaymentRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
+//            paymentRequestRepository.deleteAllRequests()
+//            paymentRequestRepository.insertRequests(requests)
+            val requests = KamiApi.retrofitService.getServiceRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
+            serviceRequestRepository.deleteAllRequests()
+            serviceRequestRepository.insertRequests(requests)
         } catch (e: Exception) {
             Log.i(TAG, "updatePaymentRequests", e)
         }

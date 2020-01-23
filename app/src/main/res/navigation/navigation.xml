@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/requestListFragment">
 
     <fragment
         android:id="@+id/requestListFragment"
@@ -10,6 +10,12 @@
         <action
             android:id="@+id/action_requestListFragment_to_requestFragment"
             app:destination="@id/requestFragment" />
+        <action
+            android:id="@+id/action_requestListFragment_to_loginFragment"
+            app:destination="@id/loginFragment" >
+            <argument android:defaultValue="1"
+                android:name="test" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/requestFragment"
@@ -30,4 +36,8 @@
             android:id="@+id/action_loginFragment_to_requestListFragment"
             app:destination="@id/requestListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="ru.cybernut.agreement.screens.AboutFragment"
+        android:label="AboutFragment" />
 </navigation>

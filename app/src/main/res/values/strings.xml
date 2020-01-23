@@ -26,4 +26,6 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="commentary">Commentary</string>
+    <string name="about">About</string>
+    <string name="authorization">Autorization</string>
 </resources>

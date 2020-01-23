@@ -51,6 +51,7 @@ interface ServiceRequestDao {
 abstract class AgreementsDatabase : RoomDatabase() {
 
     abstract fun paymentRequestsDao(): PaymentRequestDao
+    abstract fun serviceRequestsDao(): ServiceRequestDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

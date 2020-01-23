@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="request"
+            name="serviceRequest"
             type="ru.cybernut.agreement.db.ServiceRequest" />
 
     </data>
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:text="@{request.date}" />
+                android:text="@{serviceRequest.date}" />
 
             <TextView
                 android:id="@+id/client"
@@ -35,7 +35,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="4"
                 android:gravity="end"
-                android:text="@{request.client}" />
+                android:text="@{serviceRequest.client}" />
 
         </LinearLayout>
 
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="4"
-                android:text="@{request.description}" />
+                android:text="@{serviceRequest.description}" />
 
             <TextView
                 android:id="@+id/sum"
@@ -60,7 +60,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="@{request.sum}" />
+                android:text="@{serviceRequest.sum}" />
 
         </LinearLayout>
 
@@ -74,14 +74,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@{request.dept}"  />
+                android:text="@{serviceRequest.dept}"  />
 
             <TextView
                 android:id="@+id/serviceDept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@{request.serviceDept}" />
+                android:text="@{serviceRequest.serviceDept}" />
         </LinearLayout>
 
         <LinearLayout
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@{request.author}" />
+                android:text="@{serviceRequest.author}" />
 
         </LinearLayout>
     </LinearLayout>
