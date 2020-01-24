@@ -5,46 +5,47 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import ru.cybernut.agreement.utils.DATABASE_NAME
 
-@Dao
-interface PaymentRequestDao {
-    @Query("select * from payment_requests_table")
-    fun getPaymentRequests(): LiveData<List<PaymentRequest>>
 
-    @Query("select * from payment_requests_table where uuid = :uuid")
-    fun getPaymentRequestById(uuid: String): LiveData<PaymentRequest>
+interface BaseRequestDao<T> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(paymentRequest: PaymentRequest)
+    suspend fun insert(request: T)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(paymentRequest: List<PaymentRequest>)
-
-    @Query("DELETE FROM payment_requests_table")
-    suspend fun deleteAll()
+    suspend fun insertAll(request: List<T>)
 
     @Delete
-    suspend fun delete(paymentRequest: PaymentRequest)
+    suspend fun delete(request: T)
+
+    fun getRequests(): LiveData<List<T>>
+
+    fun getRequestById(uuid: String): LiveData<T>
+
+    suspend fun deleteAll()
 }
 
 @Dao
-interface ServiceRequestDao {
+abstract class PaymentRequestDao: BaseRequestDao<PaymentRequest> {
+    @Query("select * from payment_requests_table")
+    abstract override fun getRequests(): LiveData<List<PaymentRequest>>
+
+    @Query("select * from payment_requests_table where uuid = :uuid")
+    abstract override fun getRequestById(uuid: String): LiveData<PaymentRequest>
+
+    @Query("DELETE FROM payment_requests_table")
+    abstract override suspend fun deleteAll()
+}
+
+@Dao
+abstract class ServiceRequestDao: BaseRequestDao<ServiceRequest> {
     @Query("select * from service_requests_table")
-    fun getServiceRequests(): LiveData<List<ServiceRequest>>
+    abstract override fun getRequests(): LiveData<List<ServiceRequest>>
 
     @Query("select * from service_requests_table where uuid = :uuid")
-    fun getServiceRequestById(uuid: String): LiveData<ServiceRequest>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(serviceRequest: ServiceRequest)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(serviceRequest: List<ServiceRequest>)
+    abstract override fun getRequestById(uuid: String): LiveData<ServiceRequest>
 
     @Query("DELETE FROM service_requests_table")
-    suspend fun deleteAll()
-
-    @Delete
-    suspend fun delete(serviceRequest: ServiceRequest)
+    abstract override suspend fun deleteAll()
 }
 
 @Database(entities = [PaymentRequest::class, ServiceRequest::class], version = 1, exportSchema = false)

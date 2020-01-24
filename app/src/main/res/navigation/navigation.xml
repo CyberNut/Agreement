@@ -16,6 +16,10 @@
             <argument android:defaultValue="1"
                 android:name="test" />
         </action>
+        <argument
+            android:name="requestType"
+            app:argType="ru.cybernut.agreement.utils.RequestType"
+            android:defaultValue="MONEY" />
     </fragment>
     <fragment
         android:id="@+id/requestFragment"
