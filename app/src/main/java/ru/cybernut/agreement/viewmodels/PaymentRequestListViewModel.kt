@@ -5,7 +5,6 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import kotlinx.coroutines.async
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.Request
@@ -17,16 +16,34 @@ import ru.cybernut.agreement.repositories.PaymentRequestRepository
 class PaymentRequestListViewModel(application: Application) : RequestListViewModel(application) {
 
     private val TAG = "PaymentRequestListViewModel"
-    private lateinit var paymentRequestRepository: PaymentRequestRepository
+    private var paymentRequestRepository: PaymentRequestRepository
 
-    private lateinit var _requests : MutableLiveData<List<Request>>
-    private var paymentRequest:LiveData<List<PaymentRequest>>
+    private var _paymentRequests : LiveData<List<PaymentRequest>>
+    val paymentRequests: LiveData<List<PaymentRequest>>
+        get() = _paymentRequests
+
+    //private var paymentRequests:LiveData<List<PaymentRequest>>
     //val requests: LiveData<List<PaymentRequest>> = getRequests()
+//    override var request: LiveData<List<Request>>
+//        get() {
+//            val mutableLiveData = MutableLiveData<List<Request>>()
+//            val tempList: ArrayList<Request> = arrayListOf()
+//            val sourceList = _paymentRequests.value
+//            if(sourceList?.isNotEmpty()!!) {
+//                for (pr:PaymentRequest in sourceList) {
+//                    tempList.add(pr)
+//                }
+//                mutableLiveData.value = tempList
+//
+//            }
+//            return mutableLiveData
+//        }
 
     init {
         val paymentRequestDao = database.paymentRequestsDao()
         paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
-        paymentRequest = paymentRequestRepository.getRequests()
+        var tpaymentRequests = paymentRequestRepository.getRequests()
+        _paymentRequests = tpaymentRequests
     }
 
     @SuppressLint("LongLogTag")
@@ -41,15 +58,32 @@ class PaymentRequestListViewModel(application: Application) : RequestListViewMod
         }
     }
 
-    override fun getRequests(): LiveData<List<Request>> {
-        val temp = paymentRequest.value
-        var res = ArrayList<Request>()
-        if(temp!= null) {
-            for (c in temp) {
-                res.add(c)
+    override var request: LiveData<List<Request>>
+        get() {
+            val mutableLiveData = MutableLiveData<List<Request>>()
+            val tempList: ArrayList<Request> = arrayListOf()
+            val sourceList = _paymentRequests.value
+            if(sourceList?.isNotEmpty()!!) {
+                for (pr:PaymentRequest in sourceList) {
+                    tempList.add(pr)
+                }
+                mutableLiveData.value = tempList
             }
+            return mutableLiveData
         }
-        _requests.value = res
-        return _requests
-    }
+        set(value) {}
+
+//            override fun getRequests(): LiveData<List<Request>> {
+//                val mutableLiveData = MutableLiveData<List<Request>>()
+//                val tempList: ArrayList<Request> = arrayListOf()
+//                val sourceList = _paymentRequests.value
+//                if(sourceList?.isNotEmpty()!!) {
+//                    for (pr:PaymentRequest in sourceList) {
+//                        tempList.add(pr)
+//                    }
+//                    mutableLiveData.value = tempList
+//                }
+//                return mutableLiveData
+//            }
+//        }
 }

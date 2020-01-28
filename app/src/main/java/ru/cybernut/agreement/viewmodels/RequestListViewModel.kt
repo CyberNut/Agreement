@@ -33,12 +33,11 @@ abstract class RequestListViewModel(application: Application): AndroidViewModel(
 
     private var viewModelJob = Job()
 
+    abstract var request: LiveData<List<Request>>
     protected val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
         database = AgreementsDatabase.getDatabase(application)
-
-        updateRequests();
     }
 
     abstract fun getRequests(): LiveData<List<out Request>>

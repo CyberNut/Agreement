@@ -24,6 +24,8 @@ import ru.cybernut.agreement.db.AgreementsDatabase
 import ru.cybernut.agreement.db.BaseRequestDao
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.utils.RequestType
+import ru.cybernut.agreement.viewmodels.PaymentRequestListViewModel
+import ru.cybernut.agreement.viewmodels.PaymentRequestListViewModelFactory
 import ru.cybernut.agreement.viewmodels.RequestListViewModel
 import ru.cybernut.agreement.viewmodels.RequestListViewModelFactory
 
@@ -32,14 +34,13 @@ class RequestListFragment : Fragment() {
     private val args: RequestListFragmentArgs by navArgs()
     private lateinit var binding: FragmentRequestListBinding
 
-    private lateinit var viewModel: RequestListViewModel
-//            by lazy {
-//        val activity = requireNotNull(this.activity) {
-//            "You can only access the viewModel after onActivityCreated()"
-//        }
-//        ViewModelProviders.of(this, RequestListViewModelFactory(activity.application, args.requestType))
-//            .get(RequestListViewModel::class.java)
-//    }
+    private val viewModel: RequestListViewModel by lazy {
+        val activity = requireNotNull(this.activity) {
+            "You can only access the viewModel after onActivityCreated()"
+        }
+        ViewModelProviders.of(this, RequestListViewModelFactory(activity.application, args.requestType))
+            .get(RequestListViewModel::class.java)
+    }
 
     private var requestListLayoutId: Int = 0
     private var requestBindingId: Int = 0
@@ -55,7 +56,7 @@ class RequestListFragment : Fragment() {
             this.findNavController().navigate(RequestListFragmentDirections.actionRequestListFragmentToLoginFragment())
         }
 
-        viewModel = ViewModelProviders.of(this, RequestListViewModelFactory(activity!!.application, args.requestType)).get(RequestListViewModel::class.java)
+        //viewModel = ViewModelProviders.of(this, RequestListViewModelFactory(activity!!.application, args.requestType)).get(RequestListViewModel::class.java)
 
         binding = FragmentRequestListBinding.inflate(inflater, container, false)
         binding.setLifecycleOwner(this)
@@ -80,6 +81,21 @@ class RequestListFragment : Fragment() {
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
         binding.requestsList.adapter = adapter
+
+//        viewModel.getRequests().observe(this, Observer { requests ->
+//                        requests?.let {
+//                adapter.submitList(it)
+//            }
+//            //Toast.makeText(activity, "Update done!", Toast.LENGTH_SHORT).show()
+//            binding.swipeRefresh.isRefreshing = false
+//        })
+        viewModel.paymentRequests.observe(this, Observer { requests ->
+            requests?.let {
+                adapter.submitList(it)
+            }
+            //Toast.makeText(activity, "Update done!", Toast.LENGTH_SHORT).show()
+            binding.swipeRefresh.isRefreshing = false
+        })
 
 //        when (args.requestType) {
 //            RequestType.MONEY -> {
