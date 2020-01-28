@@ -18,7 +18,10 @@ import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.adapters.RequestsAdapter
+import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.databinding.FragmentRequestListBinding
+import ru.cybernut.agreement.db.AgreementsDatabase
+import ru.cybernut.agreement.db.BaseRequestDao
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.utils.RequestType
 import ru.cybernut.agreement.viewmodels.RequestListViewModel
@@ -29,13 +32,14 @@ class RequestListFragment : Fragment() {
     private val args: RequestListFragmentArgs by navArgs()
     private lateinit var binding: FragmentRequestListBinding
 
-    private val viewModel: RequestListViewModel by lazy {
-        val activity = requireNotNull(this.activity) {
-            "You can only access the viewModel after onActivityCreated()"
-        }
-        ViewModelProviders.of(this, RequestListViewModelFactory(activity.application, args.requestType))
-            .get(RequestListViewModel::class.java)
-    }
+    private lateinit var viewModel: RequestListViewModel
+//            by lazy {
+//        val activity = requireNotNull(this.activity) {
+//            "You can only access the viewModel after onActivityCreated()"
+//        }
+//        ViewModelProviders.of(this, RequestListViewModelFactory(activity.application, args.requestType))
+//            .get(RequestListViewModel::class.java)
+//    }
 
     private var requestListLayoutId: Int = 0
     private var requestBindingId: Int = 0
@@ -50,6 +54,8 @@ class RequestListFragment : Fragment() {
         } catch (ex: UninitializedPropertyAccessException ) {
             this.findNavController().navigate(RequestListFragmentDirections.actionRequestListFragmentToLoginFragment())
         }
+
+        viewModel = ViewModelProviders.of(this, RequestListViewModelFactory(activity!!.application, args.requestType)).get(RequestListViewModel::class.java)
 
         binding = FragmentRequestListBinding.inflate(inflater, container, false)
         binding.setLifecycleOwner(this)
@@ -70,34 +76,34 @@ class RequestListFragment : Fragment() {
             }
         }
 
-        val adapter = RequestsAdapter(requestListLayoutId, requestBindingId, RequestsAdapter.OnClickListener{viewModel.showPaymentRequest(it)})
+        val adapter = RequestsAdapter(requestListLayoutId, requestBindingId, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
         binding.requestsList.adapter = adapter
 
-        when (args.requestType) {
-            RequestType.MONEY -> {
-                viewModel.requests.observe(this, Observer { requests ->
-                    requests?.let {
-                        adapter.submitList(it)
-                    }
-                    //Toast.makeText(activity, "Update done!", Toast.LENGTH_SHORT).show()
-                    binding.swipeRefresh.isRefreshing = false
-                })
-
-            }
-            RequestType.SERVICE -> {
-                viewModel.serviceRequests.observe(this, Observer { requests ->
-                    requests?.let {
-                        adapter.submitList(it)
-                    }
-                    //Toast.makeText(activity, "Update done!", Toast.LENGTH_SHORT).show()
-                    binding.swipeRefresh.isRefreshing = false
-                })
-            }
-            RequestType.DELIVERY -> {
-            }
-        }
+//        when (args.requestType) {
+//            RequestType.MONEY -> {
+//                viewModel.requests.observe(this, Observer { requests ->
+//                    requests?.let {
+//                        adapter.submitList(it)
+//                    }
+//                    //Toast.makeText(activity, "Update done!", Toast.LENGTH_SHORT).show()
+//                    binding.swipeRefresh.isRefreshing = false
+//                })
+//
+//            }
+//            RequestType.SERVICE -> {
+//                viewModel.serviceRequests.observe(this, Observer { requests ->
+//                    requests?.let {
+//                        adapter.submitList(it)
+//                    }
+//                    //Toast.makeText(activity, "Update done!", Toast.LENGTH_SHORT).show()
+//                    binding.swipeRefresh.isRefreshing = false
+//                })
+//            }
+//            RequestType.DELIVERY -> {
+//            }
+//        }
 
         viewModel.navigateToSelectedRequest.observe(this, Observer {
             if (null != it) {

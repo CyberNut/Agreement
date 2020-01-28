@@ -21,25 +21,11 @@ import java.lang.Exception
 
 enum class KamiApiStatus  { LOADING, ERROR, DONE }
 
-class RequestListViewModel(application: Application, val requestType: RequestType): AndroidViewModel(application) {
+abstract class RequestListViewModel(application: Application): AndroidViewModel(application) {
 
-    private val TAG = "RequestListViewModel"
-    private val _status = MutableLiveData<KamiApiStatus>()
+//    private val TAG = "RequestListViewModel"
 
-    private var paymentRequestRepository: PaymentRequestRepository? = null
-    private var serviceRequestRepository: ServiceRequestRepository? = null
-    lateinit var requestRepository: RequestRepository<BaseRequestDao<Request>>
-
-    val status: LiveData<KamiApiStatus>
-        get() = _status
-
-    private var _requests : LiveData<List<PaymentRequest>>
-    val requests: LiveData<List<PaymentRequest>>
-        get() = _requests
-
-    private var _serviceRequests : LiveData<List<ServiceRequest>>
-    val serviceRequests: LiveData<List<ServiceRequest>>
-        get() = _serviceRequests
+    protected var database: AgreementsDatabase
 
     private val _navigateToSelectedRequest = MutableLiveData<Request>()
     val navigateToSelectedRequest: LiveData<Request>
@@ -47,48 +33,30 @@ class RequestListViewModel(application: Application, val requestType: RequestTyp
 
     private var viewModelJob = Job()
 
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    protected val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
-        Log.i(TAG, "Init view model")
-        val database = AgreementsDatabase.getDatabase(application)
-
-        //requestRepository = RequestRepository(paymentRequestDao<PaymentRequest>)
-        when(requestType) {
-            RequestType.MONEY -> {
-                val paymentRequestDao = database.paymentRequestsDao()
-                paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
-                _requests = paymentRequestRepository.getRequests()
-            }
-            RequestType.SERVICE -> {
-                val serviceRequestDao = database.serviceRequestsDao()
-                serviceRequestRepository = ServiceRequestRepository.getInstance(serviceRequestDao)
-                _serviceRequests = serviceRequestRepository.getRequests()
-            }
-            RequestType.DELIVERY -> {
-                //_requests = paymentRequestRepository.getRequests()
-            }
-        }
+        database = AgreementsDatabase.getDatabase(application)
 
         updateRequests();
     }
 
-    fun updateRequests() = coroutineScope.async {
-        try {
-            //TODO: do auth
-            val credential = AgreementApp.loginCredential
-            val requests = KamiApi.retrofitService.getPaymentRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
-            //paymentRequestRepository.deleteAllRequests()
-//            paymentRequestRepository.insertRequests(requests)
-            val serviceRequests = KamiApi.retrofitService.getServiceRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
-            //serviceRequestRepository.deleteAllRequests()
-            serviceRequestRepository.insertRequests(serviceRequests)
-        } catch (e: Exception) {
-            Log.i(TAG, "updatePaymentRequests", e)
-        }
-    }
+    abstract fun getRequests(): LiveData<List<out Request>>
 
-    fun showPaymentRequest(request: Request) {
+    abstract fun updateRequests(): Deferred<Any>
+//            = coroutineScope.async {
+//        try {
+//            //TODO: do auth
+//            val credential = AgreementApp.loginCredential
+//            val requests = KamiApi.retrofitService.getPaymentRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
+//            //paymentRequestRepository.deleteAllRequests()
+////            paymentRequestRepository.insertRequests(requests)
+//        } catch (e: Exception) {
+//            Log.i(TAG, "updatePaymentRequests", e)
+//        }
+//    }
+
+    fun showRequest(request: Request) {
         _navigateToSelectedRequest.value = request
     }
 
