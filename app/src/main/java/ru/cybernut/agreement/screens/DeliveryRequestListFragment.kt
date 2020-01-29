@@ -13,20 +13,20 @@ import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.adapters.RequestsAdapter
-import ru.cybernut.agreement.databinding.FragmentServiceRequestListBinding
+import ru.cybernut.agreement.databinding.FragmentDeliveryRequestListBinding
 import ru.cybernut.agreement.db.ServiceRequest
-import ru.cybernut.agreement.viewmodels.ServiceRequestListViewModel
+import ru.cybernut.agreement.viewmodels.DeliveryRequestListViewModel
 
-class ServiceRequestListFragment : Fragment() {
+class DeliveryRequestListFragment : Fragment() {
 
     //private val args: RequestListFragmentArgs by navArgs()
-    private lateinit var binding: FragmentServiceRequestListBinding
+    private lateinit var binding: FragmentDeliveryRequestListBinding
 
-    private val viewModel: ServiceRequestListViewModel by lazy {
+    private val viewModel: DeliveryRequestListViewModel by lazy {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        ViewModelProviders.of(this).get(ServiceRequestListViewModel::class.java)
+        ViewModelProviders.of(this).get(DeliveryRequestListViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -40,7 +40,7 @@ class ServiceRequestListFragment : Fragment() {
             this.findNavController().navigate(R.id.loginActivity)
         }
 
-        binding = FragmentServiceRequestListBinding.inflate(inflater, container, false)
+        binding = FragmentDeliveryRequestListBinding.inflate(inflater, container, false)
         binding.setLifecycleOwner(this)
         binding.viewModel = viewModel
 

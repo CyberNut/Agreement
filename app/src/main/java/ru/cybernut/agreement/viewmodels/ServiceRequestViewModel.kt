@@ -17,13 +17,13 @@ import retrofit2.Response
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.ApprovingRequestList
 import ru.cybernut.agreement.db.AgreementsDatabase
-import ru.cybernut.agreement.db.PaymentRequest
+import ru.cybernut.agreement.db.ServiceRequest
 import ru.cybernut.agreement.network.KamiApi
-import ru.cybernut.agreement.repositories.PaymentRequestRepository
+import ru.cybernut.agreement.repositories.ServiceRequestRepository
 import ru.cybernut.agreement.utils.RequestType
 
 
-class RequestViewModel(application: Application, val request: PaymentRequest): AndroidViewModel(application) {
+class ServiceRequestViewModel(application: Application, val request: ServiceRequest): AndroidViewModel(application) {
 
     private val TAG = "RequestViewModel"
     private val _status = MutableLiveData<KamiApiStatus>()
@@ -31,8 +31,8 @@ class RequestViewModel(application: Application, val request: PaymentRequest): A
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    var paymentRequest = MutableLiveData<PaymentRequest>()
-    lateinit var paymentRequestRepository: PaymentRequestRepository
+    var serviceRequest = MutableLiveData<ServiceRequest>()
+    private var serviceRequestRepository: ServiceRequestRepository
 
     val status: LiveData<KamiApiStatus>
         get() = _status
@@ -47,32 +47,31 @@ class RequestViewModel(application: Application, val request: PaymentRequest): A
 
     init {
         val database = AgreementsDatabase.getDatabase(application)
-        val paymentRequestDao = database.paymentRequestsDao()
-        paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
-        paymentRequest.value = request
+        val serviceRequestDao = database.serviceRequestsDao()
+        serviceRequestRepository = ServiceRequestRepository.getInstance(serviceRequestDao)
+        serviceRequest.value = request
     }
 
     fun handleRequest(approve: Boolean) {
         //TODO: Обработка согласования
         val approvingRequestList = ApprovingRequestList(AgreementApp.loginCredential)
-        approvingRequestList?.addRequestId(paymentRequest.value?.uuid!!)
+        approvingRequestList?.addRequestId(serviceRequest.value?.uuid!!)
         val moshi = Moshi.Builder().build()
         val jsonAdapter: JsonAdapter<ApprovingRequestList> = moshi.adapter(ApprovingRequestList::class.java)
         val json: String = jsonAdapter.toJson(approvingRequestList)
         println(json)
         try {
-            KamiApi.retrofitService.approveRequests(RequestType.MONEY.toString(), approve, "Mobile application", json)
+            KamiApi.retrofitService.approveRequests(RequestType.SERVICE.toString(), approve, "Mobile application", json)
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
-                        Log.i(TAG, "ERROR Approve = $approve, Request = ${paymentRequest.value}")
+                        Log.i(TAG, "ERROR Approve = $approve, Request = ${serviceRequest.value}")
                     }
 
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        Log.i(TAG, "SUCCESS Approve = $approve, Request = ${paymentRequest.value}")
+                        Log.i(TAG, "SUCCESS Approve = $approve, Request = ${serviceRequest.value}")
                         coroutineScope.launch {
-
-                            paymentRequestRepository.deleteRequest(
-                                paymentRequest.value!!
+                            serviceRequestRepository.deleteRequest(
+                                serviceRequest.value!!
                             )
                         }
                     }

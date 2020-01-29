@@ -48,11 +48,24 @@ abstract class ServiceRequestDao: BaseRequestDao<ServiceRequest> {
     abstract override suspend fun deleteAll()
 }
 
-@Database(entities = [PaymentRequest::class, ServiceRequest::class], version = 1, exportSchema = false)
+@Dao
+abstract class DeliveryRequestDao: BaseRequestDao<DeliveryRequest> {
+    @Query("select * from delivery_requests_table")
+    abstract override fun getRequests(): LiveData<List<DeliveryRequest>>
+
+    @Query("select * from delivery_requests_table where uuid = :uuid")
+    abstract override fun getRequestById(uuid: String): LiveData<DeliveryRequest>
+
+    @Query("DELETE FROM delivery_requests_table")
+    abstract override suspend fun deleteAll()
+}
+
+@Database(entities = [PaymentRequest::class, ServiceRequest::class, DeliveryRequest::class], version = 1, exportSchema = false)
 abstract class AgreementsDatabase : RoomDatabase() {
 
     abstract fun paymentRequestsDao(): PaymentRequestDao
     abstract fun serviceRequestsDao(): ServiceRequestDao
+    abstract fun deliveryRequestsDao(): DeliveryRequestDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

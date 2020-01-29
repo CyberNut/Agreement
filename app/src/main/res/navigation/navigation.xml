@@ -28,9 +28,24 @@
     <fragment
         android:id="@+id/serviceRequestListFragment"
         android:name="ru.cybernut.agreement.screens.ServiceRequestListFragment"
-        android:label="ServiceRequestListFragment" />
+        android:label="ServiceRequestListFragment" >
+        <action
+            android:id="@+id/action_serviceRequestListFragment_to_serviceRequestFragment"
+            app:destination="@id/serviceRequestFragment" />
+    </fragment>
     <activity
         android:id="@+id/loginActivity"
         android:name="ru.cybernut.agreement.LoginActivity"
         android:label="LoginActivity" />
+    <fragment
+        android:id="@+id/serviceRequestFragment"
+        android:name="ru.cybernut.agreement.screens.ServiceRequestFragment"
+        android:label="ServiceRequestFragment" >
+        <action
+            android:id="@+id/action_serviceRequestFragment_to_serviceRequestListFragment"
+            app:destination="@id/serviceRequestListFragment" />
+        <argument
+            android:name="request"
+            app:argType="ru.cybernut.agreement.db.ServiceRequest" />
+    </fragment>
 </navigation>

@@ -30,4 +30,6 @@
     <string name="authorization">Autorization</string>
     <string name="money">Money</string>
     <string name="Service">Service</string>
+    <string name="department">Department</string>
+    <string name="service_department">Serv. department</string>
 </resources>

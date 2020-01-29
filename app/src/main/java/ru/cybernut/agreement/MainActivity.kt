@@ -22,11 +22,11 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = binding.drawerLayout
         val navController = this.findNavController(R.id.nav_host)
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.requestListFragment), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.requestListFragment, R.id.serviceRequestListFragment), drawerLayout)
         // prevent nav gesture if not on start destination
 
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, bundle: Bundle? ->
-            if (nd.id == R.id.requestListFragment) {
+            if (nd.id == R.id.requestListFragment || nd.id == R.id.serviceRequestListFragment) {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         NavigationUI.setupWithNavController(binding.navView, navController)
-        //binding.bottomNavView?.setupWithNavController(navController)
+        binding.bottomNavView?.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {

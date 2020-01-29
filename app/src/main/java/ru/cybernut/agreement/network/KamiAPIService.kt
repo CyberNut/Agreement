@@ -12,6 +12,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
+import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.db.ServiceRequest
 
@@ -49,10 +50,14 @@ interface KamiAPIService {
     @POST("/kami_ageenko/hs/Approval/getListService")
     fun getServiceRequests(@Body loginCredential: String): Deferred<List<ServiceRequest>>
 
-    @POST("/kami_ageenko/hs/Approval/approve/{type}/{comment}")
-    fun approveRequests(@Path("type") type: Boolean,
-                        @Path("comment"
-        ) comment: String?, @Body approveBody: String?
+    @POST("/kami_ageenko/hs/Approval/getListDelivery")
+    fun getDeliveryRequests(@Body loginCredential: String): Deferred<List<DeliveryRequest>>
+
+    @POST("/kami_ageenko/hs/Approval/approve/{request_type}/{type}/{comment}")
+    fun approveRequests(@Path("request_type") requestType: String,
+                        @Path("type") type: Boolean,
+                        @Path("comment") comment: String?,
+                        @Body approveBody: String?
     ): Call<Void>
 
 }

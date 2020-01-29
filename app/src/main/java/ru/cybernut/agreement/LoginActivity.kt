@@ -7,12 +7,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -20,7 +20,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.coroutines.*
 import ru.cybernut.agreement.databinding.ActivityLoginBinding
-import ru.cybernut.agreement.databinding.FragmentLoginBinding
 import ru.cybernut.agreement.utils.SimpleScannerActivity
 import ru.cybernut.agreement.viewmodels.LoginViewModel
 
