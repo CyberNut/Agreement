@@ -1,38 +1,34 @@
-package ru.cybernut.agreement.screens
+package ru.cybernut.agreement
 
 import android.Manifest
-import android.app.Activity.RESULT_CANCELED
-import android.app.Activity.RESULT_OK
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.get
 import kotlinx.coroutines.*
-import ru.cybernut.agreement.R
+import ru.cybernut.agreement.databinding.ActivityLoginBinding
 import ru.cybernut.agreement.databinding.FragmentLoginBinding
 import ru.cybernut.agreement.utils.SimpleScannerActivity
 import ru.cybernut.agreement.viewmodels.LoginViewModel
 
-class LoginFragment: Fragment() {
+class LoginActivity : AppCompatActivity() {
     companion object {
         val QRCODE_STRING = "QRCODE_STRING"
     }
-    private val TAG = "LoginFragment"
+    private val TAG = "LoginActivity"
     private val ZBAR_CAMERA_PERMISSION = 1
     val QR_CODE_READING = 2
 
@@ -47,18 +43,14 @@ class LoginFragment: Fragment() {
 
     private val MIN_PASSWORD_LENGHT = 9
 
-    private lateinit var binding: FragmentLoginBinding
+    private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by lazy {
         ViewModelProviders.of(this).get(LoginViewModel::class.java)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView<ActivityLoginBinding>(this, R.layout.activity_login)
         binding.setLifecycleOwner(this)
 
         binding.viewModel = viewModel
@@ -66,9 +58,9 @@ class LoginFragment: Fragment() {
         viewModel.loginSuccess.observe(this, Observer {
             if(it) {
                 saveSettings()
-                //this.findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRequestListFragment())
-                val nc = this.findNavController()
-                nc.navigate(R.id.requestListFragment)
+                Toast.makeText(this, "Authorization success!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
                 viewModel.navigateToRequestListDone()
             }
         })
@@ -93,8 +85,6 @@ class LoginFragment: Fragment() {
 
         loadSettings()
         setUIChangeListenerToCancelAutoLogin()
-
-        return binding.root
     }
 
     private fun setUIChangeListenerToCancelAutoLogin() {
@@ -131,10 +121,12 @@ class LoginFragment: Fragment() {
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) {
+        //super(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
             if (requestCode == QR_CODE_READING) {
-                var qrString = data!!.getStringExtra(QRCODE_STRING)
+                var qrString = data!!.getStringExtra(LoginActivity.QRCODE_STRING)
                 qrString = qrString.replace("User=", "")
                 //parse QR String for get user/pass
                 val userName: String
@@ -149,8 +141,8 @@ class LoginFragment: Fragment() {
                     }
                 }
             }
-        } else if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(activity, "Camera unavailable", Toast.LENGTH_SHORT).show()
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            Toast.makeText(this, "Camera unavailable", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -160,14 +152,14 @@ class LoginFragment: Fragment() {
     }
 
     private fun readQRCode() {
-        if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                activity!!,
+                this,
                 arrayOf(Manifest.permission.CAMERA),
                 ZBAR_CAMERA_PERMISSION
             )
         } else {
-            val intent = Intent(activity!!, SimpleScannerActivity::class.java)
+            val intent = Intent(this, SimpleScannerActivity::class.java)
             startActivityForResult(intent, QR_CODE_READING)
         }
     }
@@ -224,7 +216,7 @@ class LoginFragment: Fragment() {
     }
 
     private fun loadSettings() {
-        val sharedPreferences: SharedPreferences = activity!!.getSharedPreferences(
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(
             PREF_FILE_NAME,
             Context.MODE_PRIVATE
         )
@@ -259,7 +251,7 @@ class LoginFragment: Fragment() {
     }
 
     private fun saveSettings() {
-        val sharedPreferences: SharedPreferences = activity!!.getSharedPreferences(
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(
             PREF_FILE_NAME,
             Context.MODE_PRIVATE
         )
@@ -282,5 +274,4 @@ class LoginFragment: Fragment() {
             )
             .apply()
     }
-
 }

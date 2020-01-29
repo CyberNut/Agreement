@@ -2,25 +2,10 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation"
     app:startDestination="@id/requestListFragment">
-
     <fragment
-        android:id="@+id/requestListFragment"
-        android:name="ru.cybernut.agreement.screens.RequestListFragment"
-        android:label="RequestListFragment" >
-        <action
-            android:id="@+id/action_requestListFragment_to_requestFragment"
-            app:destination="@id/requestFragment" />
-        <action
-            android:id="@+id/action_requestListFragment_to_loginFragment"
-            app:destination="@id/loginFragment" >
-            <argument android:defaultValue="1"
-                android:name="test" />
-        </action>
-        <argument
-            android:name="requestType"
-            app:argType="ru.cybernut.agreement.utils.RequestType"
-            android:defaultValue="MONEY" />
-    </fragment>
+        android:id="@+id/aboutFragment"
+        android:name="ru.cybernut.agreement.screens.AboutFragment"
+        android:label="AboutFragment" />
     <fragment
         android:id="@+id/requestFragment"
         android:name="ru.cybernut.agreement.screens.RequestFragment"
@@ -33,15 +18,19 @@
             app:destination="@id/requestListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="ru.cybernut.agreement.screens.LoginFragment"
-        android:label="LoginFragment" >
+        android:id="@+id/requestListFragment"
+        android:name="ru.cybernut.agreement.screens.RequestListFragment"
+        android:label="RequestListFragment" >
         <action
-            android:id="@+id/action_loginFragment_to_requestListFragment"
-            app:destination="@id/requestListFragment" />
+            android:id="@+id/action_requestListFragment_to_requestFragment"
+            app:destination="@id/requestFragment" />
     </fragment>
     <fragment
-        android:id="@+id/aboutFragment"
-        android:name="ru.cybernut.agreement.screens.AboutFragment"
-        android:label="AboutFragment" />
+        android:id="@+id/serviceRequestListFragment"
+        android:name="ru.cybernut.agreement.screens.ServiceRequestListFragment"
+        android:label="ServiceRequestListFragment" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="ru.cybernut.agreement.LoginActivity"
+        android:label="LoginActivity" />
 </navigation>

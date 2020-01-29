@@ -11,8 +11,8 @@ import java.util.List;
 import me.dm7.barcodescanner.zbar.BarcodeFormat;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
+import ru.cybernut.agreement.LoginActivity;
 import ru.cybernut.agreement.R;
-import ru.cybernut.agreement.screens.LoginFragment;
 
 public class SimpleScannerActivity extends BaseScannerActivity implements ZBarScannerView.ResultHandler {
     private ZBarScannerView mScannerView;
@@ -48,7 +48,7 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZBarSc
 //        Toast.makeText(this, "Contents = " + rawResult.getContents() +
 //                ", Format = " + rawResult.getBarcodeFormat().getName(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
-        intent.putExtra(LoginFragment.Companion.getQRCODE_STRING(), rawResult.getContents());
+        intent.putExtra(LoginActivity.Companion.getQRCODE_STRING(), rawResult.getContents());
         setResult(RESULT_OK, intent);
         finish();
         // Note:

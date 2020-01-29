@@ -9,6 +9,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import ru.cybernut.agreement.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = binding.drawerLayout
         val navController = this.findNavController(R.id.nav_host)
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.requestListFragment, R.id.loginFragment), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.requestListFragment), drawerLayout)
         // prevent nav gesture if not on start destination
 
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, bundle: Bundle? ->
@@ -33,10 +34,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         NavigationUI.setupWithNavController(binding.navView, navController)
+        //binding.bottomNavView?.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.nav_host)
         return NavigationUI.navigateUp(navController, appBarConfiguration)
     }
+
 }

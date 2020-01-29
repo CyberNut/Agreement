@@ -20,6 +20,7 @@
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/navigation"/>
 
+
         </FrameLayout>
 
         <com.google.android.material.navigation.NavigationView
@@ -30,5 +31,7 @@
             app:headerLayout="@layout/nav_header"
             app:menu="@menu/navdrawer_menu" />
 
+
     </androidx.drawerlayout.widget.DrawerLayout>
+
 </layout>

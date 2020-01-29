@@ -1,6 +1,5 @@
 package ru.cybernut.agreement.screens
 
-
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -16,19 +15,21 @@ import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentRequestListBinding
+import ru.cybernut.agreement.databinding.FragmentServiceRequestListBinding
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.viewmodels.PaymentRequestListViewModel
+import ru.cybernut.agreement.viewmodels.ServiceRequestListViewModel
 
-class RequestListFragment : Fragment() {
+class ServiceRequestListFragment : Fragment() {
 
     //private val args: RequestListFragmentArgs by navArgs()
-    private lateinit var binding: FragmentRequestListBinding
+    private lateinit var binding: FragmentServiceRequestListBinding
 
-    private val viewModel: PaymentRequestListViewModel by lazy {
+    private val viewModel: ServiceRequestListViewModel by lazy {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        ViewModelProviders.of(this).get(PaymentRequestListViewModel::class.java)
+        ViewModelProviders.of(this).get(ServiceRequestListViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -42,17 +43,17 @@ class RequestListFragment : Fragment() {
             this.findNavController().navigate(R.id.loginActivity)
         }
 
-        binding = FragmentRequestListBinding.inflate(inflater, container, false)
+        binding = FragmentServiceRequestListBinding.inflate(inflater, container, false)
         binding.setLifecycleOwner(this)
         binding.viewModel = viewModel
 
-        val adapter = RequestsAdapter(R.layout.payment_request_list_item, BR.request, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
+        val adapter = RequestsAdapter(R.layout.service_request_list_item, BR.serviceRequest, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
         binding.requestsList.adapter = adapter
 
         viewModel.requests.observe(this, Observer { requests ->
-                        requests?.let {
+            requests?.let {
                 adapter.submitList(it)
             }
             //Toast.makeText(activity, "Update done!", Toast.LENGTH_SHORT).show()
