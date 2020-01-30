@@ -20,8 +20,8 @@
         android:id="@id/serviceRequestListFragment"
         android:icon="@drawable/service_icon"
         android:title="@string/Service" />
-<!--    <item-->
-<!--        android:id="@id/serviceRequestListFragment"-->
-<!--        android:icon="@drawable/service_icon"-->
-<!--        android:title="@string/Service" />-->
+    <item
+        android:id="@id/deliveryRequestListFragment"
+        android:icon="@drawable/delivery_icon"
+        android:title="@string/Delivery" />
 </menu>

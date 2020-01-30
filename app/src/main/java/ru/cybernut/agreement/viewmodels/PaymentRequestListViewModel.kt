@@ -39,6 +39,7 @@ class PaymentRequestListViewModel(application: Application) : AndroidViewModel(a
         val paymentRequestDao = database.paymentRequestsDao()
         paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
         _requests = paymentRequestRepository.getRequests()
+        updateRequests()
     }
 
     @SuppressLint("LongLogTag")

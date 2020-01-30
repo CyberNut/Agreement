@@ -20,7 +20,7 @@ import ru.cybernut.agreement.repositories.DeliveryRequestRepository
 
 class DeliveryRequestListViewModel(application: Application): AndroidViewModel(application)  {
 
-    private val TAG = "DeliveryRequestListViewModel"
+    private val TAG = "DelivRequestListVM"
     private var database: AgreementsDatabase
     private var deliveryRequestRepository: DeliveryRequestRepository
 
@@ -40,13 +40,14 @@ class DeliveryRequestListViewModel(application: Application): AndroidViewModel(a
         val deliveryRequestDao = database.deliveryRequestsDao()
         deliveryRequestRepository = DeliveryRequestRepository.getInstance(deliveryRequestDao)
         _requests = deliveryRequestRepository.getRequests()
+        updateRequests()
     }
 
-    @SuppressLint("LongLogTag")
     fun updateRequests() = coroutineScope.async {
         try {
             val credential = AgreementApp.loginCredential
             val requests = KamiApi.retrofitService.getDeliveryRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
+            Log.i(TAG, "size=" + requests.size)
             deliveryRequestRepository.deleteAllRequests()
             deliveryRequestRepository.insertRequests(requests)
         } catch (e: Exception) {

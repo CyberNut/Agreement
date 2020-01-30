@@ -40,6 +40,7 @@ class ServiceRequestListViewModel(application: Application): AndroidViewModel(ap
         val serviceRequestDao = database.serviceRequestsDao()
         serviceRequestRepository = ServiceRequestRepository.getInstance(serviceRequestDao)
         _requests = serviceRequestRepository.getRequests()
+        updateRequests()
     }
 
     @SuppressLint("LongLogTag")

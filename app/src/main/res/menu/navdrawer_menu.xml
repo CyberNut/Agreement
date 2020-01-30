@@ -10,6 +10,10 @@
         android:id="@id/serviceRequestListFragment"
         android:icon="@drawable/service_icon"
         android:title="@string/Service" />
+    <item
+        android:id="@id/deliveryRequestListFragment"
+        android:icon="@drawable/delivery_icon"
+        android:title="@string/Delivery" />
 
     <group android:id="@+id/group1">
         <item

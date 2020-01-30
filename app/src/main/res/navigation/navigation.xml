@@ -48,4 +48,23 @@
             android:name="request"
             app:argType="ru.cybernut.agreement.db.ServiceRequest" />
     </fragment>
+    <fragment
+        android:id="@+id/deliveryRequestListFragment"
+        android:name="ru.cybernut.agreement.screens.DeliveryRequestListFragment"
+        android:label="DeliveryRequestListFragment" >
+        <action
+            android:id="@+id/action_deliveryRequestListFragment_to_deliveryRequestFragment"
+            app:destination="@id/deliveryRequestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/deliveryRequestFragment"
+        android:name="ru.cybernut.agreement.screens.DeliveryRequestFragment"
+        android:label="DeliveryRequestFragment" >
+        <action
+            android:id="@+id/action_deliveryRequestFragment_to_deliveryRequestListFragment"
+            app:destination="@id/deliveryRequestListFragment" />
+        <argument
+            android:name="request"
+            app:argType="ru.cybernut.agreement.db.DeliveryRequest" />
+    </fragment>
 </navigation>

@@ -70,7 +70,7 @@
                 android:id="@+id/department_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/department"
+                android:text="@string/warehouse_sender"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.deliveryRequest.dept}"
+                android:text="@{viewModel.deliveryRequest.warehouseSender}"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -93,7 +93,7 @@
                 android:id="@+id/service_department_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/service_department"
+                android:text="@string/sender_address"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.deliveryRequest.serviceDept}"
+                android:text="@{viewModel.deliveryRequest.senderAddress}"
                 android:textSize="16sp" />
 
         </LinearLayout>

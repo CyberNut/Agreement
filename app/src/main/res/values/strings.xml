@@ -32,4 +32,7 @@
     <string name="Service">Service</string>
     <string name="department">Department</string>
     <string name="service_department">Serv. department</string>
+    <string name="warehouse_sender">Warehouse sender</string>
+    <string name="sender_address">Sender address</string>
+    <string name="Delivery">Delivery</string>
 </resources>

@@ -14,7 +14,7 @@ import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentDeliveryRequestListBinding
-import ru.cybernut.agreement.db.ServiceRequest
+import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.viewmodels.DeliveryRequestListViewModel
 
 class DeliveryRequestListFragment : Fragment() {
@@ -44,7 +44,7 @@ class DeliveryRequestListFragment : Fragment() {
         binding.setLifecycleOwner(this)
         binding.viewModel = viewModel
 
-        val adapter = RequestsAdapter(R.layout.service_request_list_item, BR.serviceRequest, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
+        val adapter = RequestsAdapter(R.layout.delivery_request_list_item, BR.deliveryRequest, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
         binding.requestsList.adapter = adapter
@@ -60,8 +60,8 @@ class DeliveryRequestListFragment : Fragment() {
         viewModel.navigateToSelectedRequest.observe(this, Observer {
             if (null != it) {
                 this.findNavController().navigate(
-                    ServiceRequestListFragmentDirections.actionServiceRequestListFragmentToServiceRequestFragment(
-                        it as ServiceRequest
+                    DeliveryRequestListFragmentDirections.actionDeliveryRequestListFragmentToDeliveryRequestFragment(
+                        it as DeliveryRequest
                     )
                 )
                 viewModel.navigateToSelectedRequestComplete()
