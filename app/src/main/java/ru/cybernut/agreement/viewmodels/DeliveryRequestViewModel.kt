@@ -62,7 +62,7 @@ class DeliveryRequestViewModel(application: Application, val request: DeliveryRe
         val json: String = jsonAdapter.toJson(approvingRequestList)
         println(json)
         try {
-            KamiApi.retrofitService.approveRequests(RequestType.SERVICE.toString(), approve, "Mobile application", json)
+            KamiApi.retrofitService.approveRequests(RequestType.DELIVERY.toString(), approve, "Mobile application", json)
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
                         Log.i(TAG, "ERROR Approve = $approve, Request = ${deliveryRequest.value}")

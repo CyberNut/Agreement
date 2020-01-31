@@ -17,6 +17,7 @@ import ru.cybernut.agreement.databinding.FragmentDeliveryRequestListBinding
 import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.viewmodels.DeliveryRequestListViewModel
 
+
 class DeliveryRequestListFragment : Fragment() {
 
     //private val args: RequestListFragmentArgs by navArgs()
@@ -33,6 +34,13 @@ class DeliveryRequestListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val navController = this.findNavController()
+        val navInflater = navController.navInflater
+        val graph = navInflater.inflate(R.navigation.navigation_delivery)
+        if (navController.graph.id != graph.id) {
+            navController.graph = graph
+        }
 
         try {
             val lc = AgreementApp.loginCredential

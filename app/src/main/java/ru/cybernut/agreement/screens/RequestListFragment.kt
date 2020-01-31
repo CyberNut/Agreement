@@ -36,6 +36,13 @@ class RequestListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        val navController = this.findNavController()
+        val navInflater = navController.navInflater
+        val graph = navInflater.inflate(R.navigation.navigation)
+        if (navController.graph.id != graph.id) {
+            navController.graph = graph
+        }
+
         try {
             val lc = AgreementApp.loginCredential
         } catch (ex: UninitializedPropertyAccessException ) {

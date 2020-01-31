@@ -2,6 +2,8 @@ package ru.cybernut.agreement.screens
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,6 +18,7 @@ import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentServiceRequestListBinding
 import ru.cybernut.agreement.db.ServiceRequest
 import ru.cybernut.agreement.viewmodels.ServiceRequestListViewModel
+
 
 class ServiceRequestListFragment : Fragment() {
 
@@ -33,6 +36,14 @@ class ServiceRequestListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val navController = this.findNavController()
+        navController.graph.startDestination = R.id.deliveryRequestListFragment
+        val navInflater = navController.navInflater
+        val graph = navInflater.inflate(R.navigation.navigation_service)
+        if (navController.graph.id != graph.id) {
+            navController.graph = graph
+        }
 
         try {
             val lc = AgreementApp.loginCredential

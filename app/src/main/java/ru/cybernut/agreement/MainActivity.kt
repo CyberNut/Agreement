@@ -2,6 +2,7 @@ package ru.cybernut.agreement
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -20,13 +21,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         drawerLayout = binding.drawerLayout
+
+        val toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
+
         val navController = this.findNavController(R.id.nav_host)
+        navController.graph.startDestination = R.id.serviceRequestListFragment
+
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.requestListFragment, R.id.serviceRequestListFragment), drawerLayout)
-        // prevent nav gesture if not on start destination
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.serviceRequestListFragment, R.id.requestListFragment, R.id.deliveryRequestListFragment), drawerLayout)
 
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, bundle: Bundle? ->
-            if (nd.id == R.id.requestListFragment || nd.id == R.id.serviceRequestListFragment) {
+            if (nd.id == R.id.requestListFragment || nd.id == R.id.serviceRequestListFragment || nd.id == R.id.deliveryRequestListFragment) {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -41,5 +47,4 @@ class MainActivity : AppCompatActivity() {
         val navController = this.findNavController(R.id.nav_host)
         return NavigationUI.navigateUp(navController, appBarConfiguration)
     }
-
 }
