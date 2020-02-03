@@ -36,13 +36,6 @@ class RequestListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val navController = this.findNavController()
-        val navInflater = navController.navInflater
-        val graph = navInflater.inflate(R.navigation.navigation)
-        if (navController.graph.id != graph.id) {
-            navController.graph = graph
-        }
-
         try {
             val lc = AgreementApp.loginCredential
         } catch (ex: UninitializedPropertyAccessException ) {
@@ -78,20 +71,7 @@ class RequestListFragment : Fragment() {
         })
 
         initSwipeToRefresh()
-
-        setHasOptionsMenu(true)
         return binding.root
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.overflow_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.onNavDestinationSelected(item,
-            view!!.findNavController())
-                || super.onOptionsItemSelected(item)
     }
 
     private fun initSwipeToRefresh() {
