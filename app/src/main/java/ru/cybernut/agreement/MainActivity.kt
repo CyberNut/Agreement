@@ -3,11 +3,13 @@ package ru.cybernut.agreement
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import com.google.android.material.navigation.NavigationView
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         drawerLayout = binding.drawerLayout
 
         val toolbar = binding.toolbar
@@ -31,8 +33,42 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(setOf(R.id.serviceRequestListFragment, R.id.requestListFragment, R.id.deliveryRequestListFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.navView?.setupWithNavController(navController)
-        binding.bottomNavView?.setupWithNavController(navController)
+        binding.navView.setupWithNavController(navController)
+        binding.bottomNavView.setupWithNavController(navController)
+//        binding.bottomNavView.setOnNavigationItemSelectedListener { item: MenuItem ->
+//            return@setOnNavigationItemSelectedListener when (item.itemId) {
+//                R.id.deliveryRequestListFragment1 -> {
+//                    Toast.makeText(
+//                        this,
+//                        "deliveryRequestListFragment1!",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    val builder = NavOptions.Builder()
+//                    var navOptions = builder.setPopUpTo(R.id.deliveryRequestListFragment, true).build()
+//                    navController.navigate(R.id.deliveryRequestListFragment)
+//                    true
+//                }
+//                R.id.serviceRequestListFragment1 -> {
+//                    Toast.makeText(
+//                        this,
+//                        "serviceRequestListFragment1!",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    navController.navigate(R.id.serviceRequestListFragment)
+//                    true
+//                }
+//                R.id.requestListFragment1 -> {
+//                    Toast.makeText(
+//                        this,
+//                        "requestListFragment1!",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    navController.navigate(R.id.requestListFragment)
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
 
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, bundle: Bundle? ->
             if (nd.id == R.id.requestListFragment || nd.id == R.id.serviceRequestListFragment || nd.id == R.id.deliveryRequestListFragment) {
@@ -50,29 +86,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val retValue = super.onCreateOptionsMenu(menu)
-        val navigationView = findViewById<NavigationView>(R.id.navView)
-        // The NavigationView already has these same navigation items, so we only add
-        // navigation items to the menu here if there isn't a NavigationView
-        if (navigationView == null) {
-            menuInflater.inflate(R.menu.overflow_menu, menu)
-            return true
-        }
-        return retValue
+        menuInflater.inflate(R.menu.overflow_menu, menu)
+        return true
     }
-
-    //    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        val retValue = super.onCreateOptionsMenu(menu)
-//        val navigationView = findViewById<NavigationView>(R.id.navView)
-//        //val navigationView = binding.navView
-//        // The NavigationView already has these same navigation items, so we only add
-//        // navigation items to the menu here if there isn't a NavigationView
-//        if (navigationView == null) {
-//            menuInflater.inflate(R.menu.overflow_menu, menu)
-//            return true
-//        }
-//        return retValue
-//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(findNavController(R.id.nav_host))

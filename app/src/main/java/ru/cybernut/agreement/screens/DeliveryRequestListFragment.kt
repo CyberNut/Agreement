@@ -73,6 +73,8 @@ class DeliveryRequestListFragment : Fragment() {
         return binding.root
     }
 
+
+
     private fun initSwipeToRefresh() {
 //        model.refreshState.observe(this, Observer {
 //            swipe_refresh.isRefreshing = it == NetworkState.LOADING

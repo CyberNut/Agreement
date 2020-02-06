@@ -19,7 +19,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorPrimaryLight"
                 android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
             <FrameLayout
@@ -41,6 +41,7 @@
                 android:id="@+id/bottomNavView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryLight"
                 app:menu="@menu/bottom_nav_menu" />
 
         </LinearLayout>

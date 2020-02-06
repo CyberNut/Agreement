@@ -15,7 +15,8 @@
             app:argType="ru.cybernut.agreement.db.PaymentRequest" />
         <action
             android:id="@+id/action_requestFragment_to_requestListFragment"
-            app:destination="@id/requestListFragment" />
+            app:destination="@id/requestListFragment"
+            app:popUpTo="@+id/requestListFragment" />
     </fragment>
     <fragment
         android:id="@+id/requestListFragment"
@@ -23,7 +24,8 @@
         android:label="RequestListFragment" >
         <action
             android:id="@+id/action_requestListFragment_to_requestFragment"
-            app:destination="@id/requestFragment" />
+            app:destination="@id/requestFragment"
+            app:launchSingleTop="false" />
     </fragment>
     <fragment
         android:id="@+id/serviceRequestListFragment"
@@ -43,7 +45,8 @@
         android:label="ServiceRequestFragment" >
         <action
             android:id="@+id/action_serviceRequestFragment_to_serviceRequestListFragment"
-            app:destination="@id/serviceRequestListFragment" />
+            app:destination="@id/serviceRequestListFragment"
+            app:popUpTo="@+id/serviceRequestListFragment" />
         <argument
             android:name="request"
             app:argType="ru.cybernut.agreement.db.ServiceRequest" />
@@ -62,7 +65,8 @@
         android:label="DeliveryRequestFragment" >
         <action
             android:id="@+id/action_deliveryRequestFragment_to_deliveryRequestListFragment"
-            app:destination="@id/deliveryRequestListFragment" />
+            app:destination="@id/deliveryRequestListFragment"
+            app:popUpTo="@+id/deliveryRequestListFragment" />
         <argument
             android:name="request"
             app:argType="ru.cybernut.agreement.db.DeliveryRequest" />
