@@ -35,4 +35,5 @@
     <string name="warehouse_sender">Warehouse sender</string>
     <string name="sender_address">Sender address</string>
     <string name="Delivery">Delivery</string>
+    <string name="action_search">Search</string>
 </resources>

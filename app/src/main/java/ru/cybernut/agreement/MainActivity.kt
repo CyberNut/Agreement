@@ -3,16 +3,13 @@ package ru.cybernut.agreement
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
-import com.google.android.material.navigation.NavigationView
 import ru.cybernut.agreement.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -86,6 +83,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu);
         menuInflater.inflate(R.menu.overflow_menu, menu)
         return true
     }

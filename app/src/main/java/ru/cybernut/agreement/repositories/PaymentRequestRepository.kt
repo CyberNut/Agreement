@@ -1,5 +1,6 @@
 package ru.cybernut.agreement.repositories
 
+import androidx.lifecycle.LiveData
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.db.PaymentRequestDao
 
@@ -7,10 +8,12 @@ class PaymentRequestRepository private constructor(private val paymentRequestDao
 
     override fun getRequests() = paymentRequestDao.getRequests()
 
+    override fun getFilteredRequests(filter: String) = paymentRequestDao.getRequestsByFilter(filter)
+
     override fun getRequestById(requestId: String) = paymentRequestDao.getRequestById(requestId)
 
     override suspend fun insertRequests(requests: List<PaymentRequest>) {
-        paymentRequestDao.deleteAll()
+        //paymentRequestDao.deleteAll()
         paymentRequestDao.insertAll(requests)
     }
 

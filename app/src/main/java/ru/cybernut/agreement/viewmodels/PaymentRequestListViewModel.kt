@@ -16,6 +16,7 @@ import ru.cybernut.agreement.db.AgreementsDatabase
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.PaymentRequestRepository
+import ru.cybernut.fivesecondsgame.waitForValue
 
 class PaymentRequestListViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -51,6 +52,18 @@ class PaymentRequestListViewModel(application: Application) : AndroidViewModel(a
             paymentRequestRepository.insertRequests(requests)
         } catch (e: Exception) {
             Log.i(TAG, "updatePaymentRequests", e)
+        }
+    }
+
+    @SuppressLint("LongLogTag")
+    fun updateRequestsByFilter(filter: String) = coroutineScope.async {
+        try {
+            paymentRequestRepository.deleteAllRequests()
+            var filteredRequests = paymentRequestRepository.getFilteredRequests(filter).waitForValue()
+//            val list = paymentRequestRepository.getFilteredRequests(filter).waitForValue()
+            val p = 1
+        } catch (e: Exception) {
+            Log.i(TAG, "updatePaymentRequestsByFilter", e)
         }
     }
 

@@ -43,11 +43,13 @@ class DeliveryRequestListFragment : Fragment() {
 
         binding = FragmentDeliveryRequestListBinding.inflate(inflater, container, false)
         binding.setLifecycleOwner(this)
+
         binding.viewModel = viewModel
 
         val adapter = RequestsAdapter(R.layout.delivery_request_list_item, BR.deliveryRequest, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
+        //binding.requestsList.itemAnimator = null
         binding.requestsList.adapter = adapter
 
         viewModel.requests.observe(this, Observer { requests ->

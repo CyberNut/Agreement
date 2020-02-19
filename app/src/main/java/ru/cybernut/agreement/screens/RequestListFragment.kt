@@ -2,14 +2,13 @@ package ru.cybernut.agreement.screens
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BR
@@ -49,6 +48,7 @@ class RequestListFragment : Fragment() {
         val adapter = RequestsAdapter(R.layout.payment_request_list_item, BR.request, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
+        //binding.requestsList.itemAnimator = null
         binding.requestsList.adapter = adapter
 
         viewModel.requests.observe(this, Observer { requests ->
@@ -71,8 +71,39 @@ class RequestListFragment : Fragment() {
         })
 
         initSwipeToRefresh()
+        setHasOptionsMenu(true)
         return binding.root
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        var searchMenuItem = menu.findItem(R.id.action_search)
+        var searchView = searchMenuItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                if (query != null && query.trim().length >= 3) {
+                    viewModel.updateRequestsByFilter(query.trim())
+                }
+                Log.i("searchView", "onQueryTextSubmit")
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.i("searchView", "onQueryTextChange")
+                return false
+            }
+        } )
+    }
+
+    //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (item.itemId == R.id.action_search) {
+//            Toast.makeText(activity, "Search!", Toast.LENGTH_SHORT).show()
+//            return true
+//        } else {
+//            return super.onOptionsItemSelected(item)
+//        }
+//    }
 
     private fun initSwipeToRefresh() {
 //        model.refreshState.observe(this, Observer {

@@ -2,6 +2,7 @@ package ru.cybernut.agreement.db
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import ru.cybernut.agreement.utils.DATABASE_NAME
 
@@ -19,6 +20,8 @@ interface BaseRequestDao<T> {
 
     fun getRequests(): LiveData<List<T>>
 
+    fun getRequestsByFilter(filter: String): LiveData<List<T>>
+
     fun getRequestById(uuid: String): LiveData<T>
 
     suspend fun deleteAll()
@@ -28,6 +31,9 @@ interface BaseRequestDao<T> {
 abstract class PaymentRequestDao: BaseRequestDao<PaymentRequest> {
     @Query("select * from payment_requests_table")
     abstract override fun getRequests(): LiveData<List<PaymentRequest>>
+
+    @Query("select * from payment_requests_table where number LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%' OR sum LIKE '%' || :filter  || '%' OR author LIKE '%' || :filter  || '%' OR description LIKE '%' || :filter  || '%'")
+    abstract override fun getRequestsByFilter(filter: String): LiveData<List<PaymentRequest>>
 
     @Query("select * from payment_requests_table where uuid = :uuid")
     abstract override fun getRequestById(uuid: String): LiveData<PaymentRequest>
@@ -41,6 +47,9 @@ abstract class ServiceRequestDao: BaseRequestDao<ServiceRequest> {
     @Query("select * from service_requests_table")
     abstract override fun getRequests(): LiveData<List<ServiceRequest>>
 
+    @Query("select * from service_requests_table where number LIKE '%' || :filter  || '%'")
+    abstract override fun getRequestsByFilter(filter: String): LiveData<List<ServiceRequest>>
+
     @Query("select * from service_requests_table where uuid = :uuid")
     abstract override fun getRequestById(uuid: String): LiveData<ServiceRequest>
 
@@ -52,6 +61,9 @@ abstract class ServiceRequestDao: BaseRequestDao<ServiceRequest> {
 abstract class DeliveryRequestDao: BaseRequestDao<DeliveryRequest> {
     @Query("select * from delivery_requests_table")
     abstract override fun getRequests(): LiveData<List<DeliveryRequest>>
+
+    @Query("select * from delivery_requests_table where number LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%'")
+    abstract override fun getRequestsByFilter(filter: String): LiveData<List<DeliveryRequest>>
 
     @Query("select * from delivery_requests_table where uuid = :uuid")
     abstract override fun getRequestById(uuid: String): LiveData<DeliveryRequest>

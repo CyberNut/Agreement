@@ -55,6 +55,22 @@ class PaymentRequestDaoTest {
 
     @Test
     @Throws(Exception::class)
+    fun getFilteredRequests() = runBlocking {
+        val paymentRequest1 = PaymentRequest("1","pay1","shop1", "none", "true", "test1", "false","100", "sdf")
+        paymentRequestDao.insert(paymentRequest1)
+        val paymentRequest2 = PaymentRequest("2","pay2","shop2", "none", "true", "test2", "false","102", "sdf")
+        paymentRequestDao.insert(paymentRequest2)
+        val paymentRequest3 = PaymentRequest("3","pay3","shop3", "none", "true", "test3", "false","103", "ssdff")
+        paymentRequestDao.insert(paymentRequest3)
+
+        val paymentRequests = paymentRequestDao.getRequestsByFilter("102").waitForValue()
+        assertTrue(paymentRequests.size == 1)
+        //assertEquals(paymentRequests[0].name, questionSet.name)
+    }
+
+
+    @Test
+    @Throws(Exception::class)
     fun deleteAll() = runBlocking {
         val paymentRequest = PaymentRequest("1","pay","shop1", "none", "true", "test", "false","100", "sdf")
         paymentRequestDao.insert(paymentRequest)

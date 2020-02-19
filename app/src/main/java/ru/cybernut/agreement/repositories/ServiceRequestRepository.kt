@@ -1,11 +1,14 @@
 package ru.cybernut.agreement.repositories
 
+import androidx.lifecycle.LiveData
 import ru.cybernut.agreement.db.ServiceRequest
 import ru.cybernut.agreement.db.ServiceRequestDao
 
 class ServiceRequestRepository private constructor(private val serviceRequestDao: ServiceRequestDao) : RequestRepository<ServiceRequest> {
 
     override fun getRequests() = serviceRequestDao.getRequests()
+
+    override fun getFilteredRequests(filter: String) = serviceRequestDao.getRequestsByFilter(filter)
 
     override fun getRequestById(requestId: String) = serviceRequestDao.getRequestById(requestId)
 
