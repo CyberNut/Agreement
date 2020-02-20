@@ -1,7 +1,6 @@
 package ru.cybernut.agreement.repositories
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 
 interface RequestRepository<T> {
 

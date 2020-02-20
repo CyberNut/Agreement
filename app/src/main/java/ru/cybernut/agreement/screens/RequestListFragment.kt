@@ -2,7 +2,6 @@ package ru.cybernut.agreement.screens
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -16,6 +15,7 @@ import ru.cybernut.agreement.R
 import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentRequestListBinding
 import ru.cybernut.agreement.db.PaymentRequest
+import ru.cybernut.agreement.utils.MIN_SEARCH_QUERY_LENGHT
 import ru.cybernut.agreement.viewmodels.PaymentRequestListViewModel
 
 class RequestListFragment : Fragment() {
@@ -55,7 +55,6 @@ class RequestListFragment : Fragment() {
                         requests?.let {
                 adapter.submitList(it)
             }
-            //Toast.makeText(activity, "Update done!", Toast.LENGTH_SHORT).show()
             binding.swipeRefresh.isRefreshing = false
         })
 
@@ -77,42 +76,35 @@ class RequestListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.overflow_menu, menu)
         var searchMenuItem = menu.findItem(R.id.action_search)
         var searchView = searchMenuItem.actionView as SearchView
+        searchView.setQuery(viewModel.filter.value, true)
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-
-                if (query != null && query.trim().length >= 3) {
-                    viewModel.updateRequestsByFilter(query.trim())
+                if (query != null && query.trim().length >= MIN_SEARCH_QUERY_LENGHT) {
+                    viewModel.setFilter(query.trim())
+                } else {
+                    viewModel.setFilter("")
                 }
-                Log.i("searchView", "onQueryTextSubmit")
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                Log.i("searchView", "onQueryTextChange")
-                return false
+                if (newText != null && newText.trim().length >= MIN_SEARCH_QUERY_LENGHT) {
+                    viewModel.setFilter(newText.trim())
+                } else {
+                    viewModel.setFilter("")
+                }
+                return true
             }
         } )
     }
 
-    //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (item.itemId == R.id.action_search) {
-//            Toast.makeText(activity, "Search!", Toast.LENGTH_SHORT).show()
-//            return true
-//        } else {
-//            return super.onOptionsItemSelected(item)
-//        }
-//    }
-
     private fun initSwipeToRefresh() {
-//        model.refreshState.observe(this, Observer {
-//            swipe_refresh.isRefreshing = it == NetworkState.LOADING
-//        })
         binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.updateRequests()
         }
     }
-
 }

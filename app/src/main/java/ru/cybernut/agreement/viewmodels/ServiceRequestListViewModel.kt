@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.switchMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,9 +21,9 @@ import ru.cybernut.agreement.repositories.ServiceRequestRepository
 
 class ServiceRequestListViewModel(application: Application): AndroidViewModel(application)  {
 
-    private val TAG = "ServiceRequestListViewModel"
+    private val TAG = "ServiceRqstListVM"
     private var database: AgreementsDatabase
-    private var serviceRequestRepository: ServiceRequestRepository
+    private lateinit var serviceRequestRepository: ServiceRequestRepository
 
     private var viewModelJob = Job()
     protected val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -31,7 +32,19 @@ class ServiceRequestListViewModel(application: Application): AndroidViewModel(ap
     val navigateToSelectedRequest: LiveData<Request>
         get() = _navigateToSelectedRequest
 
-    private var _requests : LiveData<List<ServiceRequest>>
+    private var _filter = MutableLiveData<String>("")
+    val filter: LiveData<String>
+        get() = _filter
+
+    private var _requests : LiveData<List<ServiceRequest>> =  _filter.switchMap {
+        if (it.isEmpty()) {
+            Log.i(TAG, "NO FILTER")
+            serviceRequestRepository.getRequests()
+        } else {
+            Log.i(TAG, "FILTER = " + it)
+            serviceRequestRepository.getFilteredRequests(it)
+        }
+    }
     val requests: LiveData<List<ServiceRequest>>
         get() = _requests
 
@@ -39,7 +52,6 @@ class ServiceRequestListViewModel(application: Application): AndroidViewModel(ap
         database = AgreementsDatabase.getDatabase(application)
         val serviceRequestDao = database.serviceRequestsDao()
         serviceRequestRepository = ServiceRequestRepository.getInstance(serviceRequestDao)
-        _requests = serviceRequestRepository.getRequests()
         updateRequests()
     }
 
@@ -48,11 +60,15 @@ class ServiceRequestListViewModel(application: Application): AndroidViewModel(ap
         try {
             val credential = AgreementApp.loginCredential
             val requests = KamiApi.retrofitService.getServiceRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
-            serviceRequestRepository.deleteAllRequests()
+            _filter.value = ""
             serviceRequestRepository.insertRequests(requests)
         } catch (e: Exception) {
             Log.i(TAG, "updatePaymentRequests", e)
         }
+    }
+
+    fun setFilter(newFilter: String) {
+        _filter.value = newFilter
     }
 
     fun showRequest(request: Request) {

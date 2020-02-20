@@ -1,10 +1,7 @@
 package ru.cybernut.agreement.repositories
 
-import androidx.lifecycle.LiveData
 import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.db.DeliveryRequestDao
-import ru.cybernut.agreement.db.ServiceRequest
-import ru.cybernut.agreement.db.ServiceRequestDao
 
 class DeliveryRequestRepository private constructor(private val deliveryRequestDao: DeliveryRequestDao) : RequestRepository<DeliveryRequest> {
 
@@ -13,7 +10,6 @@ class DeliveryRequestRepository private constructor(private val deliveryRequestD
     override fun getRequestById(requestId: String) = deliveryRequestDao.getRequestById(requestId)
 
     override fun getFilteredRequests(filter: String) = deliveryRequestDao.getRequestsByFilter(filter)
-
 
     override suspend fun insertRequests(requests: List<DeliveryRequest>) {
         deliveryRequestDao.deleteAll()

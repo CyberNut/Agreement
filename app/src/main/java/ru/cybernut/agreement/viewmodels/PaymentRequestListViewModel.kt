@@ -1,11 +1,11 @@
 package ru.cybernut.agreement.viewmodels
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.switchMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,20 +14,34 @@ import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.AgreementsDatabase
 import ru.cybernut.agreement.db.PaymentRequest
+import ru.cybernut.agreement.db.PaymentRequestDao
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.PaymentRequestRepository
-import ru.cybernut.fivesecondsgame.waitForValue
 
 class PaymentRequestListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val TAG = "PaymentRequestListViewModel"
+    private val TAG = "PaymentRqstListVM"
     private var database: AgreementsDatabase
-    private var paymentRequestRepository: PaymentRequestRepository
+    private lateinit var paymentRequestRepository: PaymentRequestRepository
+    private var paymentRequestDao: PaymentRequestDao
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private var _requests : LiveData<List<PaymentRequest>>
+    private var _filter = MutableLiveData<String>("")
+    val filter: LiveData<String>
+        get() = _filter
+
+    private var _requests : LiveData<List<PaymentRequest>> = _filter.switchMap {
+        if (it.isEmpty()) {
+            Log.i(TAG, "NO FILTER")
+            paymentRequestRepository.getRequests()
+        } else {
+            Log.i(TAG, "FILTER = " + it)
+            paymentRequestRepository.getFilteredRequests(it)
+        }
+    }
+
     val requests: LiveData<List<PaymentRequest>>
         get() = _requests
 
@@ -36,18 +50,18 @@ class PaymentRequestListViewModel(application: Application) : AndroidViewModel(a
         get() = _navigateToSelectedRequest
 
     init {
+        Log.i(TAG, "init")
         database = AgreementsDatabase.getDatabase(application)
-        val paymentRequestDao = database.paymentRequestsDao()
+        paymentRequestDao = database.paymentRequestsDao()
         paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
-        _requests = paymentRequestRepository.getRequests()
         updateRequests()
     }
 
-    @SuppressLint("LongLogTag")
     fun updateRequests() = coroutineScope.async {
         try {
             val credential = AgreementApp.loginCredential
             val requests = KamiApi.retrofitService.getPaymentRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
+            _filter.value = ""
             paymentRequestRepository.deleteAllRequests()
             paymentRequestRepository.insertRequests(requests)
         } catch (e: Exception) {
@@ -55,16 +69,8 @@ class PaymentRequestListViewModel(application: Application) : AndroidViewModel(a
         }
     }
 
-    @SuppressLint("LongLogTag")
-    fun updateRequestsByFilter(filter: String) = coroutineScope.async {
-        try {
-            paymentRequestRepository.deleteAllRequests()
-            var filteredRequests = paymentRequestRepository.getFilteredRequests(filter).waitForValue()
-//            val list = paymentRequestRepository.getFilteredRequests(filter).waitForValue()
-            val p = 1
-        } catch (e: Exception) {
-            Log.i(TAG, "updatePaymentRequestsByFilter", e)
-        }
+    fun setFilter(newFilter: String) {
+        _filter.value = newFilter
     }
 
     fun showRequest(request: Request) {

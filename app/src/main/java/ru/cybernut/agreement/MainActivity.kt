@@ -1,7 +1,6 @@
 package ru.cybernut.agreement
 
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -32,40 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.navView.setupWithNavController(navController)
         binding.bottomNavView.setupWithNavController(navController)
-//        binding.bottomNavView.setOnNavigationItemSelectedListener { item: MenuItem ->
-//            return@setOnNavigationItemSelectedListener when (item.itemId) {
-//                R.id.deliveryRequestListFragment1 -> {
-//                    Toast.makeText(
-//                        this,
-//                        "deliveryRequestListFragment1!",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    val builder = NavOptions.Builder()
-//                    var navOptions = builder.setPopUpTo(R.id.deliveryRequestListFragment, true).build()
-//                    navController.navigate(R.id.deliveryRequestListFragment)
-//                    true
-//                }
-//                R.id.serviceRequestListFragment1 -> {
-//                    Toast.makeText(
-//                        this,
-//                        "serviceRequestListFragment1!",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    navController.navigate(R.id.serviceRequestListFragment)
-//                    true
-//                }
-//                R.id.requestListFragment1 -> {
-//                    Toast.makeText(
-//                        this,
-//                        "requestListFragment1!",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    navController.navigate(R.id.requestListFragment)
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
 
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, bundle: Bundle? ->
             if (nd.id == R.id.requestListFragment || nd.id == R.id.serviceRequestListFragment || nd.id == R.id.deliveryRequestListFragment) {
@@ -79,17 +44,9 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.nav_host)
         return navController.navigateUp(appBarConfiguration)
-        //return NavigationUI.navigateUp(navController, appBarConfiguration)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu);
-        menuInflater.inflate(R.menu.overflow_menu, menu)
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(findNavController(R.id.nav_host))
-                || super.onOptionsItemSelected(item)
     }
 }

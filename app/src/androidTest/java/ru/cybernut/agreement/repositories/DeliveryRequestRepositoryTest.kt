@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 import ru.cybernut.agreement.db.AgreementsDatabase
 import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.db.DeliveryRequestDao
-import ru.cybernut.fivesecondsgame.waitForValue
+import ru.cybernut.agreement.utils.waitForValue
 import java.io.IOException
 
 

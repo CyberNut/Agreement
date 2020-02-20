@@ -13,7 +13,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
-import ru.cybernut.fivesecondsgame.waitForValue
+import ru.cybernut.agreement.utils.waitForValue
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
@@ -56,14 +56,14 @@ class PaymentRequestDaoTest {
     @Test
     @Throws(Exception::class)
     fun getFilteredRequests() = runBlocking {
-        val paymentRequest1 = PaymentRequest("1","pay1","shop1", "none", "true", "test1", "false","100", "sdf")
+        val paymentRequest1 = PaymentRequest("1","pay1","shop1", "none", "REIGNMAC", "test1", "false","100", "sdf")
         paymentRequestDao.insert(paymentRequest1)
-        val paymentRequest2 = PaymentRequest("2","pay2","shop2", "none", "true", "test2", "false","102", "sdf")
+        val paymentRequest2 = PaymentRequest("2","pay2","shop2", "none", "TWT GLOBAL ENTERPRISE", "test2", "false","102", "sdf")
         paymentRequestDao.insert(paymentRequest2)
-        val paymentRequest3 = PaymentRequest("3","pay3","shop3", "none", "true", "test3", "false","103", "ssdff")
+        val paymentRequest3 = PaymentRequest("3","pay3","shop3", "none", "TWT GLOBAL ENTERPRISE", "test3", "false","103", "ssdff")
         paymentRequestDao.insert(paymentRequest3)
 
-        val paymentRequests = paymentRequestDao.getRequestsByFilter("102").waitForValue()
+        val paymentRequests = paymentRequestDao.getRequestsByFilter("mac").waitForValue()
         assertTrue(paymentRequests.size == 1)
         //assertEquals(paymentRequests[0].name, questionSet.name)
     }

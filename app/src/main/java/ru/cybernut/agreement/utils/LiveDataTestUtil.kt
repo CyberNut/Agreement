@@ -1,4 +1,4 @@
-package ru.cybernut.agreement
+package ru.cybernut.agreement.utils
 
 /*
  * Copyright (C) 2017 The Android Open Source Project

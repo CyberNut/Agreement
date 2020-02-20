@@ -2,12 +2,15 @@ package ru.cybernut.agreement.screens
 
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentRequestBinding
+import ru.cybernut.agreement.utils.hideKeyboard
 import ru.cybernut.agreement.viewmodels.RequestViewModel
 import ru.cybernut.agreement.viewmodels.RequestViewModelFactory
 
@@ -53,6 +57,12 @@ class RequestFragment : Fragment() {
         binding.approvalButton.setOnClickListener { handleThisRequest(true) }
         binding.declineButton.setOnClickListener { handleThisRequest(false) }
 
+//        val view = activity?.currentFocus
+//        view?.let { v ->
+//            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+//            imm?.hideSoftInputFromWindow(v.windowToken, 0)
+//        }
+        this.hideKeyboard()
         return binding.root
     }
 

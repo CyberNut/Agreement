@@ -2,14 +2,11 @@ package ru.cybernut.agreement.screens
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BR
@@ -17,6 +14,7 @@ import ru.cybernut.agreement.R
 import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentServiceRequestListBinding
 import ru.cybernut.agreement.db.ServiceRequest
+import ru.cybernut.agreement.utils.MIN_SEARCH_QUERY_LENGHT
 import ru.cybernut.agreement.viewmodels.ServiceRequestListViewModel
 
 
@@ -73,7 +71,35 @@ class ServiceRequestListFragment : Fragment() {
         })
 
         initSwipeToRefresh()
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.overflow_menu, menu)
+        var searchMenuItem = menu.findItem(R.id.action_search)
+        var searchView = searchMenuItem.actionView as SearchView
+        searchView.setQuery(viewModel.filter.value, true)
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null && query.trim().length >= MIN_SEARCH_QUERY_LENGHT) {
+                    viewModel.setFilter(query.trim())
+                } else {
+                    viewModel.setFilter("")
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null && newText.trim().length >= MIN_SEARCH_QUERY_LENGHT) {
+                    viewModel.setFilter(newText.trim())
+                } else {
+                    viewModel.setFilter("")
+                }
+                return true
+            }
+        } )
     }
 
     private fun initSwipeToRefresh() {

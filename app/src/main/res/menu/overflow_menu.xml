@@ -6,8 +6,5 @@
         android:title="@string/action_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always"/>
-    <item
-        android:id="@+id/aboutFragment"
-        android:title="@string/about" />
 
 </menu>

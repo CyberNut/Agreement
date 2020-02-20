@@ -15,10 +15,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentServiceRequestBinding
-import ru.cybernut.agreement.viewmodels.RequestViewModel
-import ru.cybernut.agreement.viewmodels.RequestViewModelFactory
 import ru.cybernut.agreement.viewmodels.ServiceRequestViewModel
 import ru.cybernut.agreement.viewmodels.ServiceRequestViewModelFactory
+import ru.cybernut.agreement.utils.hideKeyboard
 
 class ServiceRequestFragment : Fragment() {
 
@@ -55,6 +54,7 @@ class ServiceRequestFragment : Fragment() {
         binding.approvalButton.setOnClickListener { handleThisRequest(true) }
         binding.declineButton.setOnClickListener { handleThisRequest(false) }
 
+        this.hideKeyboard()
         return binding.root
     }
 

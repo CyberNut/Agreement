@@ -19,7 +19,7 @@
     android:id="@+id/navHeader"
     android:layout_width="match_parent"
     android:layout_height="192dp"
-    android:background="?attr/colorPrimaryDark"
+    android:background="@color/actionbar_opacity"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
@@ -36,6 +36,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/nav_header" />
+        app:srcCompat="@drawable/kami_logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
