@@ -19,8 +19,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryLight"
-                android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+                app:titleTextColor="@color/colorBlack" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -41,7 +40,8 @@
                 android:id="@+id/bottomNavView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryLight"
+                app:itemTextColor="@color/bottom_nav_color"
+                app:itemIconTint="@color/bottom_nav_color"
                 app:menu="@menu/bottom_nav_menu" />
 
         </LinearLayout>
@@ -52,6 +52,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:headerLayout="@layout/nav_header"
+            app:itemTextColor="@color/nav_drawer_color"
+            app:itemIconTint="@color/nav_drawer_color"
             app:menu="@menu/navdrawer_menu">
 
         </com.google.android.material.navigation.NavigationView>

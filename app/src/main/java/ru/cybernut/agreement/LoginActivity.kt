@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -21,6 +22,7 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.coroutines.*
 import ru.cybernut.agreement.databinding.ActivityLoginBinding
 import ru.cybernut.agreement.utils.SimpleScannerActivity
+import ru.cybernut.agreement.utils.hideKeyboard
 import ru.cybernut.agreement.viewmodels.LoginViewModel
 
 class LoginActivity : AppCompatActivity() {
@@ -57,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginSuccess.observe(this, Observer {
             if(it) {
                 saveSettings()
-                Toast.makeText(this, "Authorization success!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, resources.getString(R.string.authorization_successful), Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 viewModel.navigateToRequestListDone()
@@ -118,6 +120,9 @@ class LoginActivity : AppCompatActivity() {
                 delay(AUTOLOGIN_DELAY_MILLIS)
                 attemptLogin()
             }
+        }
+        if (binding.login.text.isNotEmpty()) {
+            hideKeyboard()
         }
     }
 

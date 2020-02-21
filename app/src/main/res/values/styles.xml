@@ -3,15 +3,21 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorBlack</item>
+        <item name="colorPrimaryDark">@color/colorWhite</item>
+        <item name="colorAccent">@color/colorBlue</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:colorBackground">@color/colorWhite</item>
+    </style>
+
+    <style name="Widget.AppCompat.Button.Borderless.BlackLight" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:colorBackground">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorBlack</item>
+
     </style>
 
     <style name="TransparentToolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:windowActionBarOverlay">true</item>
-        <!-- Support Library compability -->
         <item name="windowActionBarOverlay">true</item>
     </style>
 

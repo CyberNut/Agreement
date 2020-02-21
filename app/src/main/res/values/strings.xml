@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Agreement</string>
+    <string name="app_title">KAMI: Agreement</string>
     <string name="approve">Approve</string>
     <string name="decline">Decline</string>
     <string name="title_activity_login">Sign in</string>
@@ -29,11 +30,21 @@
     <string name="about">About</string>
     <string name="authorization">Autorization</string>
     <string name="money">Money</string>
+    <string name="money_title">Money</string>
+    <string name="money_title_item">Money </string>
     <string name="Service">Service</string>
+    <string name="service_title">Service</string>
+    <string name="service_title_item">Service</string>
     <string name="department">Department</string>
     <string name="service_department">Serv. department</string>
     <string name="warehouse_sender">Warehouse sender</string>
     <string name="sender_address">Sender address</string>
     <string name="Delivery">Delivery</string>
+    <string name="delivery_title">Delivery</string>
+    <string name="delivery_title_item">Delivery</string>
     <string name="action_search">Search</string>
+    <string name="copyright">©2020 - KAMI-Group</string>
+    <string name="version">Version</string>
+    <string name="authorization_successful">Authorization successful</string>
+    <string name="approval_comment">Approval comment</string>
 </resources>

@@ -52,16 +52,17 @@ class RequestViewModel(application: Application, val request: PaymentRequest): A
         paymentRequest.value = request
     }
 
-    fun handleRequest(approve: Boolean) {
+    fun handleRequest(approve: Boolean, comment: String) {
         //TODO: Обработка согласования
         val approvingRequestList = ApprovingRequestList(AgreementApp.loginCredential)
         approvingRequestList?.addRequestId(paymentRequest.value?.uuid!!)
         val moshi = Moshi.Builder().build()
         val jsonAdapter: JsonAdapter<ApprovingRequestList> = moshi.adapter(ApprovingRequestList::class.java)
         val json: String = jsonAdapter.toJson(approvingRequestList)
-        println(json)
+        //println(json)
+        val commentary = comment.trim() + " (Mobile)"
         try {
-            KamiApi.retrofitService.approveRequests(RequestType.MONEY.toString(), approve, "Mobile application", json)
+            KamiApi.retrofitService.approveRequests(RequestType.MONEY.toString(), approve, commentary, json)
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
                         Log.i(TAG, "ERROR Approve = $approve, Request = ${paymentRequest.value}")
@@ -70,7 +71,6 @@ class RequestViewModel(application: Application, val request: PaymentRequest): A
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         Log.i(TAG, "SUCCESS Approve = $approve, Request = ${paymentRequest.value}")
                         coroutineScope.launch {
-
                             paymentRequestRepository.deleteRequest(
                                 paymentRequest.value!!
                             )

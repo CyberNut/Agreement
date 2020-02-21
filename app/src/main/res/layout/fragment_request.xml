@@ -174,24 +174,48 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:gravity="bottom"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/approvalButton"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/approvalCommentary"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/approve" />
+                android:ems="30"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_gravity="bottom"
+                android:hint="@string/approval_comment" />
 
-            <Button
-                android:id="@+id/declineButton"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/decline" />
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/approvalButton"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/approve" />
+
+                <Button
+                    android:id="@+id/declineButton"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/decline" />
+
+            </LinearLayout>
 
         </LinearLayout>
+
     </LinearLayout>
 </layout>

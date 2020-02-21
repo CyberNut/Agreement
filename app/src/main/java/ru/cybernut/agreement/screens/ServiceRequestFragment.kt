@@ -51,21 +51,21 @@ class ServiceRequestFragment : Fragment() {
             }
         })
 
-        binding.approvalButton.setOnClickListener { handleThisRequest(true) }
-        binding.declineButton.setOnClickListener { handleThisRequest(false) }
+        binding.approvalButton.setOnClickListener { handleThisRequest(true, binding.approvalCommentary.text.toString()) }
+        binding.declineButton.setOnClickListener { handleThisRequest(false, binding.approvalCommentary.text.toString()) }
 
         this.hideKeyboard()
         return binding.root
     }
 
-    private fun handleThisRequest(approve: Boolean) {
+    private fun handleThisRequest(approve: Boolean, comment: String) {
 
         val dialogBuilder = AlertDialog.Builder(activity)
         dialogBuilder.setMessage(getString(R.string.dialog_confirm_approve))
             .setCancelable(false)
             .setPositiveButton(getText(R.string.confirm), DialogInterface.OnClickListener {
-                    dialog, id -> viewModel.handleRequest(approve)
-                    Toast.makeText(activity,"Ok", Toast.LENGTH_SHORT).show()
+                    dialog, id -> viewModel.handleRequest(approve, comment)
+                    //Toast.makeText(activity,"Ok", Toast.LENGTH_SHORT).show()
             })
             .setNegativeButton(getText(R.string.cancel), DialogInterface.OnClickListener {
                     dialog, id -> dialog.cancel()

@@ -6,12 +6,13 @@
         <variable
             name="request"
             type="ru.cybernut.agreement.db.PaymentRequest" />
-
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/extra_small_horizontal_margin"
+        android:background="@drawable/shadow_selector"
         android:orientation="vertical">
 
         <LinearLayout
@@ -25,7 +26,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:text="@{request.paymentDate}" />
+                android:text="@{request.paymentDate}"
+                tools:text="@string/requestDate" />
 
             <TextView
                 android:id="@+id/client"
@@ -35,7 +37,8 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="4"
                 android:gravity="end"
-                android:text="@{request.client}" />
+                android:text="@{request.client}"
+                tools:text="@string/client" />
 
         </LinearLayout>
 
@@ -50,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="4"
-                android:text="@{request.description}" />
+                android:text="@{request.description}"
+                tools:text="@string/description" />
 
             <TextView
                 android:id="@+id/sum"
@@ -60,7 +64,8 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="@{request.sum + '(' + request.currency + ')'}" />
+                android:text="@{request.sum + '(' + request.currency + ')'}"
+                tools:text="@string/sum" />
 
         </LinearLayout>
 
@@ -72,12 +77,12 @@
 
             <TextView
                 android:id="@+id/author"
-                style="?android:listSeparatorTextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@{request.author}" />
+                android:text="@{request.author}"
+                tools:text="@string/author" />
 
         </LinearLayout>
     </LinearLayout>

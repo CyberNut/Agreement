@@ -22,6 +22,7 @@ class RequestListFragment : Fragment() {
 
     //private val args: RequestListFragmentArgs by navArgs()
     private lateinit var binding: FragmentRequestListBinding
+    private lateinit var menu: Menu
 
     private val viewModel: PaymentRequestListViewModel by lazy {
         val activity = requireNotNull(this.activity) {
@@ -77,6 +78,7 @@ class RequestListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
+        this.menu = menu
         var searchMenuItem = menu.findItem(R.id.action_search)
         var searchView = searchMenuItem.actionView as SearchView
         searchView.setQuery(viewModel.filter.value, true)
@@ -104,7 +106,20 @@ class RequestListFragment : Fragment() {
     private fun initSwipeToRefresh() {
         binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setOnRefreshListener {
+            clearFilter()
             viewModel.updateRequests()
+        }
+    }
+
+    private fun clearFilter() {
+        if(::menu.isInitialized) {
+            var searchMenuItem = menu?.findItem(R.id.action_search)
+            if (searchMenuItem != null) {
+                var searchView = searchMenuItem?.actionView as SearchView
+                searchView?.setQuery("", false)
+                searchView?.clearFocus()
+                searchMenuItem.collapseActionView()
+            }
         }
     }
 }

@@ -34,10 +34,8 @@ class PaymentRequestListViewModel(application: Application) : AndroidViewModel(a
 
     private var _requests : LiveData<List<PaymentRequest>> = _filter.switchMap {
         if (it.isEmpty()) {
-            Log.i(TAG, "NO FILTER")
             paymentRequestRepository.getRequests()
         } else {
-            Log.i(TAG, "FILTER = " + it)
             paymentRequestRepository.getFilteredRequests(it)
         }
     }

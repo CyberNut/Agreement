@@ -2,10 +2,8 @@ package ru.cybernut.agreement.db
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import ru.cybernut.agreement.utils.DATABASE_NAME
-
 
 interface BaseRequestDao<T> {
 
@@ -32,7 +30,7 @@ abstract class PaymentRequestDao: BaseRequestDao<PaymentRequest> {
     @Query("select * from payment_requests_table")
     abstract override fun getRequests(): LiveData<List<PaymentRequest>>
 
-    @Query("select * from payment_requests_table where number LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%' OR sum LIKE '%' || :filter  || '%' OR author LIKE '%' || :filter  || '%' OR description LIKE '%' || :filter  || '%'")
+    @Query("select * from payment_requests_table where number LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%' OR payment_date LIKE '%' || :filter  || '%' OR date LIKE '%' || :filter  || '%' OR sum LIKE '%' || :filter  || '%' OR author LIKE '%' || :filter  || '%' OR description LIKE '%' || :filter  || '%'")
     abstract override fun getRequestsByFilter(filter: String): LiveData<List<PaymentRequest>>
 
     @Query("select * from payment_requests_table where uuid = :uuid")
@@ -47,7 +45,7 @@ abstract class ServiceRequestDao: BaseRequestDao<ServiceRequest> {
     @Query("select * from service_requests_table")
     abstract override fun getRequests(): LiveData<List<ServiceRequest>>
 
-    @Query("select * from service_requests_table where number LIKE '%' || :filter  || '%'")
+    @Query("select * from service_requests_table where number LIKE '%' || :filter  || '%' OR sum LIKE '%' || :filter  || '%' OR author LIKE '%' || :filter  || '%' OR date LIKE '%' || :filter  || '%' OR service_dept LIKE '%' || :filter  || '%' OR dept LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%' OR description LIKE '%' || :filter  || '%'")
     abstract override fun getRequestsByFilter(filter: String): LiveData<List<ServiceRequest>>
 
     @Query("select * from service_requests_table where uuid = :uuid")
@@ -62,7 +60,7 @@ abstract class DeliveryRequestDao: BaseRequestDao<DeliveryRequest> {
     @Query("select * from delivery_requests_table")
     abstract override fun getRequests(): LiveData<List<DeliveryRequest>>
 
-    @Query("select * from delivery_requests_table where number LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%'")
+    @Query("select * from delivery_requests_table where number LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%' OR sum LIKE '%' || :filter  || '%' OR author LIKE '%' || :filter  || '%' OR date LIKE '%' || :filter  || '%' OR warehouse_sender LIKE '%' || :filter  || '%' OR sender_address LIKE '%' || :filter  || '%' OR client_address LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%' OR description LIKE '%' || :filter  || '%'")
     abstract override fun getRequestsByFilter(filter: String): LiveData<List<DeliveryRequest>>
 
     @Query("select * from delivery_requests_table where uuid = :uuid")

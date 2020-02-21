@@ -6,5 +6,10 @@
     <color name="colorAccent">#9C27B0</color>
     <color name="actionbar_opacity">#33000000</color>
     <color name="colorWhite">#FFFFFFFF</color>
+    <color name="colorBlue">#FF428BF9</color>
+    <color name="colorGray">#FF9299A2</color>
+    <color name="colorGrayLight">#FFC1C1C1</color>
+    <color name="colorGrayExtraLight">#FFE7E7E7</color>
+    <color name="colorBlack">#FF333333</color>
 
 </resources>

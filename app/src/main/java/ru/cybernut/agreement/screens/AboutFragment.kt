@@ -1,23 +1,15 @@
 package ru.cybernut.agreement.screens
 
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import ru.cybernut.agreement.BuildConfig
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentAboutBinding
-import ru.cybernut.agreement.databinding.FragmentRequestBinding
-import ru.cybernut.agreement.viewmodels.RequestViewModel
-import ru.cybernut.agreement.viewmodels.RequestViewModelFactory
+
 
 class AboutFragment : Fragment() {
 
@@ -33,6 +25,11 @@ class AboutFragment : Fragment() {
 
         binding = FragmentAboutBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
+
+        val versionName: String = BuildConfig.VERSION_NAME
+        val versionCode: Int = BuildConfig.VERSION_CODE
+
+        binding.aboutTextView.text = resources.getString(R.string.version) + "\n" + versionName + " (" + versionCode + ")"
 
         return binding.root
     }

@@ -5,11 +5,11 @@
     <fragment
         android:id="@+id/aboutFragment"
         android:name="ru.cybernut.agreement.screens.AboutFragment"
-        android:label="AboutFragment" />
+        android:label="@string/about" />
     <fragment
         android:id="@+id/requestFragment"
         android:name="ru.cybernut.agreement.screens.RequestFragment"
-        android:label="RequestFragment" >
+        android:label="@string/money_title_item" >
         <argument
             android:name="request"
             app:argType="ru.cybernut.agreement.db.PaymentRequest" />
@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/requestListFragment"
         android:name="ru.cybernut.agreement.screens.RequestListFragment"
-        android:label="RequestListFragment" >
+        android:label="@string/money_title" >
         <action
             android:id="@+id/action_requestListFragment_to_requestFragment"
             app:destination="@id/requestFragment"
@@ -30,7 +30,7 @@
     <fragment
         android:id="@+id/serviceRequestListFragment"
         android:name="ru.cybernut.agreement.screens.ServiceRequestListFragment"
-        android:label="ServiceRequestListFragment" >
+        android:label="@string/service_title" >
         <action
             android:id="@+id/action_serviceRequestListFragment_to_serviceRequestFragment"
             app:destination="@id/serviceRequestFragment" />
@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/serviceRequestFragment"
         android:name="ru.cybernut.agreement.screens.ServiceRequestFragment"
-        android:label="ServiceRequestFragment" >
+        android:label="@string/service_title_item" >
         <action
             android:id="@+id/action_serviceRequestFragment_to_serviceRequestListFragment"
             app:destination="@id/serviceRequestListFragment"
@@ -54,7 +54,7 @@
     <fragment
         android:id="@+id/deliveryRequestListFragment"
         android:name="ru.cybernut.agreement.screens.DeliveryRequestListFragment"
-        android:label="DeliveryRequestListFragment" >
+        android:label="@string/delivery_title" >
         <action
             android:id="@+id/action_deliveryRequestListFragment_to_deliveryRequestFragment"
             app:destination="@id/deliveryRequestFragment" />
@@ -62,7 +62,7 @@
     <fragment
         android:id="@+id/deliveryRequestFragment"
         android:name="ru.cybernut.agreement.screens.DeliveryRequestFragment"
-        android:label="DeliveryRequestFragment" >
+        android:label="@string/delivery_title_item" >
         <action
             android:id="@+id/action_deliveryRequestFragment_to_deliveryRequestListFragment"
             app:destination="@id/deliveryRequestListFragment"
