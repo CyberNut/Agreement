@@ -37,9 +37,9 @@
     <string name="title_activity_login">Войти</string>
     <string name="use_qr_code">Использовать QR-код для входа</string>
     <string name="warehouse_sender">Склад-отправитель</string>
-    <string name="money_title">Заявки на расходование средств</string>
-    <string name="service_title">Заявки на ШМР</string>
-    <string name="delivery_title">Заявки на доставку клиенту</string>
+    <string name="money_title">Денежные средства</string>
+    <string name="service_title">Шеф-монтаж</string>
+    <string name="delivery_title">Доставки клиентам</string>
     <string name="delivery_title_item">Заявка на доставку клиенту</string>
     <string name="money_title_item">Заявка на расходование средств</string>
     <string name="service_title_item">Заявка на шеф-монтаж</string>
