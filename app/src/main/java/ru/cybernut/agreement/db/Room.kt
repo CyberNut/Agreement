@@ -22,7 +22,7 @@ interface BaseRequestDao<T> {
 
     fun getRequestById(uuid: String, userName: String): LiveData<T>
 
-    suspend fun deleteAll()
+    suspend fun deleteAll(userName: String)
 }
 
 @Dao
@@ -36,8 +36,8 @@ abstract class PaymentRequestDao: BaseRequestDao<PaymentRequest> {
     @Query("select * from payment_requests_table where userName = :userName AND uuid = :uuid")
     abstract override fun getRequestById(uuid: String, userName: String): LiveData<PaymentRequest>
 
-    @Query("DELETE FROM payment_requests_table")
-    abstract override suspend fun deleteAll()
+    @Query("DELETE FROM payment_requests_table where userName = :userName")
+    abstract override suspend fun deleteAll(userName: String)
 }
 
 @Dao
@@ -51,8 +51,8 @@ abstract class ServiceRequestDao: BaseRequestDao<ServiceRequest> {
     @Query("select * from service_requests_table where userName = :userName AND uuid = :uuid")
     abstract override fun getRequestById(uuid: String, userName: String): LiveData<ServiceRequest>
 
-    @Query("DELETE FROM service_requests_table")
-    abstract override suspend fun deleteAll()
+    @Query("DELETE FROM service_requests_table where userName = :userName")
+    abstract override suspend fun deleteAll(userName: String)
 }
 
 @Dao
@@ -66,39 +66,18 @@ abstract class DeliveryRequestDao: BaseRequestDao<DeliveryRequest> {
     @Query("select * from delivery_requests_table where userName = :userName AND uuid = :uuid")
     abstract override fun getRequestById(uuid: String, userName: String): LiveData<DeliveryRequest>
 
-    @Query("DELETE FROM delivery_requests_table")
-    abstract override suspend fun deleteAll()
+    @Query("DELETE FROM delivery_requests_table where userName = :userName")
+    abstract override suspend fun deleteAll(userName: String)
 }
 
-@Dao
-interface UserDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(user: User): Long
 
-    @Query("select * from users_table")
-    fun getUsers(): LiveData<List<User>>
-
-    @Query("select * from users_table where id = :id")
-    fun getUserById(id: Long): LiveData<User>
-
-    @Query("select * from users_table where userName = :name")
-    fun getUserByUserName(name: String): LiveData<User>
-
-    @Delete
-    suspend fun delete(user: User)
-
-    @Query("DELETE FROM users_table")
-    suspend fun deleteAll()
-}
-
-@Database(entities = [PaymentRequest::class, ServiceRequest::class, DeliveryRequest::class, User::class], version = 1, exportSchema = false)
+@Database(entities = [PaymentRequest::class, ServiceRequest::class, DeliveryRequest::class], version = 1, exportSchema = false)
 abstract class AgreementsDatabase : RoomDatabase() {
 
     abstract fun paymentRequestsDao(): PaymentRequestDao
     abstract fun serviceRequestsDao(): ServiceRequestDao
     abstract fun deliveryRequestsDao(): DeliveryRequestDao
-    abstract fun userDao(): UserDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

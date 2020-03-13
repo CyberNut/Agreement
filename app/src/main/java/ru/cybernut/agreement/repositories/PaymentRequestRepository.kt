@@ -15,13 +15,13 @@ class PaymentRequestRepository private constructor(private val paymentRequestDao
     override suspend fun insertRequests(requests: List<PaymentRequest>) {
         val credential = AgreementApp.loginCredential
         requests.forEach { it.userName = credential.userName }
-        paymentRequestDao.deleteAll()
+        paymentRequestDao.deleteAll(credential.userName)
         paymentRequestDao.insertAll(requests)
     }
 
     override suspend fun deleteRequest(request: PaymentRequest) = paymentRequestDao.delete(request)
 
-    override suspend fun deleteAllRequests() = paymentRequestDao.deleteAll()
+    override suspend fun deleteAllRequests() = paymentRequestDao.deleteAll(AgreementApp.loginCredential.userName)
 
     companion object {
 

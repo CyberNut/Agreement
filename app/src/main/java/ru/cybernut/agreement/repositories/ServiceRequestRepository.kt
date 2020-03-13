@@ -15,13 +15,13 @@ class ServiceRequestRepository private constructor(private val serviceRequestDao
     override suspend fun insertRequests(requests: List<ServiceRequest>) {
         val credential = AgreementApp.loginCredential
         requests.forEach { it.userName = credential.userName }
-        serviceRequestDao.deleteAll()
+        serviceRequestDao.deleteAll(credential.userName)
         serviceRequestDao.insertAll(requests)
     }
 
     override suspend fun deleteRequest(request: ServiceRequest) = serviceRequestDao.delete(request)
 
-    override suspend fun deleteAllRequests() = serviceRequestDao.deleteAll()
+    override suspend fun deleteAllRequests() = serviceRequestDao.deleteAll(AgreementApp.loginCredential.userName)
 
     companion object {
 

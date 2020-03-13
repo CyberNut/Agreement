@@ -65,12 +65,3 @@ data class DeliveryRequest constructor(
     var userName: String = ""
 ) : Serializable, Request
 
-@Entity(tableName = "users_table")
-data class User constructor(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long,
-    val userName: String
-) {
-    constructor(userName: String) : this(0L, userName) {
-    }
-}

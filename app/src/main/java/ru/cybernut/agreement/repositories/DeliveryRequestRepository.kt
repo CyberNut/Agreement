@@ -15,13 +15,13 @@ class DeliveryRequestRepository private constructor(private val deliveryRequestD
     override suspend fun insertRequests(requests: List<DeliveryRequest>) {
         val credential = AgreementApp.loginCredential
         requests.forEach { it.userName = credential.userName }
-        deliveryRequestDao.deleteAll()
+        deliveryRequestDao.deleteAll(credential.userName)
         deliveryRequestDao.insertAll(requests)
     }
 
     override suspend fun deleteRequest(request: DeliveryRequest) = deliveryRequestDao.delete(request)
 
-    override suspend fun deleteAllRequests() = deliveryRequestDao.deleteAll()
+    override suspend fun deleteAllRequests() = deliveryRequestDao.deleteAll(AgreementApp.loginCredential.userName)
 
     companion object {
 
