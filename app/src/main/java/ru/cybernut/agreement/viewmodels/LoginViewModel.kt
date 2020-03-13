@@ -6,16 +6,16 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.LoginCredential
+import ru.cybernut.agreement.db.AgreementsDatabase
+import ru.cybernut.agreement.db.User
+import ru.cybernut.agreement.db.UserDao
 import ru.cybernut.agreement.network.KamiApi
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
@@ -32,6 +32,8 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+    private var userDao: UserDao
+
     private val _loginSuccess = MutableLiveData<Boolean>(false)
     val loginSuccess: LiveData<Boolean>
         get() = _loginSuccess
@@ -41,7 +43,8 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
         get() = _incorrectLogin
 
     init {
-
+        val database = AgreementsDatabase.getDatabase(application)
+        userDao = database.userDao()
     }
 
     fun navigateToRequestListDone() {
@@ -110,11 +113,23 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.code() == 200) {
                                 Log.i(TAG, "doLogin success")
+                                AgreementApp.loginCredential = LoginCredential(userName, password)
+                                coroutineScope.launch {
+                                    var id = 0L
+                                    val user = userDao.getUserByUserName(userName)
+                                    if (user.value == null) {
+                                         id = userDao.insert(User(userName))
+                                    } else {
+                                        val tempUser = user.value
+                                        id = tempUser?.id ?: 0L
+                                    }
+                                    AgreementApp.userId = id
+                                }
                                 _loginSuccess.value = true
+
                             } else {
                                 _incorrectLogin.value = true
                             }
-                            AgreementApp.loginCredential = LoginCredential(userName, password)
                             Log.i(TAG, "doLogin success")
                         }
                     }

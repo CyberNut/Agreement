@@ -7,7 +7,6 @@ import com.squareup.moshi.Json
 import ru.cybernut.agreement.data.Request
 import java.io.Serializable
 
-
 @Entity(tableName = "payment_requests_table")
 data class PaymentRequest constructor(
     @PrimaryKey(autoGenerate = false)
@@ -21,8 +20,8 @@ data class PaymentRequest constructor(
     val description: String,
     val currency: String,
     val sum: String,
-    val author:String
-
+    val author:String,
+    var userName: String = ""
 ) : Serializable, Request
 
 @Entity(tableName = "service_requests_table")
@@ -39,8 +38,8 @@ data class ServiceRequest constructor(
     val company: String,
     val description: String,
     val sum: String,
-    val author:String
-
+    val author:String,
+    var userName: String = ""
 ) : Serializable, Request
 
 @Entity(tableName = "delivery_requests_table")
@@ -62,6 +61,16 @@ data class DeliveryRequest constructor(
     val company: String,
     val description: String,
     val sum: String,
-    val author:String
-
+    val author:String,
+    var userName: String = ""
 ) : Serializable, Request
+
+@Entity(tableName = "users_table")
+data class User constructor(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
+    val userName: String
+) {
+    constructor(userName: String) : this(0L, userName) {
+    }
+}

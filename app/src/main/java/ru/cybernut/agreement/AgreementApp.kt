@@ -7,5 +7,6 @@ class AgreementApp: Application() {
 
     companion object {
         lateinit var loginCredential: LoginCredential
+        var userId: Long = 0L
     }
 }
