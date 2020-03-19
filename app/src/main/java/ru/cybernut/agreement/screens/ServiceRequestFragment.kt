@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,9 +14,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentServiceRequestBinding
+import ru.cybernut.agreement.utils.hideKeyboard
 import ru.cybernut.agreement.viewmodels.ServiceRequestViewModel
 import ru.cybernut.agreement.viewmodels.ServiceRequestViewModelFactory
-import ru.cybernut.agreement.utils.hideKeyboard
 
 class ServiceRequestFragment : Fragment() {
 

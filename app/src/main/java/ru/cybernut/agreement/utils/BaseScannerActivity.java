@@ -1,5 +1,6 @@
 package ru.cybernut.agreement.utils;
 
+import android.annotation.SuppressLint;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
@@ -9,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import ru.cybernut.agreement.R;
 
 
+@SuppressLint("Registered")
 public class BaseScannerActivity extends AppCompatActivity {
     public void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

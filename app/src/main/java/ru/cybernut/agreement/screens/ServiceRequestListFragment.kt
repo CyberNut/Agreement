@@ -45,10 +45,10 @@ class ServiceRequestListFragment : Fragment() {
         binding.setLifecycleOwner(this)
         binding.viewModel = viewModel
 
-        val adapter = RequestsAdapter(R.layout.service_request_list_item, BR.serviceRequest, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
+        val adapter = RequestsAdapter(R.layout.service_request_list_item, R.layout.empty_request_list_item, BR.serviceRequest, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
-        //binding.requestsList.itemAnimator = null
+        binding.requestsList.itemAnimator = null
         binding.requestsList.adapter = adapter
 
         viewModel.requests.observe(this, Observer { requests ->

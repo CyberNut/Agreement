@@ -47,4 +47,7 @@
     <string name="version">Version</string>
     <string name="authorization_successful">Authorization successful</string>
     <string name="approval_comment">Approval comment</string>
+    <string name="empty_list_message">NO DATA</string>
+    <string name="kami_logo">Kami Logo</string>
+    <string name="about_agreement_app">About Agreement app</string>
 </resources>

@@ -1,23 +1,15 @@
 package ru.cybernut.agreement.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.*
-import ru.cybernut.agreement.AgreementApp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.AgreementsDatabase
-import ru.cybernut.agreement.db.BaseRequestDao
-import ru.cybernut.agreement.db.PaymentRequest
-import ru.cybernut.agreement.db.ServiceRequest
-import ru.cybernut.agreement.network.KamiApi
-import ru.cybernut.agreement.repositories.PaymentRequestRepository
-import ru.cybernut.agreement.repositories.RequestRepository
-import ru.cybernut.agreement.repositories.ServiceRequestRepository
-import ru.cybernut.agreement.utils.RequestType
-import java.lang.Exception
 
 enum class KamiApiStatus  { LOADING, ERROR, DONE }
 

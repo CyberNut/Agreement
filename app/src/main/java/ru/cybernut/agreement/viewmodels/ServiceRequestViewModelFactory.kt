@@ -3,7 +3,6 @@ package ru.cybernut.agreement.viewmodels
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.db.ServiceRequest
 
 class ServiceRequestViewModelFactory(
