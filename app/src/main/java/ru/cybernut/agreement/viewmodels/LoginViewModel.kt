@@ -102,14 +102,21 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
                         }
 
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            if (response.code() == 200) {
-                                Log.i(TAG, "doLogin success")
-                                _loginSuccess.value = true
-                            } else {
-                                _incorrectLogin.value = true
+                            when (response.code()) {
+                                200 -> {
+                                    Log.i(TAG, "doLogin success")
+                                    _loginSuccess.value = true
+                                }
+                                401 -> {
+                                    Log.i(TAG, "incorrect login (401)")
+                                    _incorrectLogin.value = true
+                                }
+                                else -> {
+                                    Log.i(TAG, "connection failure")
+                                    _incorrectLogin.value = true
+                                }
                             }
                             AgreementApp.loginCredential = LoginCredential(userName, password)
-                            Log.i(TAG, "doLogin success")
                         }
                     }
                 )
