@@ -2,6 +2,7 @@ package ru.cybernut.agreement.screens
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ import ru.cybernut.agreement.viewmodels.PaymentRequestListViewModel
 
 class RequestListFragment : Fragment() {
 
+    private val TAG = "RequestListFragment"
     //private val args: RequestListFragmentArgs by navArgs()
     private lateinit var binding: FragmentRequestListBinding
     private lateinit var menu: Menu
@@ -46,7 +48,7 @@ class RequestListFragment : Fragment() {
         binding.setLifecycleOwner(this)
         binding.viewModel = viewModel
 
-        val adapter = RequestsAdapter(R.layout.payment_request_list_item, R.layout.empty_request_list_item, BR.request, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
+        val adapter = RequestsAdapter(R.layout.payment_request_list_item, BR.request, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
         binding.requestsList.itemAnimator = null

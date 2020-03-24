@@ -47,7 +47,7 @@
     <string name="version">Версия приложения</string>
     <string name="authorization_successful">Авторизация успешна</string>
     <string name="approval_comment">Комментарий согласующего</string>
-    <string name="empty_list_message">Нет заявок требующих вашего согласования.</string>
+    <string name="empty_list_message">Нет заявок\n требующих вашего согласования.</string>
     <string name="kami_logo">Логотип группы компаний КАМИ</string>
     <string name="about_agreement_app">О приложении</string>
 </resources>

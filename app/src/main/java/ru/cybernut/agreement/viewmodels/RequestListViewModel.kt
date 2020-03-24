@@ -28,6 +28,7 @@ abstract class RequestListViewModel(application: Application): AndroidViewModel(
     abstract var request: LiveData<List<Request>>
     protected val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+
     init {
         database = AgreementsDatabase.getDatabase(application)
     }

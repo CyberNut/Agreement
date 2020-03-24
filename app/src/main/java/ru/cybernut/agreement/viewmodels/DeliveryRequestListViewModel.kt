@@ -2,10 +2,7 @@ package ru.cybernut.agreement.viewmodels
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -47,6 +44,10 @@ class DeliveryRequestListViewModel(application: Application): AndroidViewModel(a
 
     val requests: LiveData<List<DeliveryRequest>>
         get() = _requests
+
+    val empty: LiveData<Boolean> = Transformations.map(_requests) {
+        it.isEmpty()
+    }
 
     init {
         database = AgreementsDatabase.getDatabase(application)

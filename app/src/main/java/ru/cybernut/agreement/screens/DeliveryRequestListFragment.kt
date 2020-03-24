@@ -46,7 +46,7 @@ class DeliveryRequestListFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        val adapter = RequestsAdapter(R.layout.delivery_request_list_item, R.layout.empty_request_list_item, BR.deliveryRequest, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
+        val adapter = RequestsAdapter(R.layout.delivery_request_list_item, BR.deliveryRequest, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
         binding.requestsList.itemAnimator = null

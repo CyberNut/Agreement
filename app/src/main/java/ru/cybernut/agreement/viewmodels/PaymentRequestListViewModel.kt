@@ -2,10 +2,7 @@ package ru.cybernut.agreement.viewmodels
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -46,6 +43,10 @@ class PaymentRequestListViewModel(application: Application) : AndroidViewModel(a
     private val _navigateToSelectedRequest = MutableLiveData<Request>()
     val navigateToSelectedRequest: LiveData<Request>
         get() = _navigateToSelectedRequest
+
+    val empty: LiveData<Boolean> = Transformations.map(_requests) {
+        it.isEmpty()
+    }
 
     init {
         Log.i(TAG, "init")

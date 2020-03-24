@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.cybernut.agreement.data.Request
 import java.util.*
 
-class RequestsAdapter(@LayoutRes val itemLayoutId: Int, @LayoutRes val emptyLayoutId: Int, val bindingVariableId: Int?, val onClickListener: OnClickListener? = null): ListAdapter<Request, RequestsAdapter.RequestViewHolder>(DiffCallback) {
+class RequestsAdapter(@LayoutRes val itemLayoutId: Int, val bindingVariableId: Int, val onClickListener: OnClickListener? = null): ListAdapter<Request, RequestsAdapter.RequestViewHolder>(DiffCallback) {
 
     private val additionalBindingVariables = Hashtable<Int, Any>()
 
@@ -41,11 +41,9 @@ class RequestsAdapter(@LayoutRes val itemLayoutId: Int, @LayoutRes val emptyLayo
         additionalBindingVariables[bindingId] = value
     }
 
-    inner class RequestViewHolder(private var binding: ViewDataBinding, val bindingVariableId: Int?): RecyclerView.ViewHolder(binding.root) {
+    inner class RequestViewHolder(private var binding: ViewDataBinding, val bindingVariableId: Int): RecyclerView.ViewHolder(binding.root) {
         fun<T> bind(variable: T) {
-            if (bindingVariableId != null) {
-                binding.setVariable(bindingVariableId, variable)
-            }
+            binding.setVariable(bindingVariableId, variable)
             additionalBindingVariables.forEach { binding.setVariable(it.key, it.value) }
             binding.executePendingBindings()
         }
