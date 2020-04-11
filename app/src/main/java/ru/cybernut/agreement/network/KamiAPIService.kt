@@ -15,6 +15,7 @@ import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.db.ServiceRequest
 
 private const val BASE_URL = "http://172.16.0.42"
+private const val BASE_NAME = "/kami_ageenko"
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -39,19 +40,19 @@ private val retrofit = Retrofit.Builder()
  */
 interface KamiAPIService {
 
-    @POST("/kami_ageenko/hs/Approval/login")
+    @POST(BASE_NAME + "/hs/Approval/login")
     fun doLogin(@Body loginString: String?): Call<Void>
 
-    @POST("/kami_ageenko/hs/Approval/getList")
+    @POST(BASE_NAME + "/hs/Approval/getList")
     fun getPaymentRequests(@Body loginCredential: String): Deferred<List<PaymentRequest>>
 
-    @POST("/kami_ageenko/hs/Approval/getListService")
+    @POST(BASE_NAME + "/hs/Approval/getListService")
     fun getServiceRequests(@Body loginCredential: String): Deferred<List<ServiceRequest>>
 
-    @POST("/kami_ageenko/hs/Approval/getListDelivery")
+    @POST(BASE_NAME + "/hs/Approval/getListDelivery")
     fun getDeliveryRequests(@Body loginCredential: String): Deferred<List<DeliveryRequest>>
 
-    @POST("/kami_ageenko/hs/Approval/approve/{request_type}/{type}/{comment}")
+    @POST(BASE_NAME + "/hs/Approval/approve/{request_type}/{type}/{comment}")
     fun approveRequests(@Path("request_type") requestType: String,
                         @Path("type") type: Boolean,
                         @Path("comment") comment: String?,
