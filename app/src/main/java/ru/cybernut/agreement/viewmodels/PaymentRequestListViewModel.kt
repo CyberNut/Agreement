@@ -7,6 +7,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.AgreementsDatabase
@@ -15,12 +17,10 @@ import ru.cybernut.agreement.db.PaymentRequestDao
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.PaymentRequestRepository
 
-class PaymentRequestListViewModel(application: Application) : AndroidViewModel(application) {
+class PaymentRequestListViewModel() : ViewModel(), KoinComponent {
 
     private val TAG = "PaymentRqstListVM"
-    private var database: AgreementsDatabase
-    private lateinit var paymentRequestRepository: PaymentRequestRepository
-    private var paymentRequestDao: PaymentRequestDao
+    val paymentRequestRepository: PaymentRequestRepository by inject()
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -50,9 +50,6 @@ class PaymentRequestListViewModel(application: Application) : AndroidViewModel(a
 
     init {
         Log.i(TAG, "init")
-        database = AgreementsDatabase.getDatabase(application)
-        paymentRequestDao = database.paymentRequestsDao()
-        paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
         updateRequests()
     }
 

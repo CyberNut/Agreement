@@ -28,7 +28,7 @@ class DeliveryRequestFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        ViewModelProviders.of(this, DeliveryRequestViewModelFactory(activity.application, args.request))
+        ViewModelProviders.of(this, DeliveryRequestViewModelFactory(args.request))
             .get(DeliveryRequestViewModel::class.java)
     }
 

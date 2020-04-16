@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="ru.cybernut.agreement.viewmodels.RequestViewModel" />
+            type="ru.cybernut.agreement.viewmodels.PaymentRequestViewModel" />
     </data>
 
     <LinearLayout

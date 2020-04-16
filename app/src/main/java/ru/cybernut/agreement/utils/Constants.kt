@@ -5,3 +5,5 @@ const val MIN_SEARCH_QUERY_LENGHT = 3
 enum class RequestType {
     MONEY, SERVICE, DELIVERY
 }
+
+enum class KamiApiStatus  { LOADING, ERROR, DONE }

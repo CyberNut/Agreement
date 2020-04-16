@@ -1,25 +1,23 @@
 package ru.cybernut.agreement.viewmodels
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.Request
-import ru.cybernut.agreement.db.AgreementsDatabase
 import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.DeliveryRequestRepository
 
-
-class DeliveryRequestListViewModel(application: Application): AndroidViewModel(application)  {
+class DeliveryRequestListViewModel(): ViewModel(), KoinComponent  {
 
     private val TAG = "DeliveryRqstListVM"
-    private var database: AgreementsDatabase
-    private lateinit var deliveryRequestRepository: DeliveryRequestRepository
+    private val deliveryRequestRepository: DeliveryRequestRepository by inject()
 
     private var viewModelJob = Job()
     protected val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -50,9 +48,6 @@ class DeliveryRequestListViewModel(application: Application): AndroidViewModel(a
     }
 
     init {
-        database = AgreementsDatabase.getDatabase(application)
-        val deliveryRequestDao = database.deliveryRequestsDao()
-        deliveryRequestRepository = DeliveryRequestRepository.getInstance(deliveryRequestDao)
         updateRequests()
     }
 

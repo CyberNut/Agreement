@@ -15,8 +15,8 @@ import androidx.navigation.fragment.navArgs
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentRequestBinding
 import ru.cybernut.agreement.utils.hideKeyboard
-import ru.cybernut.agreement.viewmodels.RequestViewModel
-import ru.cybernut.agreement.viewmodels.RequestViewModelFactory
+import ru.cybernut.agreement.viewmodels.PaymentRequestViewModel
+import ru.cybernut.agreement.viewmodels.PaymentRequestViewModelFactory
 
 class RequestFragment : Fragment() {
 
@@ -24,12 +24,12 @@ class RequestFragment : Fragment() {
     private val args: RequestFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentRequestBinding
-    private val viewModel: RequestViewModel by lazy {
+    private val viewModel: PaymentRequestViewModel by lazy {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        ViewModelProviders.of(this, RequestViewModelFactory(activity.application, args.request))
-            .get(RequestViewModel::class.java)
+        ViewModelProviders.of(this, PaymentRequestViewModelFactory(args.request))
+            .get(PaymentRequestViewModel::class.java)
     }
 
     override fun onCreateView(

@@ -6,12 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import ru.cybernut.agreement.db.DeliveryRequest
 
 class DeliveryRequestViewModelFactory(
-    private val application: Application,
     private val request: DeliveryRequest
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DeliveryRequestViewModel(application, request) as T
+        return DeliveryRequestViewModel(request) as T
     }
 }

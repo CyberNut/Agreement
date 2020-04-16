@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">КАМИ: Согласование заявок</string>
+    <string name="database_name">agreements-db</string>
     <string name="Delivery">Доставка</string>
     <string name="Service">Шеф-монтаж</string>
     <string name="about">О программе</string>

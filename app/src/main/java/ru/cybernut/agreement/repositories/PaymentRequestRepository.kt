@@ -4,7 +4,7 @@ import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.db.PaymentRequestDao
 
-class PaymentRequestRepository private constructor(private val paymentRequestDao: PaymentRequestDao) : RequestRepository<PaymentRequest> {
+class PaymentRequestRepository(private val paymentRequestDao: PaymentRequestDao) : RequestRepository<PaymentRequest> {
 
     override fun getRequests() = paymentRequestDao.getRequests(AgreementApp.loginCredential.userName)
 
@@ -22,16 +22,5 @@ class PaymentRequestRepository private constructor(private val paymentRequestDao
     override suspend fun deleteRequest(request: PaymentRequest) = paymentRequestDao.delete(request)
 
     override suspend fun deleteAllRequests() = paymentRequestDao.deleteAll(AgreementApp.loginCredential.userName)
-
-    companion object {
-
-        // For Singleton instantiation
-        @Volatile private var instance: PaymentRequestRepository? = null
-
-        fun getInstance(paymentRequestDao: PaymentRequestDao) =
-            instance ?: synchronized(this) {
-                instance ?: PaymentRequestRepository(paymentRequestDao).also { instance = it }
-            }
-    }
 
 }

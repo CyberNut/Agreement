@@ -9,12 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.LoginCredential
-import ru.cybernut.agreement.network.KamiApi
+import ru.cybernut.agreement.utils.KamiApiStatus
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.DESKeySpec
@@ -93,33 +90,35 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
     fun doLogin(userName: String, password: String) {
         try {
             Log.i(TAG, "Before calling retrofit")
-            KamiApi.retrofitService.doLogin("User=" + userName + ";Pswd=" + password)
-                .enqueue(
-                    object : Callback<Void> {
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Log.i(TAG, "doLogin onFailure")
-                            _incorrectLogin.value = true
-                        }
-
-                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            when (response.code()) {
-                                200 -> {
-                                    Log.i(TAG, "doLogin success")
-                                    _loginSuccess.value = true
-                                }
-                                401 -> {
-                                    Log.i(TAG, "incorrect login (401)")
-                                    _incorrectLogin.value = true
-                                }
-                                else -> {
-                                    Log.i(TAG, "connection failure")
-                                    _incorrectLogin.value = true
-                                }
-                            }
-                            AgreementApp.loginCredential = LoginCredential(userName, password)
-                        }
-                    }
-                )
+            AgreementApp.loginCredential = LoginCredential(userName, password)
+            _loginSuccess.value = true
+//            KamiApi.retrofitService.doLogin("User=" + userName + ";Pswd=" + password)
+//                .enqueue(
+//                    object : Callback<Void> {
+//                        override fun onFailure(call: Call<Void>, t: Throwable) {
+//                            Log.i(TAG, "doLogin onFailure")
+//                            _incorrectLogin.value = true
+//                        }
+//
+//                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+//                            when (response.code()) {
+//                                200 -> {
+//                                    Log.i(TAG, "doLogin success")
+//                                    _loginSuccess.value = true
+//                                }
+//                                401 -> {
+//                                    Log.i(TAG, "incorrect login (401)")
+//                                    _incorrectLogin.value = true
+//                                }
+//                                else -> {
+//                                    Log.i(TAG, "connection failure")
+//                                    _incorrectLogin.value = true
+//                                }
+//                            }
+//                            AgreementApp.loginCredential = LoginCredential(userName, password)
+//                        }
+//                    }
+//                )
         } catch (e: java.lang.Exception) {
             Log.i(TAG, "updatePaymentRequests", e)
         }

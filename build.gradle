@@ -11,6 +11,7 @@ buildscript {
         coreTestingVersion = "2.1.0"
         roomVersion = '2.2.3'
         gsonVersion = "2.8.2"
+        koinVersion = "2.1.5"
     }
     repositories {
         google()

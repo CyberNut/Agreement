@@ -1,26 +1,25 @@
 package ru.cybernut.agreement.viewmodels
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.Request
-import ru.cybernut.agreement.db.AgreementsDatabase
 import ru.cybernut.agreement.db.ServiceRequest
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.ServiceRequestRepository
 
 
-class ServiceRequestListViewModel(application: Application): AndroidViewModel(application)  {
+class ServiceRequestListViewModel(): ViewModel(), KoinComponent  {
 
     private val TAG = "ServiceRqstListVM"
-    private var database: AgreementsDatabase
-    private lateinit var serviceRequestRepository: ServiceRequestRepository
+    private val serviceRequestRepository: ServiceRequestRepository by inject()
 
     private var viewModelJob = Job()
     protected val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -50,9 +49,6 @@ class ServiceRequestListViewModel(application: Application): AndroidViewModel(ap
     }
 
     init {
-        database = AgreementsDatabase.getDatabase(application)
-        val serviceRequestDao = database.serviceRequestsDao()
-        serviceRequestRepository = ServiceRequestRepository.getInstance(serviceRequestDao)
         updateRequests()
     }
 

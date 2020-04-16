@@ -4,7 +4,7 @@ import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.db.DeliveryRequestDao
 
-class DeliveryRequestRepository private constructor(private val deliveryRequestDao: DeliveryRequestDao) : RequestRepository<DeliveryRequest> {
+class DeliveryRequestRepository(private val deliveryRequestDao: DeliveryRequestDao) : RequestRepository<DeliveryRequest> {
 
     override fun getRequests() = deliveryRequestDao.getRequests(AgreementApp.loginCredential.userName)
 
@@ -22,15 +22,4 @@ class DeliveryRequestRepository private constructor(private val deliveryRequestD
     override suspend fun deleteRequest(request: DeliveryRequest) = deliveryRequestDao.delete(request)
 
     override suspend fun deleteAllRequests() = deliveryRequestDao.deleteAll(AgreementApp.loginCredential.userName)
-
-    companion object {
-
-        // For Singleton instantiation
-        @Volatile private var instance: DeliveryRequestRepository? = null
-
-        fun getInstance(deliveryRequestDao: DeliveryRequestDao) =
-            instance ?: synchronized(this) {
-                instance ?: DeliveryRequestRepository(deliveryRequestDao).also { instance = it }
-            }
-    }
 }

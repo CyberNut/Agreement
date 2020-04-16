@@ -4,7 +4,7 @@ import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.db.ServiceRequest
 import ru.cybernut.agreement.db.ServiceRequestDao
 
-class ServiceRequestRepository private constructor(private val serviceRequestDao: ServiceRequestDao) : RequestRepository<ServiceRequest> {
+class ServiceRequestRepository(private val serviceRequestDao: ServiceRequestDao) : RequestRepository<ServiceRequest> {
 
     override fun getRequests() = serviceRequestDao.getRequests(AgreementApp.loginCredential.userName)
 
@@ -22,15 +22,4 @@ class ServiceRequestRepository private constructor(private val serviceRequestDao
     override suspend fun deleteRequest(request: ServiceRequest) = serviceRequestDao.delete(request)
 
     override suspend fun deleteAllRequests() = serviceRequestDao.deleteAll(AgreementApp.loginCredential.userName)
-
-    companion object {
-
-        // For Singleton instantiation
-        @Volatile private var instance: ServiceRequestRepository? = null
-
-        fun getInstance(serviceRequestDao: ServiceRequestDao) =
-            instance ?: synchronized(this) {
-                instance ?: ServiceRequestRepository(serviceRequestDao).also { instance = it }
-            }
-    }
 }
