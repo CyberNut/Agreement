@@ -1,9 +1,7 @@
 package ru.cybernut.agreement.db
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import ru.cybernut.agreement.utils.DATABASE_NAME
 
 interface BaseRequestDao<T> {
 
@@ -70,36 +68,10 @@ abstract class DeliveryRequestDao: BaseRequestDao<DeliveryRequest> {
     abstract override suspend fun deleteAll(userName: String)
 }
 
-
-
 @Database(entities = [PaymentRequest::class, ServiceRequest::class, DeliveryRequest::class], version = 1, exportSchema = false)
 abstract class AgreementsDatabase : RoomDatabase() {
 
     abstract fun paymentRequestsDao(): PaymentRequestDao
     abstract fun serviceRequestsDao(): ServiceRequestDao
     abstract fun deliveryRequestsDao(): DeliveryRequestDao
-
-    companion object {
-        // Singleton prevents multiple instances of database opening at the
-        // same time.
-        @Volatile
-        private var INSTANCE: AgreementsDatabase? = null
-
-        fun getDatabase(context: Context): AgreementsDatabase {
-            val tempInstance = INSTANCE
-            if (tempInstance != null) {
-                return tempInstance
-            }
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AgreementsDatabase::class.java,
-                    DATABASE_NAME
-                ).fallbackToDestructiveMigration()
-                .build()
-                INSTANCE = instance
-                return instance
-            }
-        }
-    }
 }

@@ -24,7 +24,7 @@ import ru.cybernut.agreement.utils.KamiApiStatus
 import ru.cybernut.agreement.utils.RequestType
 
 
-class DeliveryRequestViewModel(val request: DeliveryRequest): ViewModel(), KoinComponent {
+class DeliveryRequestViewModel(val deliveryRequestRepository: DeliveryRequestRepository, val request: DeliveryRequest): ViewModel(), KoinComponent {
 
     private val TAG = "DelivRequestViewModel"
     private val _status = MutableLiveData<KamiApiStatus>()
@@ -33,7 +33,6 @@ class DeliveryRequestViewModel(val request: DeliveryRequest): ViewModel(), KoinC
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     var deliveryRequest = MutableLiveData<DeliveryRequest>()
-    private val deliveryRequestRepository: DeliveryRequestRepository by inject()
 
     val status: LiveData<KamiApiStatus>
         get() = _status

@@ -7,8 +7,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.ServiceRequest
@@ -16,10 +14,9 @@ import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.ServiceRequestRepository
 
 
-class ServiceRequestListViewModel(): ViewModel(), KoinComponent  {
+class ServiceRequestListViewModel(val serviceRequestRepository: ServiceRequestRepository): ViewModel()  {
 
     private val TAG = "ServiceRqstListVM"
-    private val serviceRequestRepository: ServiceRequestRepository by inject()
 
     private var viewModelJob = Job()
     protected val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)

@@ -23,7 +23,7 @@ import ru.cybernut.agreement.repositories.ServiceRequestRepository
 import ru.cybernut.agreement.utils.KamiApiStatus
 import ru.cybernut.agreement.utils.RequestType
 
-class ServiceRequestViewModel(val request: ServiceRequest): ViewModel(), KoinComponent {
+class ServiceRequestViewModel(val serviceRequestRepository: ServiceRequestRepository, val request: ServiceRequest): ViewModel(), KoinComponent {
 
     private val TAG = "RequestViewModel"
     private val _status = MutableLiveData<KamiApiStatus>()
@@ -32,7 +32,6 @@ class ServiceRequestViewModel(val request: ServiceRequest): ViewModel(), KoinCom
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     var serviceRequest = MutableLiveData<ServiceRequest>()
-    private val serviceRequestRepository: ServiceRequestRepository by inject()
 
     val status: LiveData<KamiApiStatus>
         get() = _status

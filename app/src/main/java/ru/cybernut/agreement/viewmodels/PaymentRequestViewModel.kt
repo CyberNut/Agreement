@@ -25,7 +25,7 @@ import ru.cybernut.agreement.utils.KamiApiStatus
 import ru.cybernut.agreement.utils.RequestType
 
 
-class PaymentRequestViewModel(val request: PaymentRequest): ViewModel(), KoinComponent {
+class PaymentRequestViewModel(val paymentRequestRepository: PaymentRequestRepository, val request: PaymentRequest): ViewModel(), KoinComponent {
 
     private val TAG = "RequestViewModel"
     private val _status = MutableLiveData<KamiApiStatus>()
@@ -34,7 +34,6 @@ class PaymentRequestViewModel(val request: PaymentRequest): ViewModel(), KoinCom
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     var paymentRequest = MutableLiveData<PaymentRequest>()
-    val paymentRequestRepository: PaymentRequestRepository by inject()
 
     val status: LiveData<KamiApiStatus>
         get() = _status

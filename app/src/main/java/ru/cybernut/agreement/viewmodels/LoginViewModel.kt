@@ -1,11 +1,10 @@
 package ru.cybernut.agreement.viewmodels
 
-import android.app.Application
 import android.util.Base64
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -16,7 +15,7 @@ import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.DESKeySpec
 
-class LoginViewModel(application: Application): AndroidViewModel(application) {
+class LoginViewModel(): ViewModel() {
 
     private val TAG = "LoginViewModel"
 

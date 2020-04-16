@@ -2,14 +2,14 @@ package ru.cybernut.agreement.screens
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
@@ -19,19 +19,13 @@ import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.utils.MIN_SEARCH_QUERY_LENGHT
 import ru.cybernut.agreement.viewmodels.PaymentRequestListViewModel
 
-class RequestListFragment : Fragment() {
+class RequestListFragment : Fragment(), KoinComponent {
 
     private val TAG = "RequestListFragment"
-    //private val args: RequestListFragmentArgs by navArgs()
     private lateinit var binding: FragmentRequestListBinding
     private lateinit var menu: Menu
 
-    private val viewModel: PaymentRequestListViewModel by lazy {
-        val activity = requireNotNull(this.activity) {
-            "You can only access the viewModel after onActivityCreated()"
-        }
-        ViewModelProviders.of(this).get(PaymentRequestListViewModel::class.java)
-    }
+    private val viewModel: PaymentRequestListViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

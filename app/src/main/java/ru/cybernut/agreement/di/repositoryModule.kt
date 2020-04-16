@@ -9,6 +9,8 @@ import ru.cybernut.agreement.repositories.ServiceRequestRepository
 val repositoryModule = module {
 
     single { PaymentRequestRepository(get()) }
+
     single { ServiceRequestRepository(get()) }
+
     single { DeliveryRequestRepository(get()) }
 }

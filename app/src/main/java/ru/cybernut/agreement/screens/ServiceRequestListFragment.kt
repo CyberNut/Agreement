@@ -5,9 +5,10 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.android.ext.android.inject
+import org.koin.core.KoinComponent
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
@@ -17,18 +18,11 @@ import ru.cybernut.agreement.db.ServiceRequest
 import ru.cybernut.agreement.utils.MIN_SEARCH_QUERY_LENGHT
 import ru.cybernut.agreement.viewmodels.ServiceRequestListViewModel
 
+class ServiceRequestListFragment : Fragment(), KoinComponent {
 
-class ServiceRequestListFragment : Fragment() {
-
-    //private val args: RequestListFragmentArgs by navArgs()
     private lateinit var binding: FragmentServiceRequestListBinding
 
-    private val viewModel: ServiceRequestListViewModel by lazy {
-        val activity = requireNotNull(this.activity) {
-            "You can only access the viewModel after onActivityCreated()"
-        }
-        ViewModelProviders.of(this).get(ServiceRequestListViewModel::class.java)
-    }
+    private val viewModel: ServiceRequestListViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

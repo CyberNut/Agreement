@@ -1,6 +1,5 @@
 package ru.cybernut.agreement.screens
 
-
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -9,28 +8,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import org.koin.core.parameter.parametersOf
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentServiceRequestBinding
 import ru.cybernut.agreement.utils.hideKeyboard
 import ru.cybernut.agreement.viewmodels.ServiceRequestViewModel
-import ru.cybernut.agreement.viewmodels.ServiceRequestViewModelFactory
 
-class ServiceRequestFragment : Fragment() {
+class ServiceRequestFragment : Fragment(), KoinComponent {
 
     private val TAG = "ServiceRequestFragment"
     private val args: ServiceRequestFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentServiceRequestBinding
-    private val viewModel: ServiceRequestViewModel by lazy {
-        val activity = requireNotNull(this.activity) {
-            "You can only access the viewModel after onActivityCreated()"
-        }
-        ViewModelProviders.of(this, ServiceRequestViewModelFactory(args.request))
-            .get(ServiceRequestViewModel::class.java)
-    }
+    private val viewModel: ServiceRequestViewModel by inject { parametersOf(args.request)}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

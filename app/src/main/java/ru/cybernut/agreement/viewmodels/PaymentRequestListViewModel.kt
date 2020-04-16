@@ -1,26 +1,20 @@
 package ru.cybernut.agreement.viewmodels
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.Request
-import ru.cybernut.agreement.db.AgreementsDatabase
 import ru.cybernut.agreement.db.PaymentRequest
-import ru.cybernut.agreement.db.PaymentRequestDao
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.PaymentRequestRepository
 
-class PaymentRequestListViewModel() : ViewModel(), KoinComponent {
+class PaymentRequestListViewModel(val paymentRequestRepository: PaymentRequestRepository) : ViewModel() {
 
     private val TAG = "PaymentRqstListVM"
-    val paymentRequestRepository: PaymentRequestRepository by inject()
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
