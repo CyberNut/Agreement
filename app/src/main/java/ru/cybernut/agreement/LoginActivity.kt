@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,9 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import kotlinx.coroutines.*
 import ru.cybernut.agreement.databinding.ActivityLoginBinding
 import ru.cybernut.agreement.utils.SimpleScannerActivity
@@ -46,6 +50,11 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by lazy {
         ViewModelProviders.of(this).get(LoginViewModel::class.java)
+    }
+
+    val remoteConfig = Firebase.remoteConfig
+    val configSettings = remoteConfigSettings {
+        minimumFetchIntervalInSeconds = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +95,23 @@ class LoginActivity : AppCompatActivity() {
 
         loadSettings()
         setUIChangeListenerToCancelAutoLogin()
+        loadRemoteConfig()
+    }
+
+    private fun loadRemoteConfig() {
+        val serverAddress = remoteConfig.getString("server_address")
+        val baseName = remoteConfig.getString("base_name")
+        if (serverAddress.isNotEmpty() && baseName.isNotEmpty()) {
+            AgreementApp.serverAddress = serverAddress
+            AgreementApp.baseName = baseName
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.fetchAndActivate().addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                val updated = task.result
+                Log.d(TAG, "Config params updated: $updated")
+            }
+        }
     }
 
     private fun setUIChangeListenerToCancelAutoLogin() {

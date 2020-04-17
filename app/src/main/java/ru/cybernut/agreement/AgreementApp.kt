@@ -13,6 +13,8 @@ class AgreementApp: Application() {
 
     companion object {
         lateinit var loginCredential: LoginCredential
+        var serverAddress = "http://172.16.0.42"
+        var baseName = "kami_ageenko"
     }
 
     override fun onCreate() {

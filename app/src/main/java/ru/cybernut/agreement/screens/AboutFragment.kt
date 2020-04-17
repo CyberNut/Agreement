@@ -1,11 +1,18 @@
 package ru.cybernut.agreement.screens
 
 
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BuildConfig
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentAboutBinding
