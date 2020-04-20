@@ -67,7 +67,8 @@ class LoginActivity : AppCompatActivity() {
         })
 
         viewModel.incorrectLogin.observe(this, Observer {
-            if(it) {
+            binding.errorLoginLabel.setText(it)
+            if(it.isNotEmpty()) {
                 binding.errorLoginLabel.setVisibility(View.VISIBLE)
             } else {
                 binding.errorLoginLabel.setVisibility(View.INVISIBLE)
