@@ -14,7 +14,7 @@ import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.db.ServiceRequest
 
-private const val BASE_URL = "http://srv-app1c3.kami.local/kami/hs/Approval/"
+private const val BASE_URL = "http://172.16.0.132/kami/hs/Approval/"
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
