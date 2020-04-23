@@ -97,13 +97,9 @@ class DeliveryRequestListFragment : Fragment(), KoinComponent {
     }
 
     private fun initSwipeToRefresh() {
-//        model.refreshState.observe(this, Observer {
-//            swipe_refresh.isRefreshing = it == NetworkState.LOADING
-//        })
         binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.updateRequests()
         }
     }
-
 }

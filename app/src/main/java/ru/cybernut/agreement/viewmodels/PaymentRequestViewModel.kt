@@ -1,6 +1,5 @@
 package ru.cybernut.agreement.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,14 +18,13 @@ import ru.cybernut.agreement.data.ApprovingRequestList
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.PaymentRequestRepository
-import ru.cybernut.agreement.repositories.RequestRepository
 import ru.cybernut.agreement.utils.KamiApiStatus
 import ru.cybernut.agreement.utils.RequestType
+import timber.log.Timber
 
 
 class PaymentRequestViewModel(val paymentRequestRepository: PaymentRequestRepository, val request: PaymentRequest): ViewModel(), KoinComponent {
 
-    private val TAG = "RequestViewModel"
     private val _status = MutableLiveData<KamiApiStatus>()
 
     private var viewModelJob = Job()
@@ -47,9 +44,6 @@ class PaymentRequestViewModel(val paymentRequestRepository: PaymentRequestReposi
         get() = _needShowToast
 
     init {
-//        val database = AgreementsDatabase.getDatabase(application)
-//        val paymentRequestDao = database.paymentRequestsDao()
-//        paymentRequestRepository = PaymentRequestRepository.getInstance(paymentRequestDao)
         paymentRequest.value = request
     }
 
@@ -60,17 +54,16 @@ class PaymentRequestViewModel(val paymentRequestRepository: PaymentRequestReposi
         val moshi = Moshi.Builder().build()
         val jsonAdapter: JsonAdapter<ApprovingRequestList> = moshi.adapter(ApprovingRequestList::class.java)
         val json: String = jsonAdapter.toJson(approvingRequestList)
-        //println(json)
         val commentary = comment.trim() + " (Mobile)"
         try {
             KamiApi.retrofitService.approveRequests(RequestType.MONEY.toString(), approve, commentary, json)
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
-                        Log.i(TAG, "ERROR Approve = $approve, Request = ${paymentRequest.value}")
+                        Timber.d("ERROR Approve = $approve, Request = ${paymentRequest.value}")
                     }
 
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        Log.i(TAG, "SUCCESS Approve = $approve, Request = ${paymentRequest.value}")
+                        Timber.d("SUCCESS Approve = $approve, Request = ${paymentRequest.value}")
                         coroutineScope.launch {
                             paymentRequestRepository.deleteRequest(
                                 paymentRequest.value!!
@@ -79,9 +72,8 @@ class PaymentRequestViewModel(val paymentRequestRepository: PaymentRequestReposi
                     }
                 })
             showToast()
-            //Log.i(TAG, "Approve = $approve, Request = ${paymentRequest.value}")
         } catch (e: Exception) {
-            Log.e(TAG, "KamiApi.retrofitService.approveRequests failure", e)
+            Timber.d( "KamiApi.retrofitService.approveRequests failure " + e.message)
         }
     }
 

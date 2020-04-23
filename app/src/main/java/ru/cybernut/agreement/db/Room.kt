@@ -14,6 +14,8 @@ interface BaseRequestDao<T> {
     @Delete
     suspend fun delete(request: T)
 
+    suspend fun deleteRequestList(requests: List<String>, userName: String)
+
     fun getRequests(userName: String): LiveData<List<T>>
 
     fun getRequestsByFilter(filter: String, userName: String): LiveData<List<T>>
@@ -36,6 +38,9 @@ abstract class PaymentRequestDao: BaseRequestDao<PaymentRequest> {
 
     @Query("DELETE FROM payment_requests_table where userName = :userName")
     abstract override suspend fun deleteAll(userName: String)
+
+    @Query("DELETE FROM payment_requests_table where userName = :userName AND uuid IN (:requests)")
+    abstract override suspend fun deleteRequestList(requests: List<String>, userName: String)
 }
 
 @Dao
@@ -51,6 +56,9 @@ abstract class ServiceRequestDao: BaseRequestDao<ServiceRequest> {
 
     @Query("DELETE FROM service_requests_table where userName = :userName")
     abstract override suspend fun deleteAll(userName: String)
+
+    @Query("DELETE FROM service_requests_table where userName = :userName AND uuid IN (:requests)")
+    abstract override suspend fun deleteRequestList(requests: List<String>, userName: String)
 }
 
 @Dao
@@ -66,6 +74,9 @@ abstract class DeliveryRequestDao: BaseRequestDao<DeliveryRequest> {
 
     @Query("DELETE FROM delivery_requests_table where userName = :userName")
     abstract override suspend fun deleteAll(userName: String)
+
+    @Query("DELETE FROM delivery_requests_table where userName = :userName AND uuid IN (:requests)")
+    abstract override suspend fun deleteRequestList(requests: List<String>, userName: String)
 }
 
 @Database(entities = [PaymentRequest::class, ServiceRequest::class, DeliveryRequest::class], version = 1, exportSchema = false)

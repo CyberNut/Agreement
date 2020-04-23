@@ -1,7 +1,5 @@
 package ru.cybernut.agreement.viewmodels
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,11 +10,10 @@ import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.ServiceRequest
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.ServiceRequestRepository
+import timber.log.Timber
 
 
 class ServiceRequestListViewModel(val serviceRequestRepository: ServiceRequestRepository): ViewModel()  {
-
-    private val TAG = "ServiceRqstListVM"
 
     private var viewModelJob = Job()
     protected val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -31,10 +28,10 @@ class ServiceRequestListViewModel(val serviceRequestRepository: ServiceRequestRe
 
     private var _requests : LiveData<List<ServiceRequest>> =  _filter.switchMap {
         if (it.isEmpty()) {
-            Log.i(TAG, "NO FILTER")
+            Timber.d("NO FILTER")
             serviceRequestRepository.getRequests()
         } else {
-            Log.i(TAG, "FILTER = " + it)
+            Timber.d("FILTER = " + it)
             serviceRequestRepository.getFilteredRequests(it)
         }
     }
@@ -46,19 +43,13 @@ class ServiceRequestListViewModel(val serviceRequestRepository: ServiceRequestRe
     }
 
     init {
+        Timber.d("init ServiceRequestViewModel")
         updateRequests()
     }
 
-    @SuppressLint("LongLogTag")
     fun updateRequests() = coroutineScope.async {
-        try {
-            val credential = AgreementApp.loginCredential
-            val requests = KamiApi.retrofitService.getServiceRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
-            _filter.value = ""
-            serviceRequestRepository.insertRequests(requests)
-        } catch (e: Exception) {
-            Log.i(TAG, "updatePaymentRequests", e)
-        }
+        Timber.d("updateRequests from ServiceRequestViewModel")
+        serviceRequestRepository.updateRequests()
     }
 
     fun setFilter(newFilter: String) {

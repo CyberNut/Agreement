@@ -21,7 +21,6 @@ import ru.cybernut.agreement.viewmodels.PaymentRequestViewModel
 
 class RequestFragment : Fragment(), KoinComponent {
 
-    private val TAG = "RequestFragment"
     private val args: RequestFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentRequestBinding

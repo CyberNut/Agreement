@@ -49,7 +49,6 @@ class ServiceRequestListFragment : Fragment(), KoinComponent {
             requests?.let {
                 adapter.submitList(it)
             }
-            //Toast.makeText(activity, "Update done!", Toast.LENGTH_SHORT).show()
             binding.swipeRefresh.isRefreshing = false
         })
 
@@ -97,9 +96,6 @@ class ServiceRequestListFragment : Fragment(), KoinComponent {
     }
 
     private fun initSwipeToRefresh() {
-//        model.refreshState.observe(this, Observer {
-//            swipe_refresh.isRefreshing = it == NetworkState.LOADING
-//        })
         binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.updateRequests()

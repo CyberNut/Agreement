@@ -20,7 +20,6 @@ import ru.cybernut.agreement.viewmodels.ServiceRequestViewModel
 
 class ServiceRequestFragment : Fragment(), KoinComponent {
 
-    private val TAG = "ServiceRequestFragment"
     private val args: ServiceRequestFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentServiceRequestBinding
@@ -38,7 +37,6 @@ class ServiceRequestFragment : Fragment(), KoinComponent {
 
         viewModel.needShowToast.observe(this, Observer {
             if (it == true) {
-                //Toast.makeText(activity, "Test", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(ServiceRequestFragmentDirections.actionServiceRequestFragmentToServiceRequestListFragment())
                 viewModel.onToastShowDone()
             }

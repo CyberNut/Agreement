@@ -1,6 +1,5 @@
 package ru.cybernut.agreement.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,10 +20,10 @@ import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.ServiceRequestRepository
 import ru.cybernut.agreement.utils.KamiApiStatus
 import ru.cybernut.agreement.utils.RequestType
+import timber.log.Timber
 
 class ServiceRequestViewModel(val serviceRequestRepository: ServiceRequestRepository, val request: ServiceRequest): ViewModel(), KoinComponent {
 
-    private val TAG = "RequestViewModel"
     private val _status = MutableLiveData<KamiApiStatus>()
 
     private var viewModelJob = Job()
@@ -60,11 +58,11 @@ class ServiceRequestViewModel(val serviceRequestRepository: ServiceRequestReposi
             KamiApi.retrofitService.approveRequests(RequestType.SERVICE.toString(), approve, commentary, json)
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
-                        Log.i(TAG, "ERROR Approve = $approve, Request = ${serviceRequest.value}")
+                        Timber.d("ERROR Approve = $approve, Request = ${serviceRequest.value}")
                     }
 
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        Log.i(TAG, "SUCCESS Approve = $approve, Request = ${serviceRequest.value}")
+                        Timber.d("SUCCESS Approve = $approve, Request = ${serviceRequest.value}")
                         coroutineScope.launch {
                             serviceRequestRepository.deleteRequest(
                                 serviceRequest.value!!
@@ -73,9 +71,8 @@ class ServiceRequestViewModel(val serviceRequestRepository: ServiceRequestReposi
                     }
                 })
             showToast()
-            //Log.i(TAG, "Approve = $approve, Request = ${paymentRequest.value}")
         } catch (e: Exception) {
-            Log.e(TAG, "KamiApi.retrofitService.approveRequests failure", e)
+            Timber.d("KamiApi.retrofitService.approveRequests failure " + e.message)
         }
     }
 
@@ -92,4 +89,3 @@ class ServiceRequestViewModel(val serviceRequestRepository: ServiceRequestReposi
         viewModelJob.cancel()
     }
 }
-

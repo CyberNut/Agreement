@@ -16,4 +16,6 @@ interface RequestRepository<T> {
 
     suspend fun deleteAllRequests()
 
+    suspend fun updateRequests()
+
 }

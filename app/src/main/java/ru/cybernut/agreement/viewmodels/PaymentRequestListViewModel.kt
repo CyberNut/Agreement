@@ -1,20 +1,16 @@
 package ru.cybernut.agreement.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
-import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.PaymentRequest
-import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.PaymentRequestRepository
+import timber.log.Timber
 
 class PaymentRequestListViewModel(val paymentRequestRepository: PaymentRequestRepository) : ViewModel() {
-
-    private val TAG = "PaymentRqstListVM"
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -43,20 +39,13 @@ class PaymentRequestListViewModel(val paymentRequestRepository: PaymentRequestRe
     }
 
     init {
-        Log.i(TAG, "init")
+        Timber.d("init PaymentRequestViewModel")
         updateRequests()
     }
 
     fun updateRequests() = coroutineScope.async {
-        try {
-            val credential = AgreementApp.loginCredential
-            val requests = KamiApi.retrofitService.getPaymentRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
-            _filter.value = ""
-            paymentRequestRepository.deleteAllRequests()
-            paymentRequestRepository.insertRequests(requests)
-        } catch (e: Exception) {
-            Log.i(TAG, "updatePaymentRequests", e)
-        }
+        Timber.d("updateRequests from PaymentRequestViewModel")
+        paymentRequestRepository.updateRequests()
     }
 
     fun setFilter(newFilter: String) {

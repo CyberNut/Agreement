@@ -1,6 +1,5 @@
 package ru.cybernut.agreement.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,10 +10,9 @@ import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.DeliveryRequestRepository
+import timber.log.Timber
 
 class DeliveryRequestListViewModel(val deliveryRequestRepository: DeliveryRequestRepository): ViewModel()  {
-
-    private val TAG = "DeliveryRqstListVM"
 
     private var viewModelJob = Job()
     protected val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -29,10 +27,10 @@ class DeliveryRequestListViewModel(val deliveryRequestRepository: DeliveryReques
 
     private var _requests : LiveData<List<DeliveryRequest>> = _filter.switchMap {
         if (it.isEmpty()) {
-            Log.i(TAG, "NO FILTER")
+            Timber.d( "NO FILTER")
             deliveryRequestRepository.getRequests()
         } else {
-            Log.i(TAG, "FILTER = " + it)
+            Timber.d("FILTER = " + it)
             deliveryRequestRepository.getFilteredRequests(it)
         }
     }
@@ -45,18 +43,13 @@ class DeliveryRequestListViewModel(val deliveryRequestRepository: DeliveryReques
     }
 
     init {
+        Timber.d("init DeliveryRequestViewModel")
         updateRequests()
     }
 
     fun updateRequests() = coroutineScope.async {
-        try {
-            val credential = AgreementApp.loginCredential
-            val requests = KamiApi.retrofitService.getDeliveryRequests("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}").await()
-            _filter.value = ""
-            deliveryRequestRepository.insertRequests(requests)
-        } catch (e: Exception) {
-            Log.i(TAG, "updateDeliveryRequests", e)
-        }
+        Timber.d("updateRequests from DeliveryRequestViewModel")
+        deliveryRequestRepository.updateRequests()
     }
 
     fun setFilter(newFilter: String) {

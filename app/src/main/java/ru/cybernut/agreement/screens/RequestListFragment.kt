@@ -21,7 +21,6 @@ import ru.cybernut.agreement.viewmodels.PaymentRequestListViewModel
 
 class RequestListFragment : Fragment(), KoinComponent {
 
-    private val TAG = "RequestListFragment"
     private lateinit var binding: FragmentRequestListBinding
     private lateinit var menu: Menu
 

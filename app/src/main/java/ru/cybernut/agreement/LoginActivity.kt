@@ -28,7 +28,6 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         val QRCODE_STRING = "QRCODE_STRING"
     }
-    private val TAG = "LoginActivity"
     private val ZBAR_CAMERA_PERMISSION = 1
     val QR_CODE_READING = 2
 

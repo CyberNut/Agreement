@@ -21,7 +21,6 @@ import ru.cybernut.agreement.viewmodels.DeliveryRequestViewModel
 
 class DeliveryRequestFragment : Fragment(), KoinComponent {
 
-    private val TAG = "DeliveryRequestFragment"
     private val args: DeliveryRequestFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentDeliveryRequestBinding
@@ -39,7 +38,6 @@ class DeliveryRequestFragment : Fragment(), KoinComponent {
 
         viewModel.needShowToast.observe(this, Observer {
             if (it == true) {
-                //Toast.makeText(activity, "Test", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(DeliveryRequestFragmentDirections.actionDeliveryRequestFragmentToDeliveryRequestListFragment())
                 viewModel.onToastShowDone()
             }

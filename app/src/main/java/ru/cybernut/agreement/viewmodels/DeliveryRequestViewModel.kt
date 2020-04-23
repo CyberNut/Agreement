@@ -22,11 +22,11 @@ import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.DeliveryRequestRepository
 import ru.cybernut.agreement.utils.KamiApiStatus
 import ru.cybernut.agreement.utils.RequestType
+import timber.log.Timber
 
 
 class DeliveryRequestViewModel(val deliveryRequestRepository: DeliveryRequestRepository, val request: DeliveryRequest): ViewModel(), KoinComponent {
 
-    private val TAG = "DelivRequestViewModel"
     private val _status = MutableLiveData<KamiApiStatus>()
 
     private var viewModelJob = Job()
@@ -61,11 +61,11 @@ class DeliveryRequestViewModel(val deliveryRequestRepository: DeliveryRequestRep
             KamiApi.retrofitService.approveRequests(RequestType.DELIVERY.toString(), approve, commentary, json)
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
-                        Log.i(TAG, "ERROR Approve = $approve, Request = ${deliveryRequest.value}")
+                        Timber.d( "ERROR Approve = $approve, Request = ${deliveryRequest.value}")
                     }
 
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        Log.i(TAG, "SUCCESS Approve = $approve, Request = ${deliveryRequest.value}")
+                        Timber.d("SUCCESS Approve = $approve, Request = ${deliveryRequest.value}")
                         coroutineScope.launch {
                             deliveryRequestRepository.deleteRequest(
                                 deliveryRequest.value!!
@@ -74,9 +74,9 @@ class DeliveryRequestViewModel(val deliveryRequestRepository: DeliveryRequestRep
                     }
                 })
             showToast()
-            //Log.i(TAG, "Approve = $approve, Request = ${paymentRequest.value}")
+
         } catch (e: Exception) {
-            Log.e(TAG, "KamiApi.retrofitService.approveRequests failure", e)
+            Timber.d("KamiApi.retrofitService.approveRequests failure" + e.message)
         }
     }
 
