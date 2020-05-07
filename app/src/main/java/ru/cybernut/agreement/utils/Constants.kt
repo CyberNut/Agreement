@@ -6,4 +6,8 @@ enum class RequestType {
     MONEY, SERVICE, DELIVERY
 }
 
+enum class ApprovalType {
+    NONE, APPROVE, DECLINE, ERROR
+}
+
 enum class KamiApiStatus  { LOADING, ERROR, DONE }

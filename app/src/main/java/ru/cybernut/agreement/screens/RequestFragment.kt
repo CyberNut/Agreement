@@ -7,15 +7,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import org.koin.android.ext.android.inject
 import org.koin.core.KoinComponent
 import org.koin.core.parameter.parametersOf
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentRequestBinding
+import ru.cybernut.agreement.utils.ApprovalType
 import ru.cybernut.agreement.utils.hideKeyboard
 import ru.cybernut.agreement.viewmodels.PaymentRequestViewModel
 
@@ -23,6 +29,7 @@ class RequestFragment : Fragment(), KoinComponent {
 
     private val args: RequestFragmentArgs by navArgs()
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var binding: FragmentRequestBinding
     private val viewModel: PaymentRequestViewModel by inject { parametersOf(args.request)}
 
@@ -34,13 +41,26 @@ class RequestFragment : Fragment(), KoinComponent {
         binding = FragmentRequestBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
 
+        firebaseAnalytics = Firebase.analytics
+
         binding.viewModel = viewModel
 
-        viewModel.needShowToast.observe(this, Observer {
-            if (it == true) {
-                //Toast.makeText(activity, "Test", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(RequestFragmentDirections.actionRequestFragmentToRequestListFragment())
-                viewModel.onToastShowDone()
+        viewModel.approveResult.observe(this, Observer {
+            when(it) {
+                ApprovalType.APPROVE, ApprovalType.DECLINE -> {
+                    firebaseAnalytics.logEvent("approve_decline_request") {
+                        param("type", "payment")
+                        param("number", args.request.number)
+                    }
+                    Toast.makeText(activity, getString(R.string.success_approve_decline_toast_message, if(it == ApprovalType.APPROVE) getString(
+                                            R.string.approved) else getString(R.string.declined)), Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(RequestFragmentDirections.actionRequestFragmentToRequestListFragment())
+                    viewModel.onApproveRequestDone()
+                }
+                ApprovalType.ERROR -> {
+                    Toast.makeText(activity, getString(R.string.approve_decline_error_toast), Toast.LENGTH_LONG).show()
+                    viewModel.onApproveRequestDone()
+                }
             }
         })
 
@@ -58,7 +78,6 @@ class RequestFragment : Fragment(), KoinComponent {
             .setCancelable(false)
             .setPositiveButton(getText(R.string.confirm), DialogInterface.OnClickListener {
                     dialog, id -> viewModel.handleRequest(approve, comment)
-                    //Toast.makeText(activity,"Ok", Toast.LENGTH_SHORT).show()
             })
             .setNegativeButton(getText(R.string.cancel), DialogInterface.OnClickListener {
                     dialog, id -> dialog.cancel()
@@ -69,4 +88,3 @@ class RequestFragment : Fragment(), KoinComponent {
         alert.show()
     }
 }
-

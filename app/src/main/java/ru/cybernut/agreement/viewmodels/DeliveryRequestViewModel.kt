@@ -1,6 +1,5 @@
 package ru.cybernut.agreement.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +18,7 @@ import ru.cybernut.agreement.data.ApprovingRequestList
 import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.repositories.DeliveryRequestRepository
+import ru.cybernut.agreement.utils.ApprovalType
 import ru.cybernut.agreement.utils.KamiApiStatus
 import ru.cybernut.agreement.utils.RequestType
 import timber.log.Timber
@@ -37,13 +36,9 @@ class DeliveryRequestViewModel(val deliveryRequestRepository: DeliveryRequestRep
     val status: LiveData<KamiApiStatus>
         get() = _status
 
-    private var _confirmed = MutableLiveData<Boolean>(false)
-    val confirmed: LiveData<Boolean>
-        get() = _confirmed
-
-    private var _needShowToast = MutableLiveData<Boolean>()
-    val needShowToast: LiveData<Boolean>
-        get() = _needShowToast
+    private var _approveResult = MutableLiveData<ApprovalType>(ApprovalType.NONE)
+    val approveResult: LiveData<ApprovalType>
+        get() = _approveResult
 
     init {
         deliveryRequest.value = request
@@ -62,6 +57,7 @@ class DeliveryRequestViewModel(val deliveryRequestRepository: DeliveryRequestRep
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
                         Timber.d( "ERROR Approve = $approve, Request = ${deliveryRequest.value}")
+                        _approveResult.value = ApprovalType.ERROR
                     }
 
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -71,21 +67,17 @@ class DeliveryRequestViewModel(val deliveryRequestRepository: DeliveryRequestRep
                                 deliveryRequest.value!!
                             )
                         }
+                        _approveResult.value = if (approve) ApprovalType.APPROVE else ApprovalType.DECLINE
                     }
                 })
-            showToast()
-
         } catch (e: Exception) {
             Timber.d("KamiApi.retrofitService.approveRequests failure" + e.message)
+            _approveResult.value = ApprovalType.ERROR
         }
     }
 
-    fun onToastShowDone() {
-        _needShowToast.value = false
-    }
-
-    fun showToast() {
-        _needShowToast.value = true
+    fun onApproveRequestDone() {
+        _approveResult.value =  ApprovalType.NONE
     }
 
     override fun onCleared() {

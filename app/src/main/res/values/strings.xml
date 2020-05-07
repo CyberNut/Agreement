@@ -52,4 +52,8 @@
     <string name="empty_list_message">NO DATA</string>
     <string name="kami_logo">Kami Logo</string>
     <string name="about_agreement_app">About Agreement app</string>
+    <string name="success_approve_decline_toast_message">Request successfully %s.</string>
+    <string name="approve_decline_error_toast">Approval error!</string>
+    <string name="approved">approved</string>
+    <string name="declined">declined</string>
 </resources>

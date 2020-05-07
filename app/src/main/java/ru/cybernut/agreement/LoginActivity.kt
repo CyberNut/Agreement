@@ -18,6 +18,10 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import ru.cybernut.agreement.databinding.ActivityLoginBinding
 import ru.cybernut.agreement.utils.SimpleScannerActivity
@@ -42,6 +46,8 @@ class LoginActivity : AppCompatActivity() {
 
     private val MIN_PASSWORD_LENGHT = 9
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by lazy {
         ViewModelProviders.of(this).get(LoginViewModel::class.java)
@@ -51,6 +57,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView<ActivityLoginBinding>(this, R.layout.activity_login)
         binding.setLifecycleOwner(this)
+
+        firebaseAnalytics = Firebase.analytics
 
         binding.viewModel = viewModel
 
@@ -201,6 +209,11 @@ class LoginActivity : AppCompatActivity() {
             focusView!!.requestFocus()
         } else {
             showProgress(true)
+
+            firebaseAnalytics.logEvent("login") {
+                param("USER_NAME", userName)
+            }
+
             coroutineScope.run {
                 viewModel.doLogin(userName, password)
             }
