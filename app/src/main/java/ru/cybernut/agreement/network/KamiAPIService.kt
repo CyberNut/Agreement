@@ -43,13 +43,13 @@ interface KamiAPIService {
     fun doLogin(@Body loginString: String?): Call<Void>
 
     @POST("getList")
-    fun getPaymentRequests(@Body loginCredential: String): Deferred<List<PaymentRequest>>
+    suspend fun getPaymentRequests(@Body loginCredential: String): List<PaymentRequest>
 
     @POST("getListService")
-    fun getServiceRequests(@Body loginCredential: String): Deferred<List<ServiceRequest>>
+    suspend fun getServiceRequests(@Body loginCredential: String): List<ServiceRequest>
 
     @POST("getListDelivery")
-    fun getDeliveryRequests(@Body loginCredential: String): Deferred<List<DeliveryRequest>>
+    suspend fun getDeliveryRequests(@Body loginCredential: String): List<DeliveryRequest>
 
     @POST("approve/{request_type}/{type}/{comment}")
     fun approveRequests(@Path("request_type") requestType: String,
