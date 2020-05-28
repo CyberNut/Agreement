@@ -8,7 +8,7 @@ import ru.cybernut.agreement.db.PaymentRequestDao
 import ru.cybernut.agreement.network.KamiApi
 import timber.log.Timber
 
-class PaymentRequestRepository(private val paymentRequestDao: PaymentRequestDao) : RequestRepository<PaymentRequest> {
+class PaymentRequestRepository(private val paymentRequestDao: PaymentRequestDao) : Repository<PaymentRequest> {
 
     override fun getRequests() = paymentRequestDao.getRequests(AgreementApp.loginCredential.userName)
 

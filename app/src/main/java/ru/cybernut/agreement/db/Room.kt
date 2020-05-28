@@ -16,7 +16,7 @@ interface BaseRequestDao<T> {
 
     suspend fun deleteRequestList(requests: List<String>, userName: String)
 
-    fun getRequests(userName: String): LiveData<List<T>>
+    suspend fun getRequests(userName: String): List<T>
 
     fun getRequestsByFilter(filter: String, userName: String): LiveData<List<T>>
 
@@ -28,7 +28,7 @@ interface BaseRequestDao<T> {
 @Dao
 abstract class PaymentRequestDao: BaseRequestDao<PaymentRequest> {
     @Query("select * from payment_requests_table where userName = :userName")
-    abstract override fun getRequests(userName: String): LiveData<List<PaymentRequest>>
+    abstract override suspend fun getRequests(userName: String): List<PaymentRequest>
 
     @Query("select * from payment_requests_table where userName = :userName AND (number LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%' OR payment_date LIKE '%' || :filter  || '%' OR date LIKE '%' || :filter  || '%' OR sum LIKE '%' || :filter  || '%' OR author LIKE '%' || :filter  || '%' OR description LIKE '%' || :filter  || '%')")
     abstract override fun getRequestsByFilter(filter: String, userName: String): LiveData<List<PaymentRequest>>
@@ -46,7 +46,7 @@ abstract class PaymentRequestDao: BaseRequestDao<PaymentRequest> {
 @Dao
 abstract class ServiceRequestDao: BaseRequestDao<ServiceRequest> {
     @Query("select * from service_requests_table where userName = :userName")
-    abstract override fun getRequests(userName: String): LiveData<List<ServiceRequest>>
+    abstract override suspend fun getRequests(userName: String): List<ServiceRequest>
 
     @Query("select * from service_requests_table where userName = :userName AND (number LIKE '%' || :filter  || '%' OR sum LIKE '%' || :filter  || '%' OR author LIKE '%' || :filter  || '%' OR date LIKE '%' || :filter  || '%' OR service_dept LIKE '%' || :filter  || '%' OR dept LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%' OR description LIKE '%' || :filter  || '%')")
     abstract override fun getRequestsByFilter(filter: String, userName: String): LiveData<List<ServiceRequest>>
@@ -64,7 +64,7 @@ abstract class ServiceRequestDao: BaseRequestDao<ServiceRequest> {
 @Dao
 abstract class DeliveryRequestDao: BaseRequestDao<DeliveryRequest> {
     @Query("select * from delivery_requests_table where userName = :userName")
-    abstract override fun getRequests(userName: String): LiveData<List<DeliveryRequest>>
+    abstract override suspend fun getRequests(userName: String): List<DeliveryRequest>
 
     @Query("select * from delivery_requests_table where userName = :userName AND (number LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%' OR sum LIKE '%' || :filter  || '%' OR author LIKE '%' || :filter  || '%' OR date LIKE '%' || :filter  || '%' OR warehouse_sender LIKE '%' || :filter  || '%' OR sender_address LIKE '%' || :filter  || '%' OR client_address LIKE '%' || :filter  || '%' OR client LIKE '%' || :filter  || '%' OR description LIKE '%' || :filter  || '%')")
     abstract override fun getRequestsByFilter(filter: String, userName: String): LiveData<List<DeliveryRequest>>

@@ -8,7 +8,7 @@ import ru.cybernut.agreement.db.DeliveryRequestDao
 import ru.cybernut.agreement.network.KamiApi
 import timber.log.Timber
 
-class DeliveryRequestRepository(private val deliveryRequestDao: DeliveryRequestDao) : RequestRepository<DeliveryRequest> {
+class DeliveryRequestRepository(private val deliveryRequestDao: DeliveryRequestDao) : Repository<DeliveryRequest> {
 
     override fun getRequests() = deliveryRequestDao.getRequests(AgreementApp.loginCredential.userName)
 
