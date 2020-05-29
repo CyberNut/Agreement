@@ -6,14 +6,13 @@ import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.repositories.Repository
 import timber.log.Timber
 
-class ListViewModel<T: Request>(val repository: Repository<T>) : ViewModel() {
+class RequestListViewModel<T: Request>(val repository: Repository<T>) : ViewModel() {
 
     private var _filter = MutableLiveData<String>("")
     val filter: LiveData<String>
         get() = _filter
 
     private var _requests : LiveData<List<T>> = _filter.switchMap {
-        Timber.d("From switchmap")
         if (it.isEmpty()) {
             repository.getRequests()
         } else {
@@ -41,11 +40,15 @@ class ListViewModel<T: Request>(val repository: Repository<T>) : ViewModel() {
     }
 
     fun forceUpdateRequests() {
+        try {
+            viewModelScope.launch {
+                _isLoading.postValue(true)
+                repository.fetchRequests()
+                _isLoading.postValue(false)
+            }
 
-        viewModelScope.launch {
-            _isLoading.postValue(true)
-            repository.fetchRequests()
-            _isLoading.postValue(false)
+        } catch (e: Exception) {
+            Timber.d("fetchRequest() Error:" +  e.message)
         }
     }
 

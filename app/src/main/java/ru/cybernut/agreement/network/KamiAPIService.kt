@@ -1,9 +1,7 @@
 package ru.cybernut.agreement.network
 
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -14,7 +12,7 @@ import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.db.ServiceRequest
 
-private const val BASE_URL = "http://172.16.0.132/kami/hs/Approval/"
+private const val BASE_URL = "http://172.16.0.42/kami_ageenko/hs/Approval/"
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for

@@ -10,14 +10,11 @@ import ru.cybernut.agreement.viewmodels.*
 
 val viewModelModule  = module  {
 
-//    viewModel { PaymentRequestListViewModel(get()) }
-//
-//    viewModel { ServiceRequestListViewModel(get()) }
-//
-//    viewModel { DeliveryRequestListViewModel(get()) }
-    viewModel(named("payment")) { ListViewModel<PaymentRequest>(get(named("payment"))) }
-    viewModel(named("service")) { ListViewModel<ServiceRequest>(get(named("service"))) }
-    viewModel(named("delivery")) { ListViewModel<DeliveryRequest>(get(named("delivery"))) }
+    viewModel(named("payment")) { RequestListViewModel<PaymentRequest>(get(named("payment"))) }
+
+    viewModel(named("service")) { RequestListViewModel<ServiceRequest>(get(named("service"))) }
+
+    viewModel(named("delivery")) { RequestListViewModel<DeliveryRequest>(get(named("delivery"))) }
 
     viewModel { (request: PaymentRequest) -> PaymentRequestViewModel(request) }
 

@@ -40,7 +40,6 @@ class RequestRepository<T: Request>(private val fetchFun: suspend (String) -> Li
         val credential = AgreementApp.loginCredential
         val requestsFromServer = fetchFun("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}")
         insertRequests(requestsFromServer)
-        Timber.d("fetchRequest finished")
     }
 
     override fun getFilteredRequests(filter: String): LiveData<List<T>> = dao.getRequestsByFilter(filter, AgreementApp.loginCredential.userName)

@@ -17,13 +17,13 @@ import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentServiceRequestListBinding
 import ru.cybernut.agreement.db.ServiceRequest
 import ru.cybernut.agreement.utils.MIN_SEARCH_QUERY_LENGHT
-import ru.cybernut.agreement.viewmodels.ListViewModel
+import ru.cybernut.agreement.viewmodels.RequestListViewModel
 
 class ServiceRequestListFragment : Fragment(), KoinComponent {
 
     private lateinit var binding: FragmentServiceRequestListBinding
 
-    private val viewModel: ListViewModel<ServiceRequest> by viewModel(named("service"))
+    private val viewModel: RequestListViewModel<ServiceRequest> by viewModel(named("service"))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,8 +97,8 @@ class ServiceRequestListFragment : Fragment(), KoinComponent {
     }
 
     private fun initSwipeToRefresh() {
-        binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setOnRefreshListener {
+            binding.swipeRefresh.isRefreshing = false
             viewModel.forceUpdateRequests()
         }
     }

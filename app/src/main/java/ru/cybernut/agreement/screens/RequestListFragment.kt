@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +18,7 @@ import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentRequestListBinding
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.utils.MIN_SEARCH_QUERY_LENGHT
-import ru.cybernut.agreement.viewmodels.ListViewModel
+import ru.cybernut.agreement.viewmodels.RequestListViewModel
 import timber.log.Timber
 
 class RequestListFragment : Fragment(), KoinComponent {
@@ -27,7 +26,7 @@ class RequestListFragment : Fragment(), KoinComponent {
     private lateinit var binding: FragmentRequestListBinding
     private lateinit var menu: Menu
 
-    private val viewModel: ListViewModel<PaymentRequest> by viewModel(named("payment"))
+    private val viewModel: RequestListViewModel<PaymentRequest> by viewModel(named("payment"))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +54,7 @@ class RequestListFragment : Fragment(), KoinComponent {
             requests?.let {
                 adapter.submitList(it)
             }
-            //binding.swipeRefresh.isRefreshing = false
+            binding.swipeRefresh.isRefreshing = false
         }
 
         viewModel.navigateToSelectedRequest.observe(viewLifecycleOwner) {
@@ -105,6 +104,7 @@ class RequestListFragment : Fragment(), KoinComponent {
     private fun initSwipeToRefresh() {
         //binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setOnRefreshListener {
+            binding.swipeRefresh.isRefreshing = false
             clearFilter()
             viewModel.forceUpdateRequests()
         }
