@@ -10,6 +10,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.ApprovalType
+import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.BaseRequestDao
 import ru.cybernut.agreement.network.KamiApi
 import ru.cybernut.agreement.utils.RequestType
@@ -17,26 +18,34 @@ import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class RequestRepository<T>(private val fetchFun: suspend (String) -> List<T>,
+class RequestRepository<T: Request>(private val fetchFun: suspend (String) -> List<T>,
                            private val dao: BaseRequestDao<T>,
                            private val requestType: RequestType,
                            private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : Repository<T> {
 
-    override suspend fun getRequests(forceUpdate: Boolean): LiveData<List<T>> = withContext(ioDispatcher) {
-        val liveData = MutableLiveData<List<T>>()
-        var requests = dao.getRequests(AgreementApp.loginCredential.userName)
-        if (forceUpdate) {
-            val requestsFromServer = fetchFun(AgreementApp.loginCredential.userName)
-            requests = requestsFromServer
-            dao.deleteAll(AgreementApp.loginCredential.userName)
-            dao.insertAll(requestsFromServer)
-        }
-        liveData.apply { postValue(requests) }
+    override fun getRequests(): LiveData<List<T>> {
+        Timber.d("From getRequests()")
+        val temp = dao.getRequests(AgreementApp.loginCredential.userName)
+        return temp
     }
 
-    override suspend fun getFilteredRequests(filter: String): LiveData<List<T>> = dao.getRequestsByFilter(filter, AgreementApp.loginCredential.userName)
+    fun insertRequests(requests: List<T>) {
+        val credential = AgreementApp.loginCredential
+        requests.forEach { it.userName = credential.userName }
+        dao.deleteAll(credential.userName)
+        dao.insertAll(requests)
+    }
 
-    override suspend fun getRequestById(requestId: String): LiveData<T> = dao.getRequestById(requestId, AgreementApp.loginCredential.userName)
+    override suspend fun fetchRequests() = withContext(ioDispatcher) {
+        val credential = AgreementApp.loginCredential
+        val requestsFromServer = fetchFun("{\"password\":\"" + credential.password + "\",\"userName\":\"" + credential.userName + "\"}")
+        insertRequests(requestsFromServer)
+        Timber.d("fetchRequest finished")
+    }
+
+    override fun getFilteredRequests(filter: String): LiveData<List<T>> = dao.getRequestsByFilter(filter, AgreementApp.loginCredential.userName)
+
+    override fun getRequestById(requestId: String): LiveData<T> = dao.getRequestById(requestId, AgreementApp.loginCredential.userName)
 
     suspend fun handleRequest(approve: Boolean, comment: String, requestIds: List<String>): ApprovalType {
         var approveResult: ApprovalType

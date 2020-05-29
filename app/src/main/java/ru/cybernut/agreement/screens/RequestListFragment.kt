@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import ru.cybernut.agreement.databinding.FragmentRequestListBinding
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.utils.MIN_SEARCH_QUERY_LENGHT
 import ru.cybernut.agreement.viewmodels.ListViewModel
+import timber.log.Timber
 
 class RequestListFragment : Fragment(), KoinComponent {
 
@@ -49,10 +51,11 @@ class RequestListFragment : Fragment(), KoinComponent {
         binding.requestsList.adapter = adapter
 
         viewModel.requests.observe(viewLifecycleOwner) { requests ->
-                        requests?.let {
+            Timber.d("from observe. count = " + requests?.size)
+            requests?.let {
                 adapter.submitList(it)
             }
-            binding.swipeRefresh.isRefreshing = false
+            //binding.swipeRefresh.isRefreshing = false
         }
 
         viewModel.navigateToSelectedRequest.observe(viewLifecycleOwner) {
@@ -100,7 +103,7 @@ class RequestListFragment : Fragment(), KoinComponent {
     }
 
     private fun initSwipeToRefresh() {
-        binding.swipeRefresh.isRefreshing = true
+        //binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setOnRefreshListener {
             clearFilter()
             viewModel.forceUpdateRequests()

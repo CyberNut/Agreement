@@ -17,14 +17,13 @@ import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.ApprovingRequestList
 import ru.cybernut.agreement.db.PaymentRequest
 import ru.cybernut.agreement.network.KamiApi
-import ru.cybernut.agreement.repositories.PaymentRequestRepository
 import ru.cybernut.agreement.utils.ApprovalType
 import ru.cybernut.agreement.utils.KamiApiStatus
 import ru.cybernut.agreement.utils.RequestType
 import timber.log.Timber
 
 
-class PaymentRequestViewModel(val paymentRequestRepository: PaymentRequestRepository, val request: PaymentRequest): ViewModel(), KoinComponent {
+class PaymentRequestViewModel(val request: PaymentRequest): ViewModel(), KoinComponent {
 
     private val _status = MutableLiveData<KamiApiStatus>()
 
@@ -63,9 +62,9 @@ class PaymentRequestViewModel(val paymentRequestRepository: PaymentRequestReposi
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         Timber.d("SUCCESS Approve = $approve, Request = ${paymentRequest.value}")
                         coroutineScope.launch {
-                            paymentRequestRepository.deleteRequest(
-                                paymentRequest.value!!
-                            )
+//                            paymentRequestRepository.deleteRequest(
+//                                paymentRequest.value!!
+//                            )
                         }
                         _approveResult.value = if (approve) ApprovalType.APPROVE else ApprovalType.DECLINE
                     }

@@ -2,9 +2,10 @@ package ru.cybernut.agreement.di
 
 import androidx.room.Room
 import org.koin.android.ext.koin.androidApplication
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.cybernut.agreement.R
-import ru.cybernut.agreement.db.AgreementsDatabase
+import ru.cybernut.agreement.db.*
 
 val persistenceModule = module {
 
@@ -17,9 +18,9 @@ val persistenceModule = module {
             .build()
     }
 
-    single { get<AgreementsDatabase>().paymentRequestsDao() }
+    single(named("payment")) { get<AgreementsDatabase>().paymentRequestsDao() as BaseRequestDao<PaymentRequest> }
 
-    single { get<AgreementsDatabase>().deliveryRequestsDao() }
+    single(named("service")) { get<AgreementsDatabase>().serviceRequestsDao() as BaseRequestDao<ServiceRequest>}
 
-    single { get<AgreementsDatabase>().serviceRequestsDao() }
+    single(named("delivery")) { get<AgreementsDatabase>().deliveryRequestsDao() as BaseRequestDao<DeliveryRequest>}
 }

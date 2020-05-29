@@ -21,7 +21,7 @@ data class PaymentRequest constructor(
     val currency: String,
     val sum: String,
     val author:String,
-    var userName: String = ""
+    override var userName: String = ""
 ) : Serializable, Request
 
 @Entity(tableName = "service_requests_table")
@@ -39,7 +39,7 @@ data class ServiceRequest constructor(
     val description: String,
     val sum: String,
     val author:String,
-    var userName: String = ""
+    override var userName: String = ""
 ) : Serializable, Request
 
 @Entity(tableName = "delivery_requests_table")
@@ -62,6 +62,6 @@ data class DeliveryRequest constructor(
     val description: String,
     val sum: String,
     val author:String,
-    var userName: String = ""
+    override var userName: String = ""
 ) : Serializable, Request
 

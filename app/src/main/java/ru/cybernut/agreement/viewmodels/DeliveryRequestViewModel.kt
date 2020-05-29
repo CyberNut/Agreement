@@ -17,14 +17,13 @@ import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.ApprovingRequestList
 import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.network.KamiApi
-import ru.cybernut.agreement.repositories.DeliveryRequestRepository
 import ru.cybernut.agreement.utils.ApprovalType
 import ru.cybernut.agreement.utils.KamiApiStatus
 import ru.cybernut.agreement.utils.RequestType
 import timber.log.Timber
 
 
-class DeliveryRequestViewModel(val deliveryRequestRepository: DeliveryRequestRepository, val request: DeliveryRequest): ViewModel(), KoinComponent {
+class DeliveryRequestViewModel(val request: DeliveryRequest): ViewModel(), KoinComponent {
 
     private val _status = MutableLiveData<KamiApiStatus>()
 
@@ -63,9 +62,9 @@ class DeliveryRequestViewModel(val deliveryRequestRepository: DeliveryRequestRep
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         Timber.d("SUCCESS Approve = $approve, Request = ${deliveryRequest.value}")
                         coroutineScope.launch {
-                            deliveryRequestRepository.deleteRequest(
-                                deliveryRequest.value!!
-                            )
+//                            deliveryRequestRepository.deleteRequest(
+//                                deliveryRequest.value!!
+//                            )
                         }
                         _approveResult.value = if (approve) ApprovalType.APPROVE else ApprovalType.DECLINE
                     }

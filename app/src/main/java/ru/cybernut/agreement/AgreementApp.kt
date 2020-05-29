@@ -8,6 +8,7 @@ import ru.cybernut.agreement.data.LoginCredential
 import ru.cybernut.agreement.di.persistenceModule
 import ru.cybernut.agreement.di.repositoryModule
 import ru.cybernut.agreement.di.viewModelModule
+import timber.log.Timber
 
 class AgreementApp: Application() {
 
@@ -27,5 +28,10 @@ class AgreementApp: Application() {
             modules(repositoryModule)
             modules(viewModelModule)
         }
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
     }
 }

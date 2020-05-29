@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="ru.cybernut.agreement.viewmodels.DeliveryRequestListViewModel" />
+            type="ru.cybernut.agreement.viewmodels.ListViewModel" />
 
     </data>
 

@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
+import org.koin.core.qualifier.named
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
@@ -16,13 +17,13 @@ import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentServiceRequestListBinding
 import ru.cybernut.agreement.db.ServiceRequest
 import ru.cybernut.agreement.utils.MIN_SEARCH_QUERY_LENGHT
-import ru.cybernut.agreement.viewmodels.ServiceRequestListViewModel
+import ru.cybernut.agreement.viewmodels.ListViewModel
 
 class ServiceRequestListFragment : Fragment(), KoinComponent {
 
     private lateinit var binding: FragmentServiceRequestListBinding
 
-    private val viewModel: ServiceRequestListViewModel by inject()
+    private val viewModel: ListViewModel<ServiceRequest> by viewModel(named("service"))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,14 +46,14 @@ class ServiceRequestListFragment : Fragment(), KoinComponent {
         binding.requestsList.itemAnimator = null
         binding.requestsList.adapter = adapter
 
-        viewModel.requests.observe(this, Observer { requests ->
+        viewModel.requests.observe(viewLifecycleOwner) { requests ->
             requests?.let {
                 adapter.submitList(it)
             }
             binding.swipeRefresh.isRefreshing = false
-        })
+        }
 
-        viewModel.navigateToSelectedRequest.observe(this, Observer {
+        viewModel.navigateToSelectedRequest.observe(viewLifecycleOwner)  {
             if (null != it) {
                 this.findNavController().navigate(
                     ServiceRequestListFragmentDirections.actionServiceRequestListFragmentToServiceRequestFragment(
@@ -61,7 +62,7 @@ class ServiceRequestListFragment : Fragment(), KoinComponent {
                 )
                 viewModel.navigateToSelectedRequestComplete()
             }
-        })
+        }
 
         initSwipeToRefresh()
         setHasOptionsMenu(true)
@@ -98,7 +99,7 @@ class ServiceRequestListFragment : Fragment(), KoinComponent {
     private fun initSwipeToRefresh() {
         binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.updateRequests()
+            viewModel.forceUpdateRequests()
         }
     }
 

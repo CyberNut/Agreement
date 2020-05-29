@@ -5,14 +5,17 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.ApprovingRequestList
+import ru.cybernut.agreement.data.Request
 
-interface Repository<T> {
+interface Repository<T: Request> {
 
-    suspend fun getRequests(forceUpdate: Boolean = false): LiveData<List<T>>
+    fun getRequests(): LiveData<List<T>>
 
-    suspend fun getFilteredRequests(filter: String): LiveData<List<T>>
+    fun getFilteredRequests(filter: String): LiveData<List<T>>
 
-    suspend fun getRequestById(requestId: String): LiveData<T>
+    fun getRequestById(requestId: String): LiveData<T>
+
+    suspend fun fetchRequests()
 
     suspend fun approveResquest()
 

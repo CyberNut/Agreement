@@ -5,10 +5,12 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
+import org.koin.core.qualifier.named
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
@@ -16,13 +18,13 @@ import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentDeliveryRequestListBinding
 import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.utils.MIN_SEARCH_QUERY_LENGHT
-import ru.cybernut.agreement.viewmodels.DeliveryRequestListViewModel
+import ru.cybernut.agreement.viewmodels.ListViewModel
 
 class DeliveryRequestListFragment : Fragment(), KoinComponent {
 
     private lateinit var binding: FragmentDeliveryRequestListBinding
 
-    private val viewModel: DeliveryRequestListViewModel by inject()
+    private val viewModel: ListViewModel<DeliveryRequest> by viewModel(named("delivery"))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,14 +48,14 @@ class DeliveryRequestListFragment : Fragment(), KoinComponent {
         binding.requestsList.itemAnimator = null
         binding.requestsList.adapter = adapter
 
-        viewModel.requests.observe(this, Observer { requests ->
+        viewModel.requests.observe(viewLifecycleOwner) { requests ->
             requests?.let {
                 adapter.submitList(it)
             }
             binding.swipeRefresh.isRefreshing = false
-        })
+        }
 
-        viewModel.navigateToSelectedRequest.observe(this, Observer {
+        viewModel.navigateToSelectedRequest.observe(viewLifecycleOwner) {
             if (null != it) {
                 this.findNavController().navigate(
                     DeliveryRequestListFragmentDirections.actionDeliveryRequestListFragmentToDeliveryRequestFragment(
@@ -62,7 +64,7 @@ class DeliveryRequestListFragment : Fragment(), KoinComponent {
                 )
                 viewModel.navigateToSelectedRequestComplete()
             }
-        })
+        }
 
         initSwipeToRefresh()
         setHasOptionsMenu(true)
@@ -99,7 +101,7 @@ class DeliveryRequestListFragment : Fragment(), KoinComponent {
     private fun initSwipeToRefresh() {
         binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.updateRequests()
+            viewModel.forceUpdateRequests()
         }
     }
 }
