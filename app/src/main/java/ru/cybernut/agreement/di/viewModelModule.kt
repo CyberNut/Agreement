@@ -16,10 +16,10 @@ val viewModelModule  = module  {
 
     viewModel(named("delivery")) { RequestListViewModel<DeliveryRequest>(get(named("delivery"))) }
 
-    viewModel { (request: PaymentRequest) -> PaymentRequestViewModel(request) }
+    viewModel(named("payment")) { (request: PaymentRequest) -> RequestViewModel<PaymentRequest>(get(named("payment")), request)  }
 
-    viewModel { (request: ServiceRequest) -> ServiceRequestViewModel(request) }
+    viewModel(named("service")) { (request: ServiceRequest) -> RequestViewModel<ServiceRequest>(get(named("service")), request)  }
 
-    viewModel { (request: DeliveryRequest) -> DeliveryRequestViewModel(request) }
+    viewModel(named("delivery")) { (request: DeliveryRequest) -> RequestViewModel<DeliveryRequest>(get(named("delivery")), request)  }
 
 }

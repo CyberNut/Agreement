@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="viewModel"
-            type="ru.cybernut.agreement.viewmodels.ServiceRequestViewModel" />
+            name="request"
+            type="ru.cybernut.agreement.db.ServiceRequest" />
     </data>
 
     <LinearLayout
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.serviceRequest.number}"
+                android:text="@{request.number}"
                 android:textSize="16sp" />
 
 
@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.serviceRequest.date}"
+                android:text="@{request.date}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.serviceRequest.dept}"
+                android:text="@{request.dept}"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.serviceRequest.serviceDept}"
+                android:text="@{request.serviceDept}"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -125,7 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.serviceRequest.client}"
+                android:text="@{request.client}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -147,7 +147,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.serviceRequest.description}"
+                android:text="@{request.description}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -169,7 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.serviceRequest.sum}"
+                android:text="@{request.sum}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -191,7 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.serviceRequest.author}"
+                android:text="@{request.author}"
                 android:textSize="16sp" />
         </LinearLayout>
 

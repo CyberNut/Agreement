@@ -9,10 +9,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.cybernut.agreement.AgreementApp
-import ru.cybernut.agreement.data.ApprovalType
 import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.db.BaseRequestDao
 import ru.cybernut.agreement.network.KamiApi
+import ru.cybernut.agreement.utils.ApprovalType
 import ru.cybernut.agreement.utils.RequestType
 import timber.log.Timber
 import kotlin.coroutines.resume
@@ -46,7 +46,7 @@ class RequestRepository<T: Request>(private val fetchFun: suspend (String) -> Li
 
     override fun getRequestById(requestId: String): LiveData<T> = dao.getRequestById(requestId, AgreementApp.loginCredential.userName)
 
-    suspend fun handleRequest(approve: Boolean, comment: String, requestIds: List<String>): ApprovalType {
+    override suspend fun handleRequest(approve: Boolean, comment: String, requestIds: List<String>): ApprovalType {
         var approveResult: ApprovalType
         val json = getJsonFromRequestIds(requestIds)
         val commentary = comment.trim() + " (Mobile)"
@@ -82,9 +82,4 @@ class RequestRepository<T: Request>(private val fetchFun: suspend (String) -> Li
                 })
         }
     }
-
-    override suspend fun approveResquest() {
-        TODO("Not yet implemented")
-    }
-
 }

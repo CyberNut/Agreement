@@ -9,29 +9,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 import ru.cybernut.agreement.R
 import ru.cybernut.agreement.databinding.FragmentDeliveryRequestBinding
+import ru.cybernut.agreement.db.DeliveryRequest
 import ru.cybernut.agreement.utils.ApprovalType
 import ru.cybernut.agreement.utils.hideKeyboard
-import ru.cybernut.agreement.viewmodels.DeliveryRequestViewModel
+import ru.cybernut.agreement.viewmodels.RequestViewModel
 
-class DeliveryRequestFragment : Fragment(), KoinComponent {
+class DeliveryRequestFragment : Fragment() {
 
     private val args: DeliveryRequestFragmentArgs by navArgs()
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var binding: FragmentDeliveryRequestBinding
-    private val viewModel: DeliveryRequestViewModel by inject { parametersOf(args.request)}
+    private val viewModel: RequestViewModel<DeliveryRequest> by viewModel(named("delivery")) { parametersOf(args.request)}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,9 +44,9 @@ class DeliveryRequestFragment : Fragment(), KoinComponent {
 
         firebaseAnalytics = Firebase.analytics
 
-        binding.viewModel = viewModel
+        binding.request = viewModel.request
 
-        viewModel.approveResult.observe(this, Observer {
+        viewModel.approveResult.observe(viewLifecycleOwner) {
             when(it) {
                 ApprovalType.APPROVE, ApprovalType.DECLINE -> {
                     firebaseAnalytics.logEvent("approve_decline_request") {
@@ -62,7 +63,7 @@ class DeliveryRequestFragment : Fragment(), KoinComponent {
                     viewModel.onApproveRequestDone()
                 }
             }
-        })
+        }
 
         binding.approvalButton.setOnClickListener { handleThisRequest(true, binding.approvalCommentary.text.toString()) }
         binding.declineButton.setOnClickListener { handleThisRequest(false, binding.approvalCommentary.text.toString()) }

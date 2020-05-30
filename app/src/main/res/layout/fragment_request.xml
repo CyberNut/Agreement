@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="viewModel"
-            type="ru.cybernut.agreement.viewmodels.PaymentRequestViewModel" />
+            name="request"
+            type="ru.cybernut.agreement.db.PaymentRequest" />
     </data>
 
     <LinearLayout
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.paymentRequest.number}"
+                android:text="@{request.number}"
                 android:textSize="16sp" />
 
 
@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.paymentRequest.date}"
+                android:text="@{request.date}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.paymentRequest.paymentDate}"
+                android:text="@{request.paymentDate}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.paymentRequest.client}"
+                android:text="@{request.client}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -123,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.paymentRequest.description}"
+                android:text="@{request.description}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -145,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.paymentRequest.sum + '(' + viewModel.paymentRequest.currency + ')'}"
+                android:text="@{request.sum + '(' + request.currency + ')'}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -167,7 +167,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.paymentRequest.author}"
+                android:text="@{request.author}"
                 android:textSize="16sp" />
         </LinearLayout>
 

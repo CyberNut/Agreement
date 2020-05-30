@@ -6,6 +6,7 @@ import com.squareup.moshi.Moshi
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.data.ApprovingRequestList
 import ru.cybernut.agreement.data.Request
+import ru.cybernut.agreement.utils.ApprovalType
 
 interface Repository<T: Request> {
 
@@ -17,7 +18,7 @@ interface Repository<T: Request> {
 
     suspend fun fetchRequests()
 
-    suspend fun approveResquest()
+    suspend fun handleRequest(approve: Boolean, comment: String, requestIds: List<String>): ApprovalType
 
     fun getJsonFromRequestIds(requestIds: List<String>): String {
         val approvingRequestList = ApprovingRequestList(AgreementApp.loginCredential)

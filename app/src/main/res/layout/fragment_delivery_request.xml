@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="viewModel"
-            type="ru.cybernut.agreement.viewmodels.DeliveryRequestViewModel" />
+            name="request"
+            type="ru.cybernut.agreement.db.DeliveryRequest" />
     </data>
 
     <LinearLayout
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.deliveryRequest.number}"
+                android:text="@{request.number}"
                 android:textSize="16sp" />
 
 
@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.deliveryRequest.date}"
+                android:text="@{request.date}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.deliveryRequest.warehouseSender}"
+                android:text="@{request.warehouseSender}"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.deliveryRequest.senderAddress}"
+                android:text="@{request.senderAddress}"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -125,7 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.deliveryRequest.client}"
+                android:text="@{request.client}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -147,7 +147,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.deliveryRequest.description}"
+                android:text="@{request.description}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -169,7 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.deliveryRequest.sum}"
+                android:text="@{request.sum}"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -191,7 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="@{viewModel.deliveryRequest.author}"
+                android:text="@{request.author}"
                 android:textSize="16sp" />
         </LinearLayout>
 
