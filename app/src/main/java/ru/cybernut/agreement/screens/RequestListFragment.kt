@@ -7,6 +7,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.core.KoinComponent
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -14,6 +18,8 @@ import org.koin.core.qualifier.named
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
+import ru.cybernut.agreement.adapters.MyItemDetailsLookup
+import ru.cybernut.agreement.adapters.RequestKeyProvider
 import ru.cybernut.agreement.adapters.RequestsAdapter
 import ru.cybernut.agreement.databinding.FragmentRequestListBinding
 import ru.cybernut.agreement.db.PaymentRequest
@@ -48,6 +54,17 @@ class RequestListFragment : Fragment(), KoinComponent {
         binding.requestsList.setHasFixedSize(true)
         binding.requestsList.itemAnimator = null
         binding.requestsList.adapter = adapter
+
+        val tracker = SelectionTracker.Builder<String>(
+            "mySelection",
+            binding.requestsList,
+            RequestKeyProvider(viewModel.requests.value!!),
+            MyItemDetailsLookup(binding.requestsList),
+            StorageStrategy.createStringStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectAnything()
+        ).build()
+        adapter.tracker = tracker
 
         viewModel.requests.observe(viewLifecycleOwner) { requests ->
             Timber.d("from observe. count = " + requests?.size)
