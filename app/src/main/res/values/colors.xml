@@ -12,5 +12,5 @@
     <color name="colorGrayLight">#FFC1C1C1</color>
     <color name="colorGrayExtraLight">#FFE7E7E7</color>
     <color name="colorBlack">#FF333333</color>
-
+    <color name="selection">#A9D9FF</color>
 </resources>

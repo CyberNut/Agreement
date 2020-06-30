@@ -1,8 +1,8 @@
 package ru.cybernut.agreement.data
 
-import java.io.Serializable
+import android.os.Parcelable
 
-interface Request: Serializable {
+interface Request: Parcelable {
     val uuid: String
     var userName: String
     override fun equals(other: Any?): Boolean

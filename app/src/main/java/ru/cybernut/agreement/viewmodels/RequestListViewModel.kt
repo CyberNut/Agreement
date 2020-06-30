@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.repositories.Repository
+import ru.cybernut.agreement.utils.ApprovalType
 import timber.log.Timber
 
 class RequestListViewModel<T: Request>(val repository: Repository<T>) : ViewModel() {
@@ -19,6 +20,10 @@ class RequestListViewModel<T: Request>(val repository: Repository<T>) : ViewMode
             repository.getFilteredRequests(it)
         }
     }
+
+    private var _approveResult: MutableLiveData<ApprovalType> = MutableLiveData(ApprovalType.NONE)
+    val approveResult: LiveData<ApprovalType>
+        get() = _approveResult
 
     private var _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean>
@@ -62,5 +67,16 @@ class RequestListViewModel<T: Request>(val repository: Repository<T>) : ViewMode
 
     fun navigateToSelectedRequestComplete() {
         _navigateToSelectedRequest.value = null
+    }
+
+    fun onApproveRequestDone() {
+        _approveResult.value = ApprovalType.NONE
+    }
+
+    fun approveSelected(listOfRequest: List<String>) {
+        viewModelScope.launch {
+            _approveResult.value = repository.handleRequest(true, "", listOfRequest)
+        }
+        Timber.d("approveResult = " + approveResult.value)
     }
 }

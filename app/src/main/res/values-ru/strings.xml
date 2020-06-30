@@ -52,8 +52,11 @@
     <string name="kami_logo">Логотип группы компаний КАМИ</string>
     <string name="about_agreement_app">О приложении</string>
     <string name="error_connection">Ошибка соединения с сервером</string>
-    <string name="success_approve_decline_toast_message">Заявка успешно %s.</string>
+    <string name="success_approve_decline_toast_message">%s успешно.</string>
     <string name="approve_decline_error_toast">Ошибка согласования</string>
-    <string name="approved">согласована</string>
-    <string name="declined">отклонена</string>
+    <string name="approved">Согласование</string>
+    <string name="declined">Отклонение</string>
+    <string name="selected">Выбрано:</string>
+    <string name="action_clear">снять выделение</string>
+    <string name="action_approve_selected">Согласовать выбранные</string>
 </resources>

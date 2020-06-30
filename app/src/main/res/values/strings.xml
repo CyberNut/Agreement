@@ -56,4 +56,7 @@
     <string name="approve_decline_error_toast">Approval error!</string>
     <string name="approved">approved</string>
     <string name="declined">declined</string>
+    <string name="selected">Selected:</string>
+    <string name="action_clear">clear selections</string>
+    <string name="action_approve_selected">approve selected</string>
 </resources>

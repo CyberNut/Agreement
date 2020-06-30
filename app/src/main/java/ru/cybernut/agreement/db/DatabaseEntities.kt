@@ -4,9 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 import ru.cybernut.agreement.data.Request
-import java.io.Serializable
 
+@Parcelize
 @Entity(tableName = "payment_requests_table")
 data class PaymentRequest constructor(
     @PrimaryKey(autoGenerate = false)
@@ -22,8 +23,9 @@ data class PaymentRequest constructor(
     val sum: String,
     val author:String,
     override var userName: String = ""
-) : Serializable, Request
+) : Request
 
+@Parcelize
 @Entity(tableName = "service_requests_table")
 data class ServiceRequest constructor(
     @PrimaryKey(autoGenerate = false)
@@ -40,8 +42,9 @@ data class ServiceRequest constructor(
     val sum: String,
     val author:String,
     override var userName: String = ""
-) : Serializable, Request
+) : Request
 
+@Parcelize
 @Entity(tableName = "delivery_requests_table")
 data class DeliveryRequest constructor(
     @PrimaryKey(autoGenerate = false)
@@ -63,5 +66,5 @@ data class DeliveryRequest constructor(
     val sum: String,
     val author:String,
     override var userName: String = ""
-) : Serializable, Request
+) : Request
 

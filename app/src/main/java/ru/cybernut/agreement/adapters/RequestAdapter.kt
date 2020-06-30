@@ -1,11 +1,13 @@
 package ru.cybernut.agreement.adapters
 
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,7 +18,7 @@ import java.util.*
 class RequestsAdapter(@LayoutRes val itemLayoutId: Int, val bindingVariableId: Int, val onClickListener: OnClickListener? = null): ListAdapter<Request, RequestsAdapter.RequestViewHolder>(DiffCallback) {
 
     private val additionalBindingVariables = Hashtable<Int, Any>()
-    var tracker: SelectionTracker<String>? = null
+    var tracker: SelectionTracker<Request>? = null
 
     companion object DiffCallback : DiffUtil.ItemCallback<Request>() {
         override fun areItemsTheSame(oldItem: Request, newItem: Request): Boolean {
@@ -32,13 +34,19 @@ class RequestsAdapter(@LayoutRes val itemLayoutId: Int, val bindingVariableId: I
         return RequestViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), itemLayoutId, parent, false), bindingVariableId)
     }
 
+
     override fun onBindViewHolder(holder: RequestViewHolder, position: Int) {
         val request = getItem(position)
-        if (onClickListener != null) {
-            holder.itemView.setOnClickListener{ onClickListener.onClick(request) }
-        }
         tracker?.let {
-            holder.bind(request, it.isSelected(request.uuid))
+            holder.bind(request, it.isSelected(request))
+        }
+
+        if (onClickListener != null) {
+            holder.itemView.setOnClickListener{
+                if (tracker == null || tracker?.hasSelection() == false) {
+                    onClickListener.onClick(request)
+                }
+            }
         }
     }
 
@@ -55,10 +63,10 @@ class RequestsAdapter(@LayoutRes val itemLayoutId: Int, val bindingVariableId: I
             itemView.isActivated = isActivated
         }
 
-        fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =
-            object: ItemDetailsLookup.ItemDetails<String>() {
-                override fun getSelectionKey(): String? {
-                    return getItem(adapterPosition).uuid
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Request> =
+            object: ItemDetailsLookup.ItemDetails<Request>() {
+                override fun getSelectionKey(): Request? {
+                    return getItem(adapterPosition) as Request?
                 }
 
                 override fun getPosition(): Int {
@@ -69,5 +77,20 @@ class RequestsAdapter(@LayoutRes val itemLayoutId: Int, val bindingVariableId: I
 
     class OnClickListener(val clickListener: (request: Request) -> Unit) {
         fun onClick(request: Request) = clickListener(request)
+    }
+
+    inner class RequestKeyProvider: ItemKeyProvider<Request>(ItemKeyProvider.SCOPE_MAPPED){
+        override fun getKey(position: Int) = getItem(position)
+        override fun getPosition(key: Request)  = currentList.indexOf(key)
+    }
+
+    inner class MyItemDetailsLookup(private val recyclerView: RecyclerView): ItemDetailsLookup<Request>() {
+        override fun getItemDetails(event: MotionEvent): ItemDetails<Request>? {
+            val view = recyclerView.findChildViewUnder(event.x, event.y)
+            if(view != null) {
+                return (recyclerView.getChildViewHolder(view) as RequestsAdapter.RequestViewHolder).getItemDetails()
+            }
+            return null
+        }
     }
 }

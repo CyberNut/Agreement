@@ -53,6 +53,9 @@ class RequestRepository<T: Request>(private val fetchFun: suspend (String) -> Li
         Timber.d("Before starting approve request")
         try {
             approveResult = sendApproveRequest(approve, commentary, json)
+            if (approveResult == ApprovalType.APPROVE) {
+                deleteRequestList(requestIds)
+            }
         } catch (e: Exception) {
             Timber.d("KamiApi.retrofitService.approveRequests failure " + e.message)
             approveResult = ApprovalType.ERROR
@@ -60,6 +63,8 @@ class RequestRepository<T: Request>(private val fetchFun: suspend (String) -> Li
         Timber.d("After starting approve request")
         return approveResult
     }
+
+    override fun deleteRequestList(requestIds: List<String>) = dao.deleteRequestList(requestIds, AgreementApp.loginCredential.userName)
 
     private suspend fun sendApproveRequest(approve: Boolean, comment: String, json: String): ApprovalType {
         return suspendCoroutine { cont ->

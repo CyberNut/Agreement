@@ -1,29 +1,48 @@
 package ru.cybernut.agreement.screens
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
 import org.koin.core.qualifier.named
 import ru.cybernut.agreement.AgreementApp
 import ru.cybernut.agreement.BR
 import ru.cybernut.agreement.R
+import ru.cybernut.agreement.adapters.ActionModeController
 import ru.cybernut.agreement.adapters.RequestsAdapter
+import ru.cybernut.agreement.data.Request
 import ru.cybernut.agreement.databinding.FragmentServiceRequestListBinding
 import ru.cybernut.agreement.db.ServiceRequest
+import ru.cybernut.agreement.utils.ApprovalType
 import ru.cybernut.agreement.utils.MIN_SEARCH_QUERY_LENGHT
 import ru.cybernut.agreement.viewmodels.RequestListViewModel
 
-class ServiceRequestListFragment : Fragment(), KoinComponent {
+class ServiceRequestListFragment : Fragment(), KoinComponent, ActionModeController.Approvable {
 
     private lateinit var binding: FragmentServiceRequestListBinding
+    private lateinit var menu: Menu
+    private var actionMode: ActionMode? = null
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private val viewModel: RequestListViewModel<ServiceRequest> by viewModel(named("service"))
+    private lateinit var tracker: SelectionTracker<Request>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,11 +59,39 @@ class ServiceRequestListFragment : Fragment(), KoinComponent {
         binding.setLifecycleOwner(this)
         binding.viewModel = viewModel
 
+        firebaseAnalytics = Firebase.analytics
+
         val adapter = RequestsAdapter(R.layout.service_request_list_item, BR.serviceRequest, RequestsAdapter.OnClickListener{viewModel.showRequest(it)})
         binding.requestsList.layoutManager = LinearLayoutManager(activity)
         binding.requestsList.setHasFixedSize(true)
         binding.requestsList.itemAnimator = null
         binding.requestsList.adapter = adapter
+
+        tracker = SelectionTracker.Builder<Request>(
+            "mySelection",
+            binding.requestsList,
+            adapter.RequestKeyProvider(),
+            adapter.MyItemDetailsLookup(binding.requestsList),
+            StorageStrategy.createParcelableStorage(Request::class.java)
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectAnything()
+        ).build()
+
+        tracker.addObserver(object : SelectionTracker.SelectionObserver<Request>() {
+            override fun onSelectionChanged() {
+                super.onSelectionChanged()
+                if (tracker.hasSelection() && actionMode == null) {
+                    actionMode = (activity as AppCompatActivity)?.startSupportActionMode(ActionModeController(tracker, this@ServiceRequestListFragment))
+                    setSelectedTitle(tracker.selection.size())
+                } else if (!tracker.hasSelection()) {
+                    actionMode?.finish()
+                    actionMode = null
+                } else {
+                    setSelectedTitle(tracker.selection.size())
+                }
+            }
+        })
+        adapter.tracker = tracker
 
         viewModel.requests.observe(viewLifecycleOwner) { requests ->
             requests?.let {
@@ -64,14 +111,42 @@ class ServiceRequestListFragment : Fragment(), KoinComponent {
             }
         }
 
+        viewModel.approveResult.observe(viewLifecycleOwner) {
+            when(it) {
+                ApprovalType.APPROVE, ApprovalType.DECLINE -> {
+                    firebaseAnalytics.logEvent("approve_decline_request") {
+                        param("type", "payment")
+                    }
+                    Toast.makeText(activity, getString(R.string.success_approve_decline_toast_message, if(it == ApprovalType.APPROVE) getString(
+                        R.string.approved) else getString(R.string.declined)), Toast.LENGTH_SHORT).show()
+                    viewModel.onApproveRequestDone()
+                }
+                ApprovalType.ERROR -> {
+                    Toast.makeText(activity, getString(R.string.approve_decline_error_toast), Toast.LENGTH_LONG).show()
+                    viewModel.onApproveRequestDone()
+                }
+            }
+        }
+
         initSwipeToRefresh()
         setHasOptionsMenu(true)
         return binding.root
     }
 
+    override fun onStop() {
+        super.onStop()
+        actionMode?.finish()
+        actionMode = null
+    }
+
+    private fun setSelectedTitle(selected: Int) {
+        actionMode?.title = getString(R.string.selected) + " $selected"
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
+        this.menu = menu
         var searchMenuItem = menu.findItem(R.id.action_search)
         var searchView = searchMenuItem.actionView as SearchView
         searchView.setQuery(viewModel.filter.value, true)
@@ -96,11 +171,51 @@ class ServiceRequestListFragment : Fragment(), KoinComponent {
         } )
     }
 
+    override fun ApproveSelected() {
+        if (tracker.hasSelection()) {
+            val listOfRequest = mutableListOf<String>()
+            tracker.selection.forEach { listOfRequest.add(it.uuid) }
+            if (listOfRequest.size > 0) {
+                handleThisRequest(listOfRequest)
+            }
+        }
+    }
+
+    private fun handleThisRequest(requestIds: List<String>) {
+
+        val dialogBuilder = AlertDialog.Builder(activity)
+        dialogBuilder.setMessage(getString(R.string.dialog_confirm_approve))
+            .setCancelable(false)
+            .setPositiveButton(getText(R.string.confirm), DialogInterface.OnClickListener {
+                    dialog, id -> viewModel.approveSelected(requestIds)
+            })
+            .setNegativeButton(getText(R.string.cancel), DialogInterface.OnClickListener {
+                    dialog, id -> dialog.cancel()
+            })
+
+        val alert = dialogBuilder.create()
+        alert.setTitle(getText(R.string.app_name))
+        alert.show()
+    }
+
     private fun initSwipeToRefresh() {
+        //binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setOnRefreshListener {
             binding.swipeRefresh.isRefreshing = false
+            clearFilter()
             viewModel.forceUpdateRequests()
         }
     }
 
+    private fun clearFilter() {
+        if(::menu.isInitialized) {
+            var searchMenuItem = menu?.findItem(R.id.action_search)
+            if (searchMenuItem != null) {
+                var searchView = searchMenuItem?.actionView as SearchView
+                searchView?.setQuery("", false)
+                searchView?.clearFocus()
+                searchMenuItem.collapseActionView()
+            }
+        }
+    }
 }

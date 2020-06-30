@@ -16,6 +16,8 @@ interface Repository<T: Request> {
 
     fun getRequestById(requestId: String): LiveData<T>
 
+    fun deleteRequestList(requestIds: List<String>)
+
     suspend fun fetchRequests()
 
     suspend fun handleRequest(approve: Boolean, comment: String, requestIds: List<String>): ApprovalType
